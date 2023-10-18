@@ -1,0 +1,74 @@
+
+<div class="container-fluid d-flex table-responsive"></div>">
+    <h2>User List</h2>
+    <table style="margin-top:3%" class="table  position-block  table-striped">
+        <thead>
+            <tr>
+                <th scope="col" class="text-info fw-bolder fs-5">Username</th>
+                <th scope="col" class="text-info fw-bolder fs-5">Email</th>
+                <th scope="col" class="text-info fw-bolder fs-5">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white"></tbody>
+
+
+
+
+                   
+            <% if(users.length >0){
+                for(let i=0;i<users.length;i++){%>
+
+                    <%if(users.userName==="Admin"){continue;}%>
+
+                    
+                        <tr>
+                            <td><%= users[i].userName%></td>
+                            <td><%= users[i].email%></td>
+                            <td><% if(users[i].isBlock) { %>
+                                <form action="/admin/unblockUser/<%- users[i]?._id %>" method="post">
+                                   <button type="submit" class="btn btn-success btn-sm unblock-button">Unblock</button>
+                                    </form>
+                                    <% } else { %>
+                                        <form action="/admin/blockUser/<%- users[i]?._id %>" method="post">
+                                            <button  type="submit" class="btn btn-danger btn-sm block-button"> Block</button>
+                                            </form>
+                                            <% } %>
+                                </td>
+
+                        </tr>
+
+                    <%
+                }
+
+            }else{
+                %>
+                <tr>
+                    <td>
+                        Users Not Found
+                    </td>
+                </tr>
+            <%	
+            }
+            %>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<script>
+    // function blockUser(button) {
+    //     // Implement the block user logic here
+    //     // You can use this function to perform actions when the "Block" button is clicked.
+    //     alert('User blocked');
+    // }
+
+    // function unblockUser(button) {
+    //     // Implement the unblock user logic here
+    //     // You can use this function to perform actions when the "Unblock" button is clicked.
+    //     alert('User unblocked');
+    // }
+</script>
+
+

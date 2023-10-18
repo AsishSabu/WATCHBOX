@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%=title %></title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="../admin/images/logos/favicon.png"
+    />
+    <link rel="stylesheet" href="../admin/css/styles.min.css" />
+    <link href="admin/css/main.css" rel="stylesheet" type="text/css" />
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+  </head>
+
+  <% if(title==="WATCHBOX/LOGIN"){%> <%-body %> <%}else{%>
+  <%-include('../partials/navbar.ejs')%>
+  <page><%-body %></page
+  > <%-include('../partials/footer.ejs')%> <%} %>
+</html>
