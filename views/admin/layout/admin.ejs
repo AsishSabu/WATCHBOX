@@ -11,11 +11,29 @@
     />
     <link rel="stylesheet" href="../admin/css/styles.min.css" />
     <link href="admin/css/main.css" rel="stylesheet" type="text/css" />
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Include DataTables css -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
   </head>
 
   <% if(title==="WATCHBOX/LOGIN"){%> <%-body %> <%}else{%>
   <%-include('../partials/navbar.ejs')%>
-  <page><%-body %></page
-  > <%-include('../partials/footer.ejs')%> <%} %>
+
+
+  <page><%-body %></page>
+  
+
+  <%-include('../partials/footer.ejs')%> <%} %>
+  
+  
+  <!-- Include DataTables JavaScript -->
+  <script
+  type="text/javascript"
+  charset="utf8"
+  src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"
+></script>
 </html>

@@ -1,6 +1,7 @@
 const nodemailer=require('nodemailer');
 
 
+
 //--------------create a email sender  for otp-------------
 
 const transporter=nodemailer.createTransport({
