@@ -138,6 +138,19 @@ const logout =asynchandler(async (req,res) => {
 })
 
 
+//-----------------product page load ----------------------
+
+
+const loadProduct=asynchandler(async(req, res)=>{
+    try {
+        res.render('./admin/pages/product',{title:'WATCHBOX/PRODUCT'})
+    } catch (error) {
+        console.log(error.message);
+    }
+})
+
+
+
 module.exports= {
     loadLogin,
     loadIndex,
@@ -147,7 +160,8 @@ module.exports= {
     searchUser,
     blockUser,
     unblockUser,
-    logout
-
+    logout,
+    loadProduct,
+  
 }
 

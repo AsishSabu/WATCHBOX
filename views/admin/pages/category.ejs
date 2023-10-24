@@ -1,0 +1,53 @@
+<div class="container">
+  <% if(category.length){ %>
+  <table id="categoryTable" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>List/Unlist</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% category.forEach((category,index)=>{ %>
+      <tr>
+        <td><%= index+1 %></td>
+        <td><%= category.title %></td>
+        <td>
+          <% if(category.isListed){ %>
+          <a href="/admin/category/unlist/<%- category?._id  %>">
+            <button class="btn btn-success btn-list">List</button></a
+          >
+          <% }else{ %>
+          <a href=" /admin/category/list/<%- category?._id  %>">
+            <button class="btn btn-danger btn-unlist">Unlist</button>
+          </a>
+          <% } %>
+        </td>
+        <td>
+          <a href="/admin/<%- category?._id  %>">
+            <button class="btn btn-primary">Edit</button>
+          </a>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% }else{ %>
+  <h1 class="fw-bolder">No categories found</h1>
+  <% } %>
+</div>
+<script>
+  $(document).ready(function () {
+      $("#categoryTable").DataTable();
+  });
+</script>
+
+<style>
+  .container {
+    position: absolute;
+    margin-top: 100px;
+    text-align: center;
+  }
+</style>
