@@ -1,4 +1,4 @@
-const transporter=require('../config/email')
+const transporter=require('../../config/email')
 
 //----------------function to generate otp--------------------
 function generateNumericOTP() {

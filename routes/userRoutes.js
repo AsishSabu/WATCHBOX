@@ -1,6 +1,7 @@
 const express = require('express');
 const userRoute= express();
-const usercontroller=require('../controllers/userController');
+const usercontroller=require('../controllers/shop/userController');
+const shopController = require('../controllers/shop/shopControllers');
 
 userRoute.use((req,res,next)=>{
     req.app.set('layout','user/layout/user')
@@ -16,6 +17,13 @@ userRoute.get('/resendOtp',usercontroller.resendOtp)
 userRoute.get('/verifyOtp',usercontroller.loadOtp)
 userRoute.post('/verifyOtp',usercontroller.verifyOtp);
 userRoute.post('/logout',usercontroller.logout)
+
+
+
+
+//--------------------------shop page------------------------
+
+userRoute.get('/shop',shopController.loadShop)
 
 
 

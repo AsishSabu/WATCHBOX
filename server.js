@@ -3,13 +3,14 @@ const app = express();
 const expressLayout = require('express-ejs-layouts');
 const path = require('path');
 const nocache=require('nocache');
+const morgan = require('morgan');
 
 
 app.use(expressLayout);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
+app.use(morgan("dev"));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
 app.use(express.static(path.join(__dirname, './public')));

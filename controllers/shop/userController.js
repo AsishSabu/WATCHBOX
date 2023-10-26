@@ -1,15 +1,20 @@
-const User = require("../models/userModels");
-const otpSetup = require("./otpSetup");
-const otpDb = require("../models/otpModel");
+const User = require("../../models/userModels");
+const otpSetup = require("../admin/otpSetup");
+const otpDb = require("../../models/otpModel");
 const asynchandler = require("express-async-handler");
-const otpdb = require("../models/otpModel");
+const otpdb = require("../../models/otpModel");
 const bcrypt=require('bcrypt');
+const product=require('../../models/productModel')
 
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
+
+
   try {
-    res.render("./user/pages/index");
+    const topProduct= await product.find({isListed:true}).populate("categoryName").populate("images");
+   console.log(topProduct);
+    res.render("./user/pages/index",{topProduct});
   } catch (error) {
     console.log(error.message);
   }
@@ -207,6 +212,7 @@ const logout=asynchandler(async (req,res) => {
 
 
 
+
 module.exports = {
   loadIndex,
   loadLogin,
@@ -216,5 +222,6 @@ module.exports = {
   verifyOtp,
   resendOtp,
   userLogin,
-  logout
+  logout,
+
 };

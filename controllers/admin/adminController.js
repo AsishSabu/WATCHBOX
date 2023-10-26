@@ -1,5 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
-const User = require("../models/userModels");
+const User = require("../../models/userModels");
 const asynchandler = require("express-async-handler");
 require('dotenv').config();
 
@@ -141,13 +141,7 @@ const logout =asynchandler(async (req,res) => {
 //-----------------product page load ----------------------
 
 
-const loadProduct=asynchandler(async(req, res)=>{
-    try {
-        res.render('./admin/pages/product',{title:'WATCHBOX/PRODUCT'})
-    } catch (error) {
-        console.log(error.message);
-    }
-})
+
 
 
 
@@ -161,7 +155,7 @@ module.exports= {
     blockUser,
     unblockUser,
     logout,
-    loadProduct,
+
   
 }
 

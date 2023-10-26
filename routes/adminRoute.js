@@ -1,7 +1,9 @@
 const express = require('express');
 const adminRoute = express();
-const adminController=require('../controllers/adminController');
-const categoryController=require('../controllers/categoryController')
+const adminController=require('../controllers/admin/adminController');
+const categoryController=require('../controllers/admin/categoryController')
+const productController=require('../controllers/admin/productControllers');
+const {uploadMultiple,uploadSingle,upload}=require('../config/upload')
 const {isAdminLoggedOut, isAdminLoggedin}=require('../middleware/adminAuth')
 
 adminRoute.use((req,res,next)=>{
@@ -28,20 +30,24 @@ adminRoute.post('/unblockUser/:id',isAdminLoggedin,adminController.unblockUser)
 //-----------------------admin product management ----------------------------------------------------------------
 
 
-adminRoute.get('/product',isAdminLoggedin,adminController.loadProduct)
+adminRoute.get('/products',isAdminLoggedin,productController.loadProduct)
+adminRoute.get('/addProduct',isAdminLoggedin,productController.addProduct)
+adminRoute.post('/addProduct',uploadMultiple,productController.insertProduct)
+adminRoute.post('/product/list/:id',isAdminLoggedin,productController.listProduct)
+adminRoute.post('/product/unlist/:id',isAdminLoggedin,productController.unListProduct)
 
 
 
 //---------------------admin category management ----------------------------------------------------------------  
 
-adminRoute.get('/category',isAdminLoggedin,categoryController.loadCategory)
+adminRoute.get('/category',isAdminLoggedin,categoryController.categoryManagement)
 
-adminRoute.get('/addCategory',isAdminLoggedin,categoryController.loadAddCategory)
+adminRoute.get('/addCategory',isAdminLoggedin,categoryController.addCategory)
 adminRoute.post('/addCategory',isAdminLoggedin,categoryController.insertCategory)
 adminRoute.get('/category/list/:id',isAdminLoggedin,categoryController.list)
 adminRoute.get('/category/unlist/:id',isAdminLoggedin,categoryController.unList)
-adminRoute.get('/:id',isAdminLoggedin,categoryController.loadEditCategory)
-adminRoute.post('/:id',isAdminLoggedin,categoryController.editCategory)
+adminRoute.get('/:id',isAdminLoggedin,categoryController.editCategory)
+adminRoute.post('/:id',isAdminLoggedin,categoryController.updateCategory)
 
 
 
