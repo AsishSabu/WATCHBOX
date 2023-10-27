@@ -4882,18 +4882,22 @@ a.icon-cart-furniture span.green {
 /* 8.1 Header style of smart watch */
 .header-sticky {
     left: 0;
-    padding: 70px 0;
+    padding: 10px 0;
     position: absolute;
     right: 0;
     top: 0;
-    transition: all 0.5s ease 0s;
+    transition: all 0.4s ease 0s;
     z-index: 99999;
+    background-color:rgba(0, 0, 0) ;
+  
 }
 .header-sticky.stick {
-    background: #0d0d0d;
+    background-color:rgba(0, 0, 0) ;
     padding: 15px 0;
     position: fixed;
-    top: 0;
+    top: 0
+    
+    ;
 }
 .single-overview > h4 {
   font-size: 24px;
@@ -4901,7 +4905,7 @@ a.icon-cart-furniture span.green {
   position: relative;
 }
 .single-overview > h4::before {
-  background: #383838 none repeat scroll 0 0;
+  background: #000000 none repeat scroll 0 0;
   bottom: -3px;
   content: "";
   height: 2px;

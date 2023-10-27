@@ -1,0 +1,247 @@
+<div class="product-details ptb-100 pb-90">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-7 col-12">
+        <div class="product-details-img-content">
+          <div class="product-details-tab mr-35 product-details-tab2">
+            <div
+              class="product-details-small nav mr-10 product-details-2"
+              role="tablist"
+            >
+              <a
+                class="active mb-10"
+                href="#pro-details1"
+                data-bs-toggle="tab"
+                role="tab"
+                aria-selected="true"
+              >
+                <img src="" alt="" />
+              </a>
+              <a
+                class="mb-10"
+                href="#pro-details2"
+                data-bs-toggle="tab"
+                role="tab"
+                aria-selected="true"
+              >
+                <img src="<%= Product?.images[1]?.thumbnailUrl %>" alt="" />
+              </a>
+              <a
+                class="mb-10"
+                href="#pro-details3"
+                data-bs-toggle="tab"
+                role="tab"
+                aria-selected="true"
+              >
+                <img src="<%= Product?.images[2]?.thumbnailUrl %>" alt="" />
+              </a>
+              <a
+                class="mb-10"
+                href="#pro-details4"
+                data-bs-toggle="tab"
+                role="tab"
+                aria-selected="true"
+              >
+                <img src="<%= Product?.images[3]?.thumbnailUrl %>" alt="" />
+              </a>
+            </div>
+            <div
+              class="product-details-large tab-content"
+              style="height: 400px; width: 400px"
+            >
+              <div
+                class="tab-pane active show fade"
+                id="pro-details1"
+                role="tabpanel"
+              >
+                <div class="easyzoom easyzoom--overlay is-ready">
+                  <a href="<%= Product?.images[0]?.imageUrl  %>">
+                    <img src="<%= Product?.images[0]?.imageUrl %>" alt="" />
+                  </a>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="pro-details2" role="tabpanel">
+                <div class="easyzoom easyzoom--overlay is-ready">
+                  <a href="<%= Product?.images[1]?.imageUrl %>">
+                    <img src="<%= Product?.images[1]?.imageUrl %>" alt="" />
+                  </a>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="pro-details3" role="tabpanel">
+                <div class="easyzoom easyzoom--overlay is-ready">
+                  <a href="<%= Product?.images[2]?.imageUrl %>">
+                    <img src="<%= Product?.images[2]?.imageUrl %>" alt="" />
+                  </a>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="pro-details4" role="tabpanel">
+                <div class="easyzoom easyzoom--overlay is-ready">
+                  <a href="<%= Product?.images[3]?.imageUrl %>">
+                    <img src="<%= Product?.images[3]?.imageUrl %>" alt="" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-5 col-12">
+        <div class="product-details-content">
+          <h3><%= Product.title %></h3>
+          <div class="rating-number">
+            <div class="quick-view-rating">
+              <i class="pe-7s-star red-star"></i>
+              <i class="pe-7s-star red-star"></i>
+              <i class="pe-7s-star"></i>
+              <i class="pe-7s-star"></i>
+              <i class="pe-7s-star"></i>
+            </div>
+            <div class="quick-view-number">
+              <span>2 Ratting (S)</span>
+            </div>
+          </div>
+
+          <div class="details-price gap-3 d-flex align-items-baseline">
+            <div class="">
+              <span class="h3 fw-bold">₹ <%= Product.salePrice %></span>
+            </div>
+            <div class="">
+              <span class="text-muted text-decoration-line-through"
+                >₹ <%= Product.productPrice %></span
+              >
+            </div>
+            <div class="">
+              <span class="h3 text-success"
+                ></span
+              >
+            </div>
+          </div>
+          <p><%= Product.description %></p>
+          <% if (Product.quantity === 0) { %>
+          <smal class="text-danger h4">Out Of Stock!</smal>
+          <% } else if (Product.quantity < 5) { %>
+          <smal class="text-warning h5"
+            >Hurry, Only <%= Product.quantity %> more left!</smal
+          >
+          <% } %>
+
+          <div class="product-share mt-4">
+            <ul>
+              <li class="categories-title">Share :</li>
+              <li>
+                <a href="#">
+                  <i class="icofont icofont-social-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="icofont icofont-social-twitter"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="icofont icofont-social-pinterest"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="icofont icofont-social-flikr"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="product-description-review-area pb-5">
+  <div class="container">
+    <div class="product-description-review text-center">
+      <div class="description-review-title nav" role="tablist">
+        <a
+          class="active"
+          href="#pro-dec"
+          data-bs-toggle="tab"
+          role="tab"
+          aria-selected="true"
+        >
+          Description
+        </a>
+        <a
+          href="#pro-review"
+          data-bs-toggle="tab"
+          role="tab"
+          aria-selected="false"
+        >
+          Reviews (0)
+        </a>
+      </div>
+      <div class="description-review-text tab-content">
+        <div
+          class="tab-pane active show fade"
+          id="pro-dec"
+          role="tabpanel"
+        ></div>
+        <div class="tab-pane fade" id="pro-review" role="tabpanel">
+          <a href="#">Be the first to write your review!</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- product area start -->
+<div class="product-area pb-95">
+  <div class="container">
+    <div class="section-title-3 text-center mb-50">
+      <h2>Related products</h2>
+    </div>
+    <div class="product-style">
+      <div class="related-product-active owl-carousel">
+        <% relatedProducts.forEach(item => { %>
+        <div class="product-wrapper">
+          <div class="product-img">
+            <a href="/product/<%= item._id %>">
+              <img
+                src="<%= item.images[0].thumbnailUrl %>"
+                alt=""
+                width="100px"
+                height="300px"
+              />
+            </a>
+            <div class="product-action">
+              <a
+                class="animate-left"
+                title="Wishlist"
+                href="/wishlist/add/<%= Product._id %>"
+              >
+                <i class="pe-7s-like"></i>
+              </a>
+              <a
+                class="animate-top"
+                title="Add To Cart"
+                href="/cart/add/<%= Product._id %>"
+              >
+                <i class="pe-7s-c   art"></i>
+              </a>
+            </div>
+          </div>
+          <div class="product-content">
+            <h4><a href="#"><%= item.title %></a></h4>
+            <span>₹ <%= item.salePrice %></span>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .container{
+        margin-top: 200px;
+    }
+</style>
+<!-- product area end -->
+<!--add to cart fetch-->

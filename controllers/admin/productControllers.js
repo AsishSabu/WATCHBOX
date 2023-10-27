@@ -82,8 +82,6 @@ const insertProduct=asynchandler(async(req,res)=>{
 
 
             })
-            console.log(newProduct.categoryName);
-            console.log(newProduct.title);
 
 
             console.log("inserted",newProduct);
@@ -129,9 +127,11 @@ const unListProduct=asynchandler(async(req,res)=>{
 
 
 
+
 module.exports={
     loadProduct,
     addProduct,
     insertProduct,
-    listProduct,unListProduct
+    listProduct,
+    unListProduct
 }

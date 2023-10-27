@@ -1,99 +1,101 @@
+
+
+
+
+
 <div class="container">
   <h1>Add Product</h1>
   <form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
       <label for="productName">Product Name</label>
-      <input
-        type="text"
-        class="form-control"
-        id="productName"
-        name="productName"
-        required
-      />
+      <input type="text" class="form-control" id="productName" name="productName" required />
     </div>
     <div class="form-group">
-      <select  name="categoryName" id="category" required>
-        <option value="">Select Category</option>
-
-
+      <label class="fw-bold"   for="category">Category</label>
+      <select name="categoryName" id="category" class="form-control" required>
+        <option class="fw-bolder" value="">Select Category</option>
+        <!-- EJS code for category options here -->
 
         <% catList.forEach(category=> { %>
-            <option value="<%= category?._id %>"><%= category.categoryName %></option>
-            <% }) %>
+          <option class="text-danger" value="<%= category?._id %>"><%= category.categoryName %></option>
+          <% }) %>
       </select>
     </div>
     <div class="form-group">
       <label for="description">Description</label>
-      <textarea
-        class="form-control"
-        id="description"
-        name="description"
-        rows="4"
-        required
-      ></textarea>
+      <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
     </div>
     <div class="form-group">
       <label for="productPrice">Product Price</label>
-      <input
-        type="text"
-        class="form-control"
-        id="productPrice"
-        name="productPrice"
-        required
-      />
+      <input type="text" class="form-control" id="productPrice" name="productPrice" required />
     </div>
     <div class="form-group">
       <label for="salePrice">Sale Price</label>
-      <input
-        type="text"
-        class="form-control"
-        id="salePrice"
-        name="salePrice"
-        required
-      />
+      <input type="text" class="form-control" id="salePrice" name="salePrice" required />
     </div>
     <div class="form-group">
-      <label for="Brand">Brand</label>
-      <input
-        type="text"
-        class="form-control"
-        id="brand"
-        name="brand"
-       
-      />
+      <label for="brand">Brand</label>
+      <input type="text" class="form-control" id="brand" name="brand" />
     </div>
     <div class="form-group">
       <label for="quantity">Quantity</label>
-      <input
-        type="text"
-        class="form-control"
-        id="quantity"
-        name="quantity"
-        required
-      />
+      <input type="text" class="form-control" id="quantity" name="quantity" required />
     </div>
     <div class="form-group">
-      <label for="productImage">Product Image</label>
-      <input
-        type="file"
-        class="form-control-file"
-        id="image"
-        name="images"
-        accept="image/*"
-        multiple
-      />
+      <label for="productImage">Product Images</label>
+      <input type="file" class="form-control-file" id="image" name="images" accept="image/*" multiple />
     </div>
     <button type="submit" class="btn btn-primary">Add Product</button>
   </form>
 </div>
-
 <!-- Add Bootstrap JS and jQuery (you may need to adjust the paths) -->
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 
 <style>
-  .container {
-    position: absolute;
-    margin-top: 100px;
-  }
+ 
+
+  body {
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      position: absolute;
+    margin-top: 72px;
+      background-color: #fff;
+      border: 1px solid #ffffff;
+      border-radius: 5px;
+      padding: 20px;
+      
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .form-control {
+      width: 100%;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    /* Additional styling for responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        margin: 20px;
+      }
+    }
 </style>
+
