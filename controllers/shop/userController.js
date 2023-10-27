@@ -12,8 +12,7 @@ const loadIndex = asynchandler(async (req, res) => {
 
 
   try {
-    const topProduct= await product.find({isListed:true}).populate("categoryName").populate("images");
-   console.log(topProduct);
+    const topProduct= await product.find({isListed:true}).populate("categoryName").populate("images").limit(8);
     res.render("./user/pages/index",{topProduct});
   } catch (error) {
     console.log(error.message);

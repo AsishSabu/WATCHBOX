@@ -27,4 +27,10 @@ userRoute.get('/shop',shopController.loadShop)
 
 
 
+//-------------------------------productDetails page------------------------
+
+userRoute.get('/viewProduct/:id',shopController.loadProductDetails)
+
+
+
 module.exports= userRoute;

@@ -7,7 +7,10 @@
                         <div class="slider-text">
                             <h2 class="tlt1">Most <br>intelligent <br>& Smart Watch.</h2>
                             <div class="button-set">
-                                <a class="explore-btn video-popup" href="https://www.youtube.com/watch?v=6Tc7LBx7XzE">
+                                <!-- <a class="explore-btn video-popup" href="/shop">
+                                    Explore More <i class="ti-control-play"></i>
+                                </a> -->
+                                <a class="explore-btn" href="/shop">
                                     Explore More <i class="ti-control-play"></i>
                                 </a>
                             </div>
@@ -29,29 +32,29 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="banner-wrapper-4 mb-30">
-                    <a href="#"><img src="assets/img/banner/20.jpg" alt=""></a>
+                    <a href="#"><img src="assets/img/banner/watch5.jpg" alt=""></a>
                     <div class="banner-content4-style1">
-                        <h4>Best <br>Electronics <br>Products.</h4>
+                        <!-- <h4>Best <br>Watches <br>Ever</h4> -->
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="banner-wrapper-4 mb-30">
-                    <a href="#"><img src="assets/img/banner/21.jpg" alt=""></a>
+                    <a href="#"><img src="assets/img/banner/watch4.jpg" alt=""></a>
                     <div class="banner-content4-style2">
-                        <h5 class="p-left">get</h5>
-                        <h2>25% </h2>
+                        <!-- <h5 class="p-left text-danger">Best</h5>
+                        <h2 class="">Watches </h2>
                         <h5 class="p-right">off</h5>
-                        <h3>Bitso X1202</h3>
+                        <h3>Bitso X1202</h3> -->
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="banner-wrapper-4 mb-30">
-                    <a href="#"><img src="assets/img/banner/22.jpg" alt=""></a>
+                    <a href="#"><img src="assets/img/banner/watch3.jpg" alt=""></a>
                     <div class="banner-content4-style3">
-                        <h1>Up to <br>10% Off</h1>
-                        <h3>Lonovo Vio D22</h3>
+                        <!-- <h1>Up to <br>10% Off</h1>
+                        <h3>Lonovo Vio D22</h3> -->
                     </div>
                 </div>
             </div>
@@ -80,10 +83,10 @@
                 <div class="tab-pane active show fade" id="electro1" role="tabpanel">
                     <div class="custom-row-2">
                      <% topProduct.forEach(product=>{ %>   
-                        <div class="custom-col-style-2 custom-col-4">
-                            <div class="product-wrapper product-border mb-24">
-                                <div class="product-img-3">
-                                    <a href="product-details.html">
+                        <div class="custom-col-style-2 custom-col-4  ">
+                            <div class="product-wrapper product-border mb-24 ">
+                                <div class="product-img-5  k">
+                                    <a href="/viewProduct/<%= product?._id %>">
                                         <img src="<%= product.images[0].thumbnailUrl %>" alt="">
                                     </a>
                                     <div class="product-action-right">
@@ -123,3 +126,12 @@
 
     </div>
 </div>
+
+<style>
+
+.k {
+    width: 200px; /* Set the desired width for the product images */
+    height: 200px; /* Set the desired height for the product images */
+    object-fit: cover; /* This property ensures that the image covers the specified dimensions */
+}
+</style>

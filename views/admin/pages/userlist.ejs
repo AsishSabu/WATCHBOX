@@ -1,5 +1,24 @@
 
-<div class="container-fluid d-flex table-responsive"></div>">
+<div class="container  table-responsive  ">
+
+
+
+    <div class="search-box">
+        <ul>
+          <li>
+            <form action="/admin/search" method="post">
+              <div class="input-group mb-3">
+                <input type="search" class="form-control search rounded" placeholder="Search..." name="search">
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary"><i class="bx bx-search"></i> Search</button>
+                </div>
+              </div>
+            </form>
+          </li>
+        </ul>
+      </div>
+    
+
     <h2>User List</h2>
     <table style="margin-top:3%" class="table  position-block  table-striped">
         <thead>
@@ -57,6 +76,7 @@
 
 
 
+
 <script>
     // function blockUser(button) {
     //     // Implement the block user logic here
@@ -71,4 +91,25 @@
     // }
 </script>
 
+
+
+
+<style>
+    .container {
+    position: absolute;
+    margin-top: 100px;
+    text-align: center;
+  }
+    /* Custom CSS for the search box */
+    .search-box {
+      position: fixed;
+/* Adjust the left position as needed */
+      top: 10%; /* Adjust the top position as needed */
+    
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+   
+    }
+  </style>
 
