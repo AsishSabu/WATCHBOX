@@ -1,19 +1,28 @@
+
+
 const User = require("../../models/userModels");
 const otpSetup = require("../admin/otpSetup");
 const otpDb = require("../../models/otpModel");
 const asynchandler = require("express-async-handler");
 const otpdb = require("../../models/otpModel");
-const bcrypt=require('bcrypt');
-const product=require('../../models/productModel')
+const bcrypt = require("bcrypt");
+const product = require("../../models/productModel");
+
+
+
+
+
 
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
-
-
   try {
-    const topProduct= await product.find({isListed:true}).populate("categoryName").populate("images").limit(8);
-    res.render("./user/pages/index",{topProduct});
+    const topProduct = await product
+      .find({ isListed: true })
+      .populate("categoryName")
+      .populate("images")
+      .limit(8);
+    res.render("./user/pages/index", { topProduct });
   } catch (error) {
     console.log(error.message);
   }
@@ -22,14 +31,18 @@ const loadIndex = asynchandler(async (req, res) => {
 //------------------load login page--------
 const loadLogin = asynchandler(async (req, res) => {
   try {
-    res.render("./user/pages/login");
-  } catch (error) {}
+    const messages = req.flash();
+    res.render("./user/pages/login", { messages });
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 //-----------------load register page------------------------
 const loadRegister = asynchandler(async (req, res) => {
   try {
-    res.render("./user/pages/register");
+    const messages = req.flash();
+    res.render("./user/pages/register", { messages });
   } catch (error) {}
 });
 
@@ -41,39 +54,34 @@ const insertUser = asynchandler(async (req, res) => {
     const checkData = await User.findOne({ email: emailCheck });
 
     if (checkData) {
-      res.render("./user/pages/register", {
-        message: "user is already registered, please try with another email",
-      });
+      req.flash(
+        "danger",
+        "user is already registered, please try with another email"
+      );
+      res.redirect("/register");
     } else {
-      const userData = {
+      const userData = new User({
         userName: req.body.name,
         email: req.body.email,
         password: req.body.password,
-      };
-      req.session.userData = userData;
+      }); /*--------
+            accessing the details of the user
+               */
+      const userSave = await userData.save(); //-------------------user save to database-------------------
+      req.session.userData = userData; //-------------------userdata take to the  session----------------
 
       //--------------------generating otp --------------------
-
       const OTP = otpSetup.generateNumericOTP();
       console.log(OTP);
-
       //--------------saving otp to databasse------------------------------
-
       const email = req.body.email;
-
       const otp = new otpdb({ email: email, otp: OTP });
       const otpSave = await otp.save();
-      if (otpSave) {
-        console.log("registered successfully");
-      } else {
-        console.log("registered unsuccessfully");
-      }
 
       //------------------------otp sending to mail ------------------------------
-      name = req.body.name;
+      const name = req.body.name;
       const otpSend = otpSetup.sendOtp(email, OTP, name);
     }
-
     try {
       return res.redirect("/verifyOtp");
     } catch (error) {
@@ -85,12 +93,11 @@ const insertUser = asynchandler(async (req, res) => {
 });
 
 //-----------------load Otp page------------------------
-
 const loadOtp = asynchandler(async (req, res) => {
   try {
     email = req.session.userData.email;
-
-    res.render("./user/pages/verifyOtp", { email: email });
+    const messages = req.flash();
+    res.render("./user/pages/verifyOtp", { email: email, messages });
   } catch (error) {
     console.log(error.message);
   }
@@ -101,29 +108,18 @@ const loadOtp = asynchandler(async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const enteredOtp = req.body.otp;
-
     // Use the Mongoose model to search for the OTP in the database
     const otpRecord = await otpdb.findOne({ otp: enteredOtp });
-
     if (otpRecord) {
+      const verifyOtp = await User.findOneAndUpdate(
+        { email: otpRecord.email },
+        { $set: { isVerified: true } }
+      );
+      req.flash("success", "succesfully registered");
       res.redirect("/login");
-
-      const user = new User({
-        userName: req.session.userData.userName,
-        email: req.session.userData.email,
-        password: req.session.userData.password,
-      });
-
-      const userSave = await user.save();
-
-      // const userSave = await User.create(user);
-      if (userSave) {
-        console.log("registered successfully");
-      } else {
-        console.log("registration error");
-      }
     } else {
-      res.render("./user/pages/verifyOtp", { email, message: "invalid otp" });
+      req.flash("danger", "enter a valid otp");
+      res.redirect("/verifyOtp");
     }
   } catch (error) {
     console.error(error);
@@ -132,59 +128,52 @@ const verifyOtp = async (req, res) => {
 };
 
 //------------------resend otp----------------------------------------------------
-
 const resendOtp = asynchandler(async (req, res) => {
   try {
     const OTP = otpSetup.generateNumericOTP();
     console.log(OTP);
     const email = req.session.userData.email;
     console.log(email);
-
     const otp = new otpdb({ email: email, otp: OTP });
     const otpSave = await otp.save();
-    if (otpSave) {
-      console.log("registered successfully");
-    } else {
-      console.log("registered unsuccessfully");
-    }
-
-    name = req.session.userData.name;
+    const name = req.session.userData.name;
     const otpSend = otpSetup.sendOtp(email, OTP, name);
-
     try {
       return res.redirect("/verifyOtp");
     } catch (error) {
       console.log(error.message);
     }
-  } catch (error) {}
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
-//--------------------------------verify login--------------------------------  
-
-
+//--------------------------------verify login--------------------------------
 const userLogin = asynchandler(async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email });  //---------------checking email already registered-----------------------
-    console.log(user);
-    if (!user) {
- return res.render('./user/pages/login',{message: "User not found. Please check your email"})
-    } else {
-      const passwordValid = await bcrypt.compare( password,user.password); //----------------compare enterd password and registered passwoerd-------
+    const user = await User.findOne({ email: email }); //---------------checking email already registered-----------------------
 
+    if (!user) {
+      req.flash("danger", "User not found. Please check your email");
+      res.redirect("/login");
+    } else {
+      const passwordValid = await bcrypt.compare(password, user.password); //----------------compare enterd password and registered passwoerd-------
 
       if (!passwordValid) {
-        return res.render("./user/pages/login", {
-          message: "invalid password",
-        });
+        req.flash("danger", "invalid password");
+        res.redirect("/login");
       } else {
-        if (user.isBlock)    //---------------------------checking user i s blocked --------------------    
-         {                          
-          return res.render("./user/pages/login", {
-            message: "your permission declined",
-          });
+        if (user.isBlock) {
+          //---------------------------checking user i s blocked --------------------
+          req.flash("danger", "your permission declined");
+          res.redirect("/login");
+        } else if (!user.isVerified) {
+          req.flash("danger", "please verify your account");
+          res.redirect("/login");
         } else {
-            req.session.user_id = user._id;
+          req.session.user_id = user._id;
+
           res.redirect("/");
         }
       }
@@ -194,24 +183,111 @@ const userLogin = asynchandler(async (req, res) => {
   }
 });
 
-
 //--------------------------------logout----------------------------------------------------
-
-const logout=asynchandler(async (req,res) => {
+const logout = asynchandler(async (req, res) => {
   try {
-    
-    req.session.destroy();    
-     res.redirect('/')
-
-    
+    req.session.destroy();
+    res.redirect("/");
   } catch (error) {
     console.log(error);
   }
 });
 
+//-------------------load--sendEmail----------------------------------------------------------------
+const loadSendEmail = asynchandler(async (req, res) => {
+  try {
+    const messages = req.flash();
+    res.render("./user/pages/otpVerification", { messages });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//-------------------sendEmail----------------------------------------------------------------
+const sendEmail = asynchandler(async (req, res) => {
+  try {
+    const email = req.body.email;
+    const user = await User.findOne({ email: email }); //---------------checking email already registered-----------------------
+
+    if (user.isVerified) {
+      req.flash("danger", "you are already verified");
+      res.redirect("/sendEmail");
+    } else {
+      req.session.verifyEmail = email;
+      const OTP = otpSetup.generateNumericOTP();
+      console.log(OTP);
+      const otp = new otpdb({ email: email, otp: OTP });
+      const otpSave = await otp.save();
+      name = user.userName;
+      const otpSend = otpSetup.sendOtp(email, OTP, name);
+      try {
+        res.redirect("/verifyEmail");
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//-----------------------load verify email----------------------------------
+
+const LoadVerifyEmail = asynchandler(async (req, res) => {
+  try {
+    const email = req.session.verifyEmail;
+    const messages = req.flash();
+    res.render("./user/pages/emailVerification", { email, messages });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+//--------------------------verifyEmail------------------------
+
+const verifyEmail = asynchandler(async (req, res) => {
+  try {
+    const enteredOtp = req.body.otp;
+    const otpRecord = await otpdb.findOne({ otp: enteredOtp });
+    if (otpRecord) {
+      const verifyOtp = await User.findOneAndUpdate(
+        { email: otpRecord.email },
+        { $set: { isVerified: true } }
+      );
+      req.flash("success", "succesfully registered");
+      res.redirect("/login");
+    } else {
+      req.flash("danger", "enter a valid otp");
+      res.redirect("/verifyEmail");
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+//----------------------------------resend verify email--------------------------------
+
+const reverifyEmail = asynchandler(async (req, res) => {
+  try {
+    const OTP = otpSetup.generateNumericOTP();
+    console.log(OTP);
+    email = req.session.verifyEmail;
+    const otp = new otpdb({ email: email, otp: OTP });
+    const otpSave = await otp.save();
+    const user = await User.findOne({ email: email });
+    const otpSend = otpSetup.sendOtp(email, OTP, user.userName);
+    try {
+      return res.redirect("/verifyEmail");
+    } catch (error) {
+      console.log(error.message);
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+});
 
 
-
+//------------------------exported modules------------------------
 module.exports = {
   loadIndex,
   loadLogin,
@@ -222,5 +298,11 @@ module.exports = {
   resendOtp,
   userLogin,
   logout,
-
+  loadSendEmail,
+  sendEmail,
+  LoadVerifyEmail,
+  verifyEmail,
+  reverifyEmail,
 };
+
+

@@ -126,12 +126,25 @@ const unListProduct=asynchandler(async(req,res)=>{
 })
 
 
+//------------------------edit product page-------------------------------- 
 
+
+const editProduct=asynchandler(async(req,res)=>{
+    try {
+        const id=req.params.id;
+        const categories=await category.find({isListed:true});
+        const product=await product.findById(id).populate("categoryName").populate("images");
+        res.render('./admin/pages/editProduct',{title:"editProduct",categories,product})
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 module.exports={
     loadProduct,
     addProduct,
     insertProduct,
     listProduct,
-    unListProduct
+    unListProduct,
+    editProduct
 }

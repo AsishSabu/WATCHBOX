@@ -31,11 +31,14 @@
   </label>
   
   <button type="submit">submit</button>
-  <% if (typeof message !=='undefined' ) { %>
-    <div class="alert alert-success fade show mt-3" id="message" role="alert"">
-        <%= message %>
-    </div>
-    <% } %>
+
+  <h6 class="fw-normal m-3 pb-3" style="letter-spacing:1px">
+    <a href="/forgotPassword">forgot your password?</a>
+    <a href="/sendEmail">  verify your account</a>
+         </h6>
+         <%-include('../partials/flashMessage.ejs')  %>
+
+
 </form>
 
 
@@ -198,9 +201,5 @@ function validate() {
 }
 
 
-const message=document.getElementById("message");
- setTimeout(function () {
-     message.style.display="none";
-    }, 3000);
 
 </script>

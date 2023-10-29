@@ -5,51 +5,25 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
-<form id="form" action="/register" method="post">
+<form id="form" action="/sendEmail" method="post">
   <div class="d-flex justify-content-center  mb-3 pb-1">
   
-    <span class="h1 fw-bold mb-0 ">SIGNUP</span>
+    <span class="h1 fw-bold mb-0 ">ENTER YOUR EMAIL</span>
   </div>
 
-  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px">
- Register your account
-  </h5>
+
+ 
   <label>
-    <p class="label-txt">ENTER YOUR NAME</p>
-    <input type="text" id="name" name="name"  class="input">
-    <div class="line-box">
-      <div class="text-danger" id="nameerr" ></div>
-    </div>
-  </label>
-  <label>
-    <p class="label-txt">ENTER YOUR EMAIL</p>
+    <!-- <p class="label-txt">ENTER YOUR EMAIL</p> -->
     <input type="text" id="email" name="email" class="input">
     <div class="line-box">
       <div class=" text-danger" id="emailerr"></div>
     </div>
   </label>
-  <label>
-    <p class="label-txt">ENTER YOUR PASSWORD</p>
-    <input type="password" id="password" name="password"  class="input">
-    <div class="line-box">
-      <div class=" text-danger" id="passworderr"></div>
-    </div>
-  </label>
-  <label>
-    <p class="label-txt">CONFIRM PASSWORD</p>
-    <input type="password"id="cpassword" name="cpassword"  class="input">
-    <div class="line-box">
-      <div class="text-danger" id="cpassworderr" ></div>
-    </div>
-  </label>
   <button type="submit">submit</button>
-
   <%-include('../partials/flashMessage.ejs')  %>
 </form>
 
-<h5 class="fw-normal mb-3 pb-3" style="letter-spacing:1px">
- please verify your account
-   </h5>
 
 <style>
 
@@ -132,7 +106,7 @@ button:hover {
   color: #ffffff;
 }
 </style>
-<script src="/assets/js/registerValidation.js" ></script>
+
 <script>
     
     $(document).ready(function(){
@@ -148,4 +122,66 @@ $(".input").focusout(function(){
 });
 
 });
+
+
+
+
+const form = document.getElementById("form");
+form.addEventListener("submit", (event) => {
+  if (!validate()) {
+    event.preventDefault();
+  }
+});
+
+function validate() {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+
+  const emailerr = document.getElementById("emailerr");
+  const passworderr = document.getElementById("passworderr");
+
+
+  const nameRegex = /^[A-Z]/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // General email validation
+
+  let isValid = true;
+
+
+
+  // Email field
+  if (email.trim() === "") {
+    emailerr.textContent = "Field is required";
+    isValid = false;
+    setTimeout(function () {
+      emailerr.textContent = "";
+    }, 3000);
+  } else if (!emailRegex.test(email.trim())) {
+    emailerr.textContent = "Invalid email format.";
+    isValid = false;
+    setTimeout(function () {
+      emailerr.textContent = "";
+    }, 3000);
+  }
+
+  // Password field
+  if (password.trim() === "") {
+    passworderr.textContent = "Field is required";
+    setTimeout(function () {
+      passworderr.textContent = "";
+    }, 3000);
+    isValid = false;
+  } else if (password.length < 4) {
+    passworderr.textContent = "Password must be at least 4 characters long";
+    setTimeout(function () {
+      passworderr.textContent = "";
+    }, 3000);
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+
 </script>
