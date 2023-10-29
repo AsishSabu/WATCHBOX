@@ -35,6 +35,7 @@ adminRoute.get('/addProduct',isAdminLoggedin,productController.addProduct)
 adminRoute.post('/addProduct',uploadMultiple,productController.insertProduct)
 adminRoute.post('/product/list/:id',isAdminLoggedin,productController.listProduct)
 adminRoute.post('/product/unlist/:id',isAdminLoggedin,productController.unListProduct)
+adminRoute.get('/product/editproduct/:id',isAdminLoggedin,productController.editProduct)
 
 
 

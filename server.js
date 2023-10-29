@@ -4,6 +4,7 @@ const expressLayout = require('express-ejs-layouts');
 const path = require('path');
 const nocache=require('nocache');
 const morgan = require('morgan');
+const flash=require('connect-flash');
 
 
 app.use(expressLayout);
@@ -19,7 +20,6 @@ app.use(express.static(path.join(__dirname, './public')));
 //------------------------session creating--------------
 const session = require('express-session');
 require('dotenv').config()
-
 app.use(session({
     secret:process.env.SECRET,
     resave:false,
@@ -27,9 +27,12 @@ app.use(session({
 }));
 
 
+ // Call the database connection function
 const database = require('./config/database');
-database.dbConnect(); // Call the database connection function
+database.dbConnect();
 
+
+app.use(flash())
 app.use(nocache())
 
 const userRoute = require('./routes/userRoutes');

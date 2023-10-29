@@ -16,7 +16,7 @@ function validate() {
   const passworderr = document.getElementById("passworderr");
   const cpassworderr = document.getElementById("cpassworderr");
 
-  const nameRegex = /^[A-Z]/;
+  const nameRegex = /^[A-Za-z\s]+$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // General email validation
 
   let isValid = true;
@@ -25,68 +25,56 @@ function validate() {
   if (name.trim() === "") {
     nameerr.textContent = "Field is required";
     isValid = false;
-    setTimeout(function () {
-      nameerr.textContent = "";
-    }, 3000);
   } else if (name.trim().length < 4) {
     nameerr.textContent = "Name must be at least 4 characters";
     isValid = false;
-    setTimeout(function () {
-      nameerr.textContent = "";
-    }, 3000);
   } else if (!nameRegex.test(name.trim())) {
-    nameerr.textContent = "First letter should be capital";
+    nameerr.textContent = "Name should start with a capital letter and only contain alphabetic characters";
     isValid = false;
-    setTimeout(function () {
-      nameerr.textContent = "";
-    }, 3000);
   }
 
   // Email field
   if (email.trim() === "") {
     emailerr.textContent = "Field is required";
     isValid = false;
-    setTimeout(function () {
-      emailerr.textContent = "";
-    }, 3000);
   } else if (!emailRegex.test(email.trim())) {
     emailerr.textContent = "Invalid email format.";
     isValid = false;
-    setTimeout(function () {
-      emailerr.textContent = "";
-    }, 3000);
   }
 
   // Password field
   if (password.trim() === "") {
     passworderr.textContent = "Field is required";
-    setTimeout(function () {
-      passworderr.textContent = "";
-    }, 3000);
     isValid = false;
   } else if (password.length < 4) {
     passworderr.textContent = "Password must be at least 4 characters long";
-    setTimeout(function () {
-      passworderr.textContent = "";
-    }, 3000);
+    isValid = false;
+  } else if (!/[A-Z]/.test(password)) {
+    passworderr.textContent = "Password must contain at least one uppercase letter";
+    isValid = false;
+  } else if (!/[a-z]/.test(password)) {
+    passworderr.textContent = "Password must contain at least one lowercase letter";
+    isValid = false;
+  }else if (!/[0-9]/.test(password)) {
+    passworderr.textContent = "Password must contain at least one number";
     isValid = false;
   }
 
   // Confirm Password field
-
   if (cpassword.trim() === "") {
     cpassworderr.textContent = "Field is required";
     isValid = false;
-    setTimeout(function () {
-      cpassworderr.textContent = "";
-    }, 3000);}
- else if (password !== cpassword) {
+  } else if (password !== cpassword) {
     cpassworderr.textContent = "Passwords do not match.";
-    setTimeout(function () {
-      cpassworderr.textContent = "";
-    }, 3000);
     isValid = false;
   }
+
+  setTimeout(function () {
+    nameerr.textContent = "";
+    emailerr.textContent = "";
+    passworderr.textContent = "";
+    cpassworderr.textContent = "";
+  }, 3000);
 
   return isValid;
 }
