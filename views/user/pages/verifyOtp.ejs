@@ -14,6 +14,8 @@
         type="submit"
         value="SIGNUP"
         class="btn btn-danger btn-lg ms-2 rounded"
+        id="verify"
+      
       >
         Verify
       </button>
@@ -110,6 +112,7 @@
     const timerElement = document.getElementById("timer");
     const resendButton = document.getElementById("resendOTPButton");
     const text = document.getElementById("text");
+    const verify=document.getElementById("verify")
 
     timerElement.textContent = `${(timerSeconds % 60)
       .toString()
@@ -129,7 +132,8 @@
   }, 3000);
 
   setTimeout(() => {
+    verify.style.display="none";
     text.style.display = "block";
     resendOTPButton.style.display = "inline-block";
-  }, 31000);
+  }, 32000);
 </script>
