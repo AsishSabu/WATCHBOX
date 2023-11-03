@@ -1,69 +1,101 @@
+
+
+
+
+
 <div class="container">
-    <div class="row">
-      <div class="col-md-6 offset-md-3 center-content">
-        <h1>Edit Category</h1>
-        <form action="" method="post">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" value=<%= value.categoryName %>  name="text" >
-            <button class="btn btn-submit" type="submit" name="btn">Update</button>
-          </div>
-        </form>
-      </div>
+  <h1>Add Product</h1>
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="productName">Product Name</label>
+      <input type="text" class="form-control" id="productName" name="productName" required />
     </div>
-  </div>
-  <% if(typeof message !=='undefined') { %>
-    <div class="alert alert-success fade show mt-3" id="message" role="alert">
-        <%- message %>
+    <div class="form-group">
+      <label class="fw-bold"   for="category">Category</label>
+      <select name="categoryName" id="category" class="form-control" required>
+        <option class="fw-bolder" value="">Select Category</option>
+        <!-- EJS code for category options here -->
+
+        <% catList.forEach(category=> { %>
+          <option class="text-danger" value="<%= category?._id %>"><%= category.categoryName %></option>
+          <% }) %>
+      </select>
     </div>
-  <% } %>
-  
-  <% if(typeof catCheck !=='undefined') { %>
-    <div class="alert alert-danger fade show mt-3" id="message" role="alert">
-        <%- catCheck %>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
     </div>
-  <% } %>
-  
-  <script>
-  const message = document.getElementById('message');
-  
-  const hide = () => {
-    message.style.display = 'none';
-  }
-  
-  setTimeout(hide, 3000);
-  
-  </script>
-  
-  <style>
-    /* Style to add spacing from the top navbar */
-   
-    /* Center the content */
-    h1{
-        color: #fff;
-    }   
-  
-    .center-content {
-      text-align: center;
-      margin-top: 250px; 
-      background-color: rgb(0, 0, 0);
-      height: 200px;
-      padding-top: 40px;
-      color: #fff;
+    <div class="form-group">
+      <label for="productPrice">Product Price</label>
+      <input type="text" class="form-control" id="productPrice" name="productPrice" required />
+    </div>
+    <div class="form-group">
+      <label for="salePrice">Sale Price</label>
+      <input type="text" class="form-control" id="salePrice" name="salePrice" required />
+    </div>
+    <div class="form-group">
+      <label for="brand">Brand</label>
+      <input type="text" class="form-control" id="brand" name="brand" />
+    </div>
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input type="text" class="form-control" id="quantity" name="quantity" required />
+    </div>
+    <div class="form-group">
+      <label for="productImage">Product Images</label>
+      <input type="file" class="form-control-file" id="image" name="images" accept="image/*" multiple />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Product</button>
+  </form>
+</div>
+<!-- Add Bootstrap JS and jQuery (you may need to adjust the paths) -->
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+
+<style>
+ 
+
+  body {
+      background-color: #f4f4f4;
     }
-  
-    /* Style for the input and button */
-    .input-group {
-      margin: 0 auto;
-      max-width: 300px;
+
+    .container {
+      position: absolute;
+    margin-top: 72px;
+      background-color: #fff;
+      border: 1px solid #ffffff;
+      border-radius: 5px;
+      padding: 20px;
+      
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .input-group input::placeholder {
-    color: #f7f7f7; /* Replace with your desired color */
-  }
-  
-    /* Style for the button */
-    .btn-submit {
-      background-color: #ffffff;
-      color: #000000;
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .form-control {
+      width: 100%;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
       border: none;
     }
-  </style>
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    /* Additional styling for responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        margin: 20px;
+      }
+    }
+</style>
+

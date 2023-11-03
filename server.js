@@ -5,6 +5,7 @@ const path = require('path');
 const nocache=require('nocache');
 const morgan = require('morgan');
 const flash=require('connect-flash');
+const passport = require('passport');
 
 
 app.use(expressLayout);
@@ -25,6 +26,16 @@ app.use(session({
     resave:false,
     saveUninitialized:false
 }));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+require('./utils/passport')
+
+app.use((req,res,next)=>{
+    res.locals.user=req.user;
+    next();
+})
 
 
  // Call the database connection function

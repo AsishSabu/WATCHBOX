@@ -186,11 +186,16 @@ const userLogin = asynchandler(async (req, res) => {
 //--------------------------------logout----------------------------------------------------
 const logout = asynchandler(async (req, res) => {
   try {
-    req.session.destroy();
-    res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
+    req.logout(function (err) {
+
+        if (err) {
+            next(err);
+        }
+    })
+    res.redirect('/')
+} catch (error) {
+    console.log(error.message);
+}
 });
 
 //-------------------load--sendEmail----------------------------------------------------------------
