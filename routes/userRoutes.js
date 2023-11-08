@@ -55,6 +55,6 @@ userRoute.get("/viewProduct/:id", shopController.loadProductDetails);
 //------------------------user Cart page--------------------------------------------------- 
 
 userRoute.get('/cart',ensureAuthenticated,cartController.loadCart)
-// userRoute.get('/addToCart',ensureAuthenticated,cartController.addToCart)
+userRoute.get('/addToCart/:id',ensureAuthenticated,cartController.addToCart)
 
 module.exports = userRoute;

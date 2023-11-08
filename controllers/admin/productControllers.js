@@ -20,7 +20,7 @@ const loadProduct = asynchandler(async (req, res) => {
     });
   } catch (error) {
     // Handle the error appropriately, e.g., render an error page or log the error
-    console.error(error.message);
+    throw new Error(error);
   }
 });
 
@@ -35,7 +35,7 @@ const addProduct = asynchandler(async (req, res) => {
       catList: Category,
     });
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -135,7 +135,7 @@ const editProduct = asynchandler(async (req, res) => {
       Product,
     });
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -152,28 +152,58 @@ const updateProduct = asynchandler(async (req, res) => {
     res.redirect("/admin/products");
 
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 
 //----------------------------for editing the image----------------------------
 
 const editImage = asynchandler(async (req, res) => {
-  try {
-    const id = req.params.id;
+   try {
+    const imageId = req.params.id;
+    const file = req.file;
+    console.log('file', req.file);
+    console.log(imageId);
+    const imageBuffer = await sharp(file.path)
+    .resize(600, 800)
+    .toBuffer();
+  const thumbnailBuffer = await sharp(file.path)
+    .resize(300, 300)
+    .toBuffer();
+  const imageUrl = path.join("/admin/uploads", file.filename);
+  const thumbnailUrl = path.join("/admin/uploads", file.filename);
 
-    const Product = await product.findById(id).populate("images").exec();
-    res.render("admin/pages/products/update-image", {
-      title: "Edit Images",
-      product,
-      messages,
+    const images = await Images.findByIdAndUpdate(imageId, {
+      imageUrl: imageUrl,
+      thumbnailUrl: thumbnailUrl,
     });
+
+    req.flash("success", "Image updated");
+    res.redirect("back");
   } catch (error) {
     throw new Error(error);
   }
 });
 
 //---------------------------
+
+
+const deleteImage = asynchandler(async (req, res) => {
+  try {
+    const imageId = req.params.id;
+    // Optionally, you can also remove the image from your database
+    await Images.findByIdAndRemove(imageId);
+    const Product = await product.findOneAndUpdate(
+      { images: imageId },
+      { $pull: { images: imageId } },
+      { new: true }
+    );
+    res.json({ message: "Images Removed" });
+  } catch (error) {
+    throw new Error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 const editProductImages = asynchandler(async (req, res) => {
   res.send("editProductImages");
@@ -194,4 +224,5 @@ module.exports = {
   editImage,
   editProductImages,
   addNewImages,
+  deleteImage
 };

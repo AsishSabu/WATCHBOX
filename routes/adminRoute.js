@@ -38,7 +38,8 @@ adminRoute.post('/product/list/:id',isAdminLoggedin,productController.listProduc
 adminRoute.post('/product/unlist/:id',isAdminLoggedin,productController.unListProduct)
 adminRoute.get('/product/editProduct/:id',isAdminLoggedin,productController.editProduct)
 adminRoute.post('/product/editProduct/:id',isAdminLoggedin,productController.updateProduct)
-adminRoute.post('/product/editProduct/:id',isAdminLoggedin,productController.editImage)
+adminRoute.put('/product/editImage/:id',isAdminLoggedin,upload.single('images'),productController.editImage)
+adminRoute.delete('/product/deleteImage/:id',isAdminLoggedin,productController.deleteImage)
 // adminRoute.post('/product/editProduct/editImage/:id',uploadSingle,isAdminLoggedin,productController.editProductImages)
 // adminRoute.post("/editproduct/images/upload/new/:id", uploadMultiple, productController.addNewImages);
 
@@ -51,7 +52,7 @@ adminRoute.post('/addCategory',isAdminLoggedin,categoryController.insertCategory
 adminRoute.get('/category/list/:id',isAdminLoggedin,categoryController.list)
 adminRoute.get('/category/unlist/:id',isAdminLoggedin,categoryController.unList)
 adminRoute.get('/:id',isAdminLoggedin,categoryController.editCategory)
-adminRoute.post('/:id',isAdminLoggedin,categoryController.updateCategory)
+adminRoute.post('/:id',isAdminLoggedin,upload.single('image'),categoryController.updateCategory)
 
 
 
