@@ -1,5 +1,3 @@
-
-
 const User = require("../../models/userModels");
 const otpSetup = require("../admin/otpSetup");
 const otpDb = require("../../models/otpModel");
@@ -7,24 +5,21 @@ const asynchandler = require("express-async-handler");
 const otpdb = require("../../models/otpModel");
 const bcrypt = require("bcrypt");
 const product = require("../../models/productModel");
-
-
-
-
-
-
+const category = require("../../models/categoryModel");
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
   try {
+    const listedCategories = await category.find({ isListed: true });
+    const listedCategoryIds = listedCategories.map((category) => category._id);
     const topProduct = await product
-      .find({ isListed: true })
-      .populate("categoryName")
+      .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
       .populate("images")
       .limit(8);
+
     res.render("./user/pages/index", { topProduct });
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -43,7 +38,9 @@ const loadRegister = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
     res.render("./user/pages/register", { messages });
-  } catch (error) {}
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 //---------------------insert user to database-----------------------
@@ -85,7 +82,7 @@ const insertUser = asynchandler(async (req, res) => {
     try {
       return res.redirect("/verifyOtp");
     } catch (error) {
-      console.log(error.message);
+      throw new Error(error);
     }
   } catch (error) {
     throw new Error(error);
@@ -99,7 +96,7 @@ const loadOtp = asynchandler(async (req, res) => {
     const messages = req.flash();
     res.render("./user/pages/verifyOtp", { email: email, messages });
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -122,7 +119,7 @@ const verifyOtp = async (req, res) => {
       res.redirect("/verifyOtp");
     }
   } catch (error) {
-    console.error(error);
+    throw new Error(error);
     res.status(500).send("verify otp Error");
   }
 };
@@ -141,7 +138,7 @@ const resendOtp = asynchandler(async (req, res) => {
     try {
       return res.redirect("/verifyOtp");
     } catch (error) {
-      console.log(error.message);
+      throw new Error(error);
     }
   } catch (error) {
     throw new Error(error);
@@ -179,7 +176,7 @@ const userLogin = asynchandler(async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -187,15 +184,14 @@ const userLogin = asynchandler(async (req, res) => {
 const logout = asynchandler(async (req, res) => {
   try {
     req.logout(function (err) {
-
-        if (err) {
-            next(err);
-        }
-    })
-    res.redirect('/')
-} catch (error) {
-    console.log(error.message);
-}
+      if (err) {
+        next(err);
+      }
+    });
+    res.redirect("/");
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 //-------------------load--sendEmail----------------------------------------------------------------
@@ -204,7 +200,7 @@ const loadSendEmail = asynchandler(async (req, res) => {
     const messages = req.flash();
     res.render("./user/pages/otpVerification", { messages });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 });
 
@@ -228,11 +224,11 @@ const sendEmail = asynchandler(async (req, res) => {
       try {
         res.redirect("/verifyEmail");
       } catch (error) {
-        console.log(error.message);
+        throw new Error(error);
       }
     }
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 });
 
@@ -284,13 +280,12 @@ const reverifyEmail = asynchandler(async (req, res) => {
     try {
       return res.redirect("/verifyEmail");
     } catch (error) {
-      console.log(error.message);
+      throw new Error(error);
     }
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error);
   }
 });
-
 
 //------------------------exported modules------------------------
 module.exports = {
@@ -309,5 +304,3 @@ module.exports = {
   verifyEmail,
   reverifyEmail,
 };
-
-

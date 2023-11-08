@@ -101,7 +101,7 @@
             <div class="card-body p-4">
               <% Product.images.forEach((element, index) => { %>
               <form
-                action="/admin/product/editproduct/editImage/<%= Product.images[index]._id %>"
+                action="/admin/product/editImage/<%= Product.images[index]._id %>/?_method=PUT"
                 method="post"
                 enctype="multipart/form-data"
               >
@@ -122,7 +122,7 @@
                       id="image<%= index %>"
                       accept="image/*"
                       style="display: none"
-                      name="image"
+                      name="images"
                     />
                     <button
                       type="button"
@@ -139,9 +139,6 @@
                     >
                       <i class="fas fa-edit"></i> Update Image
                     </button>
-                    <!-- <button type="submit" class="btn btn-sm btn-danger mt-2" id="submitImage<%= index %>" onclick="removeImage(`<%= Product.images[index]._id %>`)" disabled>
-                      <i class="fas fa-delete"></i> Remove Image
-                    </button> -->
                     <button
                       type="button"
                       onclick="removeImage(`<%= Product.images[index]._id %>`)"
@@ -234,8 +231,9 @@
 <script>
   function removeImage(id) {
     const imageId = id;
-    const url = `/admin/Product/editproduct/images/delete/${imageId}`;
+    const url = `/admin/product/deleteImage/${imageId}`;
     const imageElement = document.getElementById(`previewImage${imageId}`);
+
     fetch(url, {
       method: "DELETE",
     })
