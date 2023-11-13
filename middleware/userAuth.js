@@ -1,31 +1,41 @@
-const isLogin=async (req, res, next) =>{
-    try {
-        if(req.session.user_id){
-            next();
-        }else{
-            res.redirect('/')
+const User = require('../models/userModels')
+
+async function ensureAuthenticated(req, res, next) {
+
+    if (req.isAuthenticated()) {
+        if (req.user.id) {   /* checking the id of user  */
+            const user = await isBlockCheck(req.user.id);
+            if(user.isBlock) {    /*** if user status is blocked user will be redirected to
+                                              login page after clearing the session ***/
+                req.logout(function (err) {
+                    if (err) {
+                        next(err);
+                    }
+                })
+                res.redirect('/login')
+
+            }else {
+                next();
+            }
         }
-      
-    } catch (error) {
-        console.log(error.message);
+    }else{
+        res.redirect('/login')
     }
 }
 
-const isLogout=async (req, res, next) =>{
-    try {
-        if(req.session.user_id){
-            res.redirect('/home')
-        }else{
-            next();
-        }
-       
-    } catch (error) {
-        console.log(error.message);
+
+function ensureNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect('back')
+
+    } else {
+        next()
     }
 }
 
+const isBlockCheck = async (id) => {
+    const isBlockChecking = await User.findOne({ _id: id });
+    return isBlockChecking;
+}
 
-module.exports={
-    isLogin,
-    isLogout
-};
+module.exports = { ensureAuthenticated, ensureNotAuthenticated }

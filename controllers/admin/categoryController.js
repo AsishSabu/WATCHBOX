@@ -1,259 +1,132 @@
-// const categoryDb=require('../models/categoryModel')
-// const asynchandler = require("express-async-handler");
-// let mongoose =require("mongoose");
-// const response= require('../routes/adminRoute');
+const category = require("../../models/categoryModel");
+const expressHandler = require("express-async-handler");
 
-
-
-// //---------------load category page----------------------------
-
-// const loadCategory=asynchandler(async(req, res)=>{
-
-//     try {
-//     const category=await categoryDb.find();
-//     res.render('./admin/pages/category',{category:category,title:'WATCHBOX/CATEGORY'})
-
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// });
-
-// //--------------------------------load add category-------------------------------
-
-// const loadAddCategory=asynchandler(async(req, res)=>{
-//     try {
-//         res.render('./admin/pages/addCategory',{title:'WATCHBOX/ADD_CATEGORY'})
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// });
-
-// //----------------------inserting categories-------------------------------   
-
-// const insertCategory=asynchandler(async(req, res)=>{
-//     try {
-//         const categoryName=req.body.text;
-//         const regexCategoryName = new RegExp(`^${categoryName}$`, 'i');
-//         const findCat=await categoryDb.findOne({ title:regexCategoryName});
-       
-//         if(findCat){
-//             const catCheck= `Category ${categoryName} Already existing`;
-//             res.render('./admin/pages/addCategory',{catCheck,title:'WATCHBOX/ADD_CATEGORY'})
-//         }else{
-//             const result= new categoryDb({
-//                 title:categoryName
-//             });
-//             await result.save();
-//             res.render('./admin/pages/addCategory',{
-//                 message:`Category ${categoryName} added successfully`,
-//                 title:'WATCHBOX/ADD_CATEGORY'
-//             })
-//         }
-
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// });
-
-
-// //------------------list categories --------------------------------
-
-// const list=asynchandler(async(req,res) => {
-//     try {
-//         const id=req.params.id;
-//         const list=await categoryDb.findByIdAndUpdate({_id:id},{$set:{isListed:true}})
-   
-//      res.redirect('/admin/category')
-    
-//     } catch (error) {
-//         console.log(error.message); 
-//     }
-// });
-
-
-// //---------------------------unlist categories --------------------------------
-
-// const unList=asynchandler(async(req,res) => {
-//     try {
-//      const id=req.params.id
-//      const list=await categoryDb.findByIdAndUpdate({_id:id},{$set:{isListed:false}})
- 
-//      res.redirect('/admin/category')
-   
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// });
-
-// //------------------------------load --edit category-----------------------------
-
-// const loadEditCategory=asynchandler(async(req, res)=>{
-
-//     try {
-//         const { id } = req.params
-//         const catName = await categoryDb.findById(id);
-//         if (catName) {
-//             res.render('./admin/pages/editCate', { title: 'WATCHBOX/EDIT_CATEGORY', value: catName });
-//         } else {
-//             console.log('error in render edit category');
-//         }
-//     } catch (error) {
-//         console.log(error);
-//     }
-
-
-// });
-
-
-// //-------------------------edit category----------------------------------------        
-
-// const editCategory=asynchandler(async(req, res)=>{
-//     try {
-      
-//        const id = req.params.id;
-//        console.log(id)
-     
-//        const text=req.body.text 
-    
-//        const category= await categoryDb.findByIdAndUpdate(id,{$set:{title:text}})
-
-//         res.redirect('/admin/category')
-//     } catch (error) {
-        
-//     }
-
-// })
-
-
-
-
-
-// module.exports={
-//     loadCategory,
-//     loadAddCategory,
-//     insertCategory,
-//     list,
-//     unList,
-//     loadEditCategory,
-//     editCategory,
-  
-
-// }
-const category = require('../../models/categoryModel')
-const expressHandler = require('express-async-handler')
-
-
-// category page-- 
+// category page--
 const categoryManagement = expressHandler(async (req, res) => {
-    try {
-        const findCategory = await category.find()
-        res.render('./admin/pages/category', {category:findCategory, title: 'Categories' })
-    } catch (error) {
-        throw new Error(error)
-    }
-})
+  try {
+    const findCategory = await category.find();
+    res.render("./admin/pages/category", {
+      category: findCategory,
+      title: "Categories",
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // addCategory form---
 const addCategory = expressHandler(async (req, res) => {
-    try {
-        res.render('./admin/pages/addCategory', { title: 'addCategory' })
-    } catch (error) {
-        throw new Error(error)
-    }
-})
+  try {
+    res.render("./admin/pages/addCategory", { title: "addCategory" });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // inserting  categories--
 const insertCategory = expressHandler(async (req, res) => {
-    try {
+  try {
+    const categoryName = req.body.text;
+    const regexCategoryName = new RegExp(`^${categoryName}$`, "i");
+    const findCat = await category.findOne({ categoryName: regexCategoryName });
 
-        const categoryName = req.body.text;
-        const regexCategoryName = new RegExp(`^${categoryName}$`, 'i');
-        const findCat = await category.findOne({ categoryName: regexCategoryName });
+    if (findCat) {
+      const catCheck = `Category ${categoryName} Already existing`;
+      res.render("./admin/pages/addCategory", {
+        catCheck,
+        title: "addCategory",
+      });
+    } else {
+      const result = new category({
+        categoryName: categoryName,
+      });
+      await result.save();
 
-        if (findCat) {
-            const catCheck = `Category ${categoryName} Already existing`;
-            res.render('./admin/pages/addCategory', { catCheck, title: 'addCategory' });
-        } else {
-            const result = new category({
-                categoryName: categoryName,
-            });
-            await result.save();
-
-            res.render('./admin/pages/addCategory', {
-                message: `Category ${categoryName} added successfully`,
-                title: 'addCategory',
-            });
-        }
-
-    } catch (error) {
-        throw new Error(error);
+      res.render("./admin/pages/addCategory", {
+        message: `Category ${categoryName} added successfully`,
+        title: "addCategory",
+      });
     }
+  } catch (error) {
+    throw new Error(error);
+  }
 });
-
 
 // //---------------------------unlist categories --------------------------------
 
- const unList=expressHandler(async(req,res) => {
-     try {
-     const id=req.params.id
-      const list=await category.findByIdAndUpdate({_id:id},{$set:{isListed:false}})
- 
-      res.redirect('/admin/category')
-   
-     } catch (error) {
-         console.log(error.message);
-     }
-  });
+const unList = expressHandler(async (req, res) => {
+  try {
+    const id = req.params.id;
+    const list = await category.findByIdAndUpdate(
+      { _id: id },
+      { $set: { isListed: false } }
+    );
+
+    res.redirect("/admin/category");
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // list category--
 const list = expressHandler(async (req, res) => {
-    try {
+  try {
+    const id = req.params.id;
+    console.log(id);
 
-        const id = req.params.id
-        console.log(id);
-
-        const listing = await category.findByIdAndUpdate({ _id: id }, { $set: { isListed: true } })
-        console.log(listing);
-        res.redirect('/admin/category')
-
-    } catch (error) {
-        throw new Error(error)
-    }
-})
-
-
+    const listing = await category.findByIdAndUpdate(
+      { _id: id },
+      { $set: { isListed: true } }
+    );
+    console.log(listing);
+    res.redirect("/admin/category");
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // edit Category form --
 const editCategory = expressHandler(async (req, res) => {
-
-    try {
-        const { id } = req.params
-        const catName = await category.findById(id);
-        if (catName) {
-            res.render('./admin/pages/editCategory', { title: 'editCategory', value: catName });
-        } else {
-            console.log('error in rendering');
-        }
-    } catch (error) {
-        throw new Error(error)
+  try {
+    const { id } = req.params;
+    const catName = await category.findById(id);
+    if (catName) {
+      const messages = req.flash();
+      res.render("./admin/pages/editCategory", {
+        title: "editCategory",
+        value: catName, messages
+      });
+    } else {
+      console.log("error in rendering");
     }
-})
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
-// update Category name 
+// update Category name
 const updateCategory = expressHandler(async (req, res) => {
-    try {
-        const id = req.params.id
-        const updatedName = req.body.text
+  try {
+    const id = req.params.id;
+    const updatedName = req.body.text;
+    const existedCategory = await category.findOne({
+      categoryName: updatedName,
+    });
+    if (existedCategory) {
+      req.flash("danger", `${updatedName} already exists, try new one`);
+      res.redirect("back");
+    } else {
         const cat = await category.findById(id)
         console.log(cat);
         cat.categoryName = updatedName;
        
         const saved = await cat.save()
         res.redirect('/admin/category')
-    } catch (error) {
-        throw new Error(error)
     }
-})
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // searchcCategory----
 // const searchCategory = expressHandler(async (req, res) => {
@@ -273,15 +146,13 @@ const updateCategory = expressHandler(async (req, res) => {
 //     }
 // })
 
-
 module.exports = {
-    categoryManagement,
-    addCategory,
-    insertCategory,
-    list,
-    unList,
-    editCategory,
-    updateCategory,
-    // searchCategory
-
-}
+  categoryManagement,
+  addCategory,
+  insertCategory,
+  list,
+  unList,
+  editCategory,
+  updateCategory,
+  // searchCategory
+};

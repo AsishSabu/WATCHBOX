@@ -5,6 +5,9 @@ const path = require('path');
 const nocache=require('nocache');
 const morgan = require('morgan');
 const flash=require('connect-flash');
+const passport = require('passport');
+const override=require('method-override')
+const { notFound, errorHandler }=require('./middleware/errorHandler')
 
 
 app.use(expressLayout);
@@ -27,6 +30,18 @@ app.use(session({
 }));
 
 
+app.use(passport.initialize());
+app.use(passport.session());
+require('./utils/passport')
+
+app.use(override('_method'))
+
+app.use((req,res,next)=>{
+    res.locals.user=req.user;
+    next();
+})
+
+
  // Call the database connection function
 const database = require('./config/database');
 database.dbConnect();
@@ -41,6 +56,10 @@ app.use('/', userRoute);
 const adminRoute = require('./routes/adminRoute');
 app.use('/admin', adminRoute);
 
+
+//-------------------error handling----------------
+
+app.use(errorHandler);
 
 
 app.listen(4000, () => {
