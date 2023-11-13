@@ -1,6 +1,6 @@
 <div class="container">
   <% if(category.length){ %>
-  <table id="categoryTable" class="table table-bordered">
+  <table id="adminsTable" class="table table-bordered">
     <thead>
       <tr>
         <th>ID</th>
@@ -16,12 +16,13 @@
         <td><%= category.categoryName %></td>
         <td>
           <% if(category.isListed){ %>
-          <a href="/admin/category/unlist/<%- category?._id  %>">
-            <button class="btn btn-success btn-list">List</button></a
+          <a href="/admin/category/unlist/<%- category?._id  %>">   
+            <button class="btn btn-danger btn-unlist">Unlist</button> </a
           >
           <% }else{ %>
           <a href=" /admin/category/list/<%- category?._id  %>">
-            <button class="btn btn-danger btn-unlist">Unlist</button>
+          
+            <button class="btn btn-success btn-list">List</button>
           </a>
           <% } %>
         </td>

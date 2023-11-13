@@ -27,6 +27,7 @@ adminRoute.post('/blockUser/:id',isAdminLoggedin,adminController.blockUser)
 adminRoute.post('/unblockUser/:id',isAdminLoggedin,adminController.unblockUser)
 
 
+
 //-----------------------admin product management ----------------------------------------------------------------
 
 
@@ -35,20 +36,24 @@ adminRoute.get('/addProduct',isAdminLoggedin,productController.addProduct)
 adminRoute.post('/addProduct',uploadMultiple,productController.insertProduct)
 adminRoute.post('/product/list/:id',isAdminLoggedin,productController.listProduct)
 adminRoute.post('/product/unlist/:id',isAdminLoggedin,productController.unListProduct)
-adminRoute.get('/product/editproduct/:id',isAdminLoggedin,productController.editProduct)
-
+adminRoute.get('/product/editProduct/:id',isAdminLoggedin,productController.editProduct)
+adminRoute.post('/product/editProduct/:id',isAdminLoggedin,productController.updateProduct)
+adminRoute.put('/product/editImage/:id',isAdminLoggedin,upload.single('images'),productController.editImage)
+adminRoute.put('/product/editImage/upload/:id',upload.array("files",4),isAdminLoggedin,productController.addNewImages)
+adminRoute.delete('/product/deleteImage/:id',isAdminLoggedin,productController.deleteImage)
+// adminRoute.post('/product/editProduct/editImage/:id',uploadSingle,isAdminLoggedin,productController.editProductImages)
+// adminRoute.post("/editproduct/images/upload/new/:id", uploadMultiple, productController.addNewImages);
 
 
 //---------------------admin category management ----------------------------------------------------------------  
 
 adminRoute.get('/category',isAdminLoggedin,categoryController.categoryManagement)
-
 adminRoute.get('/addCategory',isAdminLoggedin,categoryController.addCategory)
 adminRoute.post('/addCategory',isAdminLoggedin,categoryController.insertCategory)
 adminRoute.get('/category/list/:id',isAdminLoggedin,categoryController.list)
 adminRoute.get('/category/unlist/:id',isAdminLoggedin,categoryController.unList)
 adminRoute.get('/:id',isAdminLoggedin,categoryController.editCategory)
-adminRoute.post('/:id',isAdminLoggedin,categoryController.updateCategory)
+adminRoute.post('/:id',isAdminLoggedin,upload.single('image'),categoryController.updateCategory)
 
 
 

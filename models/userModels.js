@@ -24,7 +24,18 @@ const userSchema=new Schema({
      isVerified:{
         type:Boolean,
         default:false,
-     }
+     },
+     cart:[{
+        product:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Product'
+        },
+        quantity:Number,
+     }],
+     addresses:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Address'
+     }]
 
 },{timestamps:true});
 
@@ -36,6 +47,12 @@ userSchema.pre('save',async function(next){
     }
     next();
 })
+
+userSchema.methods.isPasswordMatched = async function (enteredPassword) {
+    // Checking for matching password
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
 
 
 
