@@ -1,32 +1,36 @@
 const asynchandler = require("express-async-handler");
-const product=require("../../models/productModel")
-const category=require("../../models/categoryModel")
-
-
+const product = require("../../models/productModel");
+const category = require("../../models/categoryModel");
 
 // //----------------------load shop page ---------------------------------------
-exports.loadShop=asynchandler(async(req,res)=>{
+exports.loadShop = asynchandler(async (req, res) => {
   try {
-    const categories = await category.find({isListed:true});
-  
-    const products= await product.find({isListed:true}).populate("categoryName").populate("images")
 
-    res.render('./user/pages/shop',{products,categories})
+    const categories = await category.find({ isListed: true });
+    const listedCategoryIds = categories.map((category) => category._id);
+    const products = await product
+      .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
+      .populate("images")
+      .limit(8);
+    res.render("./user/pages/shop", {title:'WATCHBOX', products, categories });
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
-})
+});
 
 // //--------------------------load product details-------------------------------
 
-exports.loadProductDetails = asynchandler(async(req, res)=>{
+exports.loadProductDetails = asynchandler(async (req, res) => {
   try {
     const id = req.params.id;
- const Product = await product.findOne({_id:id}).populate("images").populate("categoryName");   
- const relatedProducts = await product.find().populate("images");
+    const Product = await product
+      .findOne({ _id: id })
+      .populate("images")
+      .populate("categoryName");
+    const relatedProducts = await product.find().populate("images");
 
- res.render("./user/pages/productDetails", {Product,relatedProducts})
+    res.render("./user/pages/productDetails", {title:'WATCHBOX', Product, relatedProducts });
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
-})
+});

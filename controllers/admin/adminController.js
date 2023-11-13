@@ -56,14 +56,14 @@ const loadIndex = asynchandler(async(req,res)=>{
 
 //---------------------load user list-------------------
 
-const userList=asynchandler(async(req,res)=>{
-    try {
-        res.render('./admin/pages/userlist',{title:"WATCHBOX/USERLIST"})
+// const userList=asynchandler(async(req,res)=>{
+//     try {
+//         res.render('./admin/pages/userlist',{title:"WATCHBOX/USERLIST"})
         
-    } catch (error) {
-        console.log(error.message)
-    }
-})
+//     } catch (error) {
+//         console.log(error.message)
+//     }
+// })
 
 
 //---------------usermanagement------------------------ 
@@ -149,7 +149,6 @@ module.exports= {
     loadLogin,
     loadIndex,
     verifyAdmin,
-    userList,
     userManagement,
     searchUser,
     blockUser,

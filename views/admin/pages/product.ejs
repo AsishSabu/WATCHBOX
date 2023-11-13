@@ -1,6 +1,6 @@
-<div class="container">
-  <h1>Product Page</h1>
-  <table class="table table-bordered">
+<div class="container ">
+  
+  <table id="adminsTable" class="table table-bordered ">
     <thead>
       <tr>
         <th>S.No</th>
@@ -43,7 +43,7 @@
         <td>
           <div class="btn-group" role="group" aria-label="Product Actions">
             <a
-              href="/admin/product/editproduct/<%= product._id %>"
+              href="/admin/product/editProduct/<%= product._id %>"
               class="btn btn-primary btn-sm"
               style="margin-right: 10px"
             >
@@ -94,3 +94,9 @@
     </tbody>
   </table>
 </div>
+
+<style>
+  .container{
+   padding:100px;
+  }
+</style>
