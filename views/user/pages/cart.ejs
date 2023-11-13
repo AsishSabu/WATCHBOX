@@ -1,186 +1,207 @@
-<div class=" ">
-  <!-- Include cart-page.html content here -->
-  <div
-    class="breadcrumb-area pt-205 pb-210"
-    style="background-image: url(assets/img/bg/breadcrumb.jpg)"
-  >
-    <div class="container">
-      <div class="breadcrumb-content text-center">
-        <h2>cart page</h2>
-        <ul>
-          <li><a href="#">home</a></li>
-          <li>cart page</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <!-- shopping-cart-area start -->
-  <div class="cart-main-area pt-95 pb-100">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-          <h1 class="cart-heading text-white fw-bold">Cart</h1>
-          <% if (cartItems && cartItems.products.length>=0) { %>
-          <form action="#">
-            <div class="table-content table-responsive">
-              <table>
-                <thead>
-                  <tr>
-                    <th>remove</th>
-                    <th>images</th>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <%if (cartItems){%> <%
-                  cartItems.products.forEach((product,index)=>{ %>
-                  <tr>
-                    <td class="product-remove">
-                      <a href="/cart/remove/<%=product.product._id %>"
-                        ><i class="pe-7s-close"></i
-                      ></a>
-                    </td>
-                    <td class="product-thumbnail">
-                      <a href="">
-                        <%if(product.product&&product.product.images&&
-                        product.product.images[0]&&product.product.images[0].thumbnailUrl){%>
-                        <img
-                          src="<% product.product.images[0].thumbnailUrl %>"
-                          alt="Thumbnail"
-                        />
-                        <% } else { %>
-                        <img src="" alt="" class="img-thumbnail" />
-                        <% } %>
-                      </a>
-                    </td>
-                    <td class="product-name">
-                      <a href="#"> <%= product.product.title %> </a>
-                    </td>
-                    <td class="product-price-cart">
-                      <span class="amount">$165.00</span>
-                    </td>
-                    <td class="product-quantity">
-                      <input value="1" min="1" type="number" />
-                    </td>
-                    <td class="product-subtotal">$165.00</td>
-                  </tr>
-                  <% }) %> <% } %>
-                </tbody>
-              </table>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="coupon-all">
-                  <div class="coupon">
-                    <input
-                      id="coupon_code"
-                      class="input-text"
-                      name="coupon_code"
-                      value=""
-                      placeholder="Coupon code"
-                      type="text"
-                    />
-                    <input
-                      class="button"
-                      name="apply_coupon"
-                      value="Apply coupon"
-                      type="submit"
-                    />
-                  </div>
-                  <div class="coupon2">
-                    <input
-                      class="button"
-                      name="update_cart"
-                      value="Update cart"
-                      type="submit"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-5 ms-auto">
-                <div class="cart-page-total">
-                  <h2>Cart totals</h2>
-                  <ul>
-                    <li>Subtotal<span>100.00</span></li>
-                    <li>Total<span>100.00</span></li>
-                  </ul>
-                  <a href="#">Proceed to checkout</a>
-                </div>
-              </div>
-            </div>
-          </form>
-          <% } else { %>
-
-<div class="text-center">
-  <p>No Items in the cart</p>
-  <a href="/shop" class="btn btn-dark h-auto">Shop Now</a>
-</div>
-<% } %>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- shopping-cart-area end -->
 
 <style>
-  /* Custom styles for a black background and responsiveness */
-  body {
-    background-color: #000;
-    color: #fff;
-  }
-
-  .cart-main-area {
-    background-color: #111;
-    padding: 50px 0;
-    border-radius: 10px;
-  }
-
-  .cart-heading {
-    color: #ffffff;
-  }
-
-  table {
-    color: #fff;
-  }
-
-  .product-thumbnail img {
-    max-width: 100px;
-    height: auto;
-  }
-
-  .product-quantity input {
-    width: 50px;
-  }
-
-  .coupon input[type="text"] {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .cart-page-total {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-  }
-
-  .cart-page-total h2 {
-    color: #fff;
-  }
-
-  .cart-page-total ul li {
-    list-style: none;
-    font-size: 18px;
-    margin: 10px 0;
-  }
-
-  a.btn.btn-primary {
-    background-color: #f00;
-    border: none;
+  .quantity-input {
+    max-width: 30px;
+    max-height: 30px;
   }
 </style>
+
+<div class="breadcrumb-area" style="background-color: black; color: white">
+  <div class="container">
+    <div class="breadcrumb-content text-center pt-1">
+      <ul>
+        <li>
+          <h3><a href="/">Home</a></h3>
+        </li>
+        <li>
+          <h3 style="color: white">/</h3>
+        </li>
+        <li>
+          <h3 style="color: white">Cart</h3>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- shopping-cart-area start -->
+<!-- shopping-cart-area start -->
+<div class="cart-main-area pt-95 pb-100">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h1 class="cart-heading">Cart</h1>
+        <form action="/checkout" method="post">
+          <div class="table-content table-responsive">
+            <% if ( cartItems.products.length!==0) { %>
+            <table class="table table-hover table-borderless">
+              <thead class="bg-dark">
+                <tr>
+                  <th class="text-white">remove</th>
+                  <th class="text-white">images</th>
+                  <th class="text-white">Product</th>
+                  <th class="text-white">Price</th>
+                  <th class="text-white">Quantity</th>
+                  <th class="text-white">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+  
+     <% cartItems?.products?.forEach((product,index)=> { %>
+                <tr>
+                  <td class="product-remove">
+                    <a href="/cart/remove/<%= product.product._id %>"
+                      ><i class="pe-7s-close text-bg-secondary"></i
+                    ></a>
+                  </td>
+                  <td class="product-thumbnail">
+                    <a href="/product/<%= product.product._id %>">
+                      <% if (product.product && product.product.images &&
+                      product.product.images[0] &&
+                      product.product.images[0].thumbnailUrl) { %>
+                      <img
+                        src="<%= product.product.images[0].thumbnailUrl %>"
+                        alt="Thumbnail"
+                        class="img-thumbnail"
+                      />
+                      <% } else { %>
+                      <!-- Handle the case where thumbnailUrl is not available -->
+                      <img
+                        src="placeholder-thumbnail-url.jpg"
+                        alt="Placeholder"
+                        class="img-thumbnail"
+                      />
+                      <% } %>
+                    </a>
+                  </td>
+
+                  <td class="product-name">
+                    <a href="/product/<%= product.product._id %>">
+                      <%= product.product.title %>
+                    </a>
+                    <% if (product.product.isDeleted) { %>
+                    <p class="text-danger">Currently Unavailable</p>
+                    <% } else if (product.product.quantity < product.quantity) {
+                    %>
+                    <p class="text-danger">Out of Stock</p>
+                    <% } %>
+                  </td>
+                  <td class="product-price-cart">
+                    <span
+                      >₹
+                      <span class="amount">
+                        <% const
+                        productPrice=parseFloat(product.product.salePrice) %>
+                        <%= productPrice.toFixed(2) %>
+                      </span>
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group" role="group" aria-label="Quantity">
+                      <a
+                        href="javascript:void(0);"
+                        class="btn btn-outline-secondary h-auto minusBtn"
+                        data-product-id="<%= product.product._id %>"
+                      >
+                        <i class="ti ti-minus"></i>
+                      </a>
+                      <span
+                        class="btn btn-dark h-auto quantity"
+                        id="quantity_<%= product.product._id %>"
+                      >
+                        <%= product.quantity %>
+                      </span>
+
+                      <a
+                        href="javascript:void(0);"
+                        class="btn btn-outline-secondary h-auto plusBtn"
+                        data-product-id="<%= product.product._id %>"
+                        id="plusBtn"
+                      >
+                        <i class="ti ti-plus"></i>
+                      </a>
+                    </div>
+                  </td>
+                  <td
+                    class="product-subtotal"
+                    id="totalProductPrice_<%= product.product._id %>"
+                  >
+                    <% if (product.product) { %> <% const
+                    productTotal=parseFloat(product.product.salePrice); %> <%
+                    const productQuantity=parseInt(product.quantity, 10); %> <%
+                    const totalProductPrice=productTotal * productQuantity; %>
+                    <%= totalProductPrice.toFixed(2) %> <% } else { %>
+                    <!-- Handle the case where product information is not available -->
+                    ₹0.00 <% } %>
+                  </td>
+                </tr>
+                <% }) %>
+  
+              </tbody>
+            </table>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-5 ms-auto">
+              <div class="cart-page-total">
+                <h2>Cart totals</h2>
+                <ul>
+                  <li>
+                    Subtotal
+                    <span
+                      >₹
+                      <span id="subtotal">
+                        <%= subtotal.toFixed(2) %>
+                      </span></span
+                    >
+                  </li>
+
+                  <li class="d-none" id="couponList">
+                    Discount <span>₹ <span id="appliedCoupon"></span></span>
+                  </li>
+                  <li>
+                    Total
+                    <span
+                      >₹
+                      <span id="cart-total">
+                        <%= total.toFixed(2) %>
+                      </span></span
+                    >
+                  </li>
+                </ul>
+                <% if (cartItems.products.some(product=>
+                product.product.quantity < product.quantity ) ||
+                cartItems.products.some(product=> product.product.isDeleted)) {
+                %>
+                <button
+                  class="btn btn-secondary cursor-na btn-dark"
+                  type="submit"
+                  disabled
+                >
+                  Proceed to checkout
+                </button>
+                <% } else { %>
+                <button id="checkoutBtn" class="btn btn-dark">
+                  Proceed to checkout
+                </button>
+                <% } %>
+              </div>
+            </div>
+          </div>
+
+          <% } else { %>
+
+          <div class="text-center m-5 p-5">
+            <p class="fw-bolder">No Items in the cart</p>
+            <a href="/shop" class="btn btn-dark h-auto">Shop Now</a>
+          </div>
+          <% } %>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- shopping-cart-area end -->
+
+<script src="assets/js/shop/cart.js"></script>

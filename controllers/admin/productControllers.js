@@ -14,8 +14,11 @@ const loadProduct = asynchandler(async (req, res) => {
       .populate("categoryName")
       .populate("images");
 
+      const messages=req.flash();
+
     res.render("./admin/pages/product", {
       title: "WATCHBOX/PRODUCTS",
+      messages,
       products: products, // Pass the products to the view
     });
   } catch (error) {
@@ -30,9 +33,11 @@ const addProduct = asynchandler(async (req, res) => {
   try {
     const Category = await category.find({ isListed: true });
     console.log(category);
+    const messages=req.flash();
     res.render("./admin/pages/addProduct", {
       title: "Add Product",
       catList: Category,
+      messages
     });
   } catch (error) {
     throw new Error(error);
@@ -81,6 +86,7 @@ const insertProduct = asynchandler(async (req, res) => {
 
       console.log("inserted", newProduct);
       if (newProduct) {
+        req.flash("success", "Product Created");
         res.redirect("/admin/products");
       }
     } else {
@@ -128,11 +134,13 @@ const editProduct = asynchandler(async (req, res) => {
       .populate("categoryName")
       .populate("images");
     const categories = await category.find({ isListed: true });
+    const messages=req.flash();
 
     res.render("./admin/pages/editProduct", {
       title: "editProduct",
       categories,
       Product,
+      messages
     });
   } catch (error) {
     throw new Error(error);
@@ -146,11 +154,10 @@ const updateProduct = asynchandler(async (req, res) => {
     const id = req.params.id;
     const exists = await product.findOne({ title: req.body.title });
 
-    // const updatedProduct = await product.findByIdAndUpdate(id, req.body);
+    const updatedProduct = await product.findByIdAndUpdate(id, req.body);
 
     console.log(exists);
     res.redirect("/admin/products");
-
   } catch (error) {
     throw new Error(error);
   }
@@ -159,19 +166,15 @@ const updateProduct = asynchandler(async (req, res) => {
 //----------------------------for editing the image----------------------------
 
 const editImage = asynchandler(async (req, res) => {
-   try {
+  try {
     const imageId = req.params.id;
     const file = req.file;
-    console.log('file', req.file);
+    console.log("file", req.file);
     console.log(imageId);
-    const imageBuffer = await sharp(file.path)
-    .resize(600, 800)
-    .toBuffer();
-  const thumbnailBuffer = await sharp(file.path)
-    .resize(300, 300)
-    .toBuffer();
-  const imageUrl = path.join("/admin/uploads", file.filename);
-  const thumbnailUrl = path.join("/admin/uploads", file.filename);
+    const imageBuffer = await sharp(file.path).resize(600, 800).toBuffer();
+    const thumbnailBuffer = await sharp(file.path).resize(300, 300).toBuffer();
+    const imageUrl = path.join("/admin/uploads", file.filename);
+    const thumbnailUrl = path.join("/admin/uploads", file.filename);
 
     const images = await Images.findByIdAndUpdate(imageId, {
       imageUrl: imageUrl,
@@ -186,7 +189,6 @@ const editImage = asynchandler(async (req, res) => {
 });
 
 //---------------------------
-
 
 const deleteImage = asynchandler(async (req, res) => {
   try {
@@ -205,13 +207,37 @@ const deleteImage = asynchandler(async (req, res) => {
   }
 });
 
-const editProductImages = asynchandler(async (req, res) => {
-  res.send("editProductImages");
-});
-
 //--------------------------------------------
 const addNewImages = asynchandler(async (req, res) => {
-  res.send("addNewImages");
+  try {
+    const files = req.files;
+    const imageUrls = [];
+    const productId = req.params.id;
+
+    for (const file of files) {
+      try {
+        const imageBuffer = sharp(file.path).resize(600, 600).toBuffer();
+        const thumbnailBuffer = sharp(file.path).resize(300, 300).toBuffer();
+
+        const imageUrl = path.join("/admin/uploads", file.filename);
+        const thumbnailUrl = path.join("/admin/uploads", file.filename);
+        imageUrls.push(imageUrl, thumbnailUrl);
+      } catch (error) {
+        console.log("error processing in image", error);
+      }
+    }
+
+      const image = await Images.create(imageUrls);
+      const ids = image.map((image) => image._id);
+      const product = await product.findByIdAndUpdate(productId, {
+        $push: { images: ids },
+      });
+      req.flash("success", "Image added");
+      res.redirect("back");
+    
+  } catch (error) {
+   console.log(error.message);
+  }
 });
 module.exports = {
   loadProduct,
@@ -222,7 +248,6 @@ module.exports = {
   editProduct,
   updateProduct,
   editImage,
-  editProductImages,
   addNewImages,
-  deleteImage
+  deleteImage,
 };

@@ -24,7 +24,18 @@ const userSchema=new Schema({
      isVerified:{
         type:Boolean,
         default:false,
-     }
+     },
+     cart:[{
+        product:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Product'
+        },
+        quantity:Number,
+     }],
+     addresses:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Address'
+     }]
 
 },{timestamps:true});
 

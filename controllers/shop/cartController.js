@@ -2,6 +2,7 @@ const Cart = require("../../models/cartModel");
 const Product = require("../../models/productModel");
 const User = require("../../models/userModels");
 const asynchandler = require("express-async-handler");
+const {incrementQuantity,decrementQuantity,calculateCartTotals} = require("../../helpers/cartHelpers")
 
 const loadCart = asynchandler(async (req, res) => {
   const userId = req.user.id;
@@ -14,10 +15,18 @@ const loadCart = asynchandler(async (req, res) => {
         populate: { path: "images", model: "Images" },
       })
       .exec();
+      
+      if(cart){ 
+        const {subtotal,total}=calculateCartTotals(cart.products);
+        res.render("./user/pages/cart", {title:'WATCHBOX', cartItems: cart,subtotal,total,messages });
+      }else{
+      
+        res.render("./user/pages/cart", {title:'WATCHBOX', cartItems:null,messages })
+      }
 
-    res.render("./user/pages/cart", { cartItems: cart });
+   
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 });
 
@@ -27,7 +36,7 @@ const addToCart = asynchandler(async (req, res) => {
 
   try {
       const product = await Product.findById(productId);
-      let existingProduct2=false;
+      // let existingProduct2=false;
 
       if (!product) {
           return res.status(404).json({ message: "Product not found" });
@@ -46,15 +55,16 @@ const addToCart = asynchandler(async (req, res) => {
 
           if (existingProduct) {
               // Update the quantity of the existing product
+              if(product.quantity <= existingProduct.quantity){
+                return res.json({message:"out of stock",status:"danger",count:cart.products.length});
+            }
               existingProduct.quantity += 1;
           } else {
               // Add a new product to the cart
-             existingProduct2= cart.products.push({ product: productId, quantity: 1 });
+          cart.products.push({ product: productId, quantity: 1 });
           }
           await cart.save();
-          if(existingProduct||existingProduct2){
-            res.redirect('/cart')
-          }
+          
           res.json({ message: "Product Added to Cart", count: cart.products.length, status: "success" });
 
       // Send a success response if needed
@@ -65,57 +75,58 @@ const addToCart = asynchandler(async (req, res) => {
       console.log(error);
       res.status(500).json({ message: "Internal Server Error" });
   }
+});
+
+const removeProduct =asynchandler(async(req,res) => {
+  const productId=req.params.id;
+  const userId=req.user.id;
 
   try {
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res.status(404).json({ message: "product not found" });
-    }
-
-    if (product.quantity < 1) {
-      return res.status(404).json({ message: "product is out of stock" });
-    }
-
-    let cart = await Cart.findOne({ user: userId });
-
-    if (!cart) {
-      cart = await Cart.create({
-        user: userId,
-        products: [{ product: productId, quantity: 1 }],
-      });
-    } else {
-      const existingProduct = cart.products.find((item) =>
-        item.product.equals(productId)
-      );
-
-      if (existingProduct) {
-        if (product.quantity <= existingProduct.quantity) {
-          return res.json({
-            message: "out of stock",
-            status: "danger",
-            count: cart.products.length,
-          });
-        }
-        existingProduct.quantity += 1;
-      } else {
-        cart.products.push({ product: productId, quantity: 1 });
-      }
-
+    const cart= await Cart.findOne({user:userId});
+    if(cart){
+      cart.products=cart.products.filter((product)=>product.product.toString()!==productId);
+      
       await cart.save();
     }
-
-    res.json({
-      message: "Product Added to Cart",
-      count: cart.products.length,
-      status: "success",
-    });
+    req.flash('success','item removed from cart')
+    res.redirect('back');
+    
   } catch (error) {
     throw new Error(error);
   }
-});
+})
+
+
+//------------------------increment the quantity of cart----------------------------
+
+
+const incQuantity=asynchandler(async(req,res)=>{
+  try {
+    
+    const productId=req.params.id;
+    const userId=req.user._id;
+    await incrementQuantity(userId,productId,res);
+  } catch (error) {
+    throw new Error(error);
+  }
+})
+
+//-------------decrerment quantity of product-----------------------
+
+const decQuantity=asynchandler(async(req,res)=>{
+  try {
+    const productId=req.params.id;
+    const userId=req.user._id;
+    await decrementQuantity(userId,productId,res)
+  } catch (error) {
+    throw new Error(error);
+  }
+})
 
 module.exports = {
   loadCart,
   addToCart,
+  removeProduct,
+  incQuantity,
+  decQuantity
 };
