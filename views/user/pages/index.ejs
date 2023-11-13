@@ -98,7 +98,7 @@
                                         <a class="animate-right" href="#" data-bs-target="#exampleModal" data-bs-toggle="modal" title="Quick View">
                                             <i class="pe-7s-look"></i>
                                         </a>
-                                        <a class="animate-top" title="Add To Cart" href="#">
+                                        <a class="animate-top" title="Add To Cart"onclick="addToCart(`<%= product._id %>`)">
                                             <i class="pe-7s-cart"></i>
                                         </a>
                                         <a class="animate-left" title="Wishlist" href="#">
@@ -131,7 +131,7 @@
 
     </div>
 </div>
-
+<script src="assets/js/shop/cart.js"></script>
 <style>
 
 .k {

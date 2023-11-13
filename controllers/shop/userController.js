@@ -17,7 +17,7 @@ const loadIndex = asynchandler(async (req, res) => {
       .populate("images")
       .limit(8);
 
-    res.render("./user/pages/index", { topProduct });
+    res.render("./user/pages/index", {title:'WATCHBOX', topProduct });
   } catch (error) {
     throw new Error(error);
   }
@@ -27,7 +27,7 @@ const loadIndex = asynchandler(async (req, res) => {
 const loadLogin = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/login", { messages });
+    res.render("./user/pages/login", {title:'WATCHBOX', messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -37,7 +37,7 @@ const loadLogin = asynchandler(async (req, res) => {
 const loadRegister = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/register", { messages });
+    res.render("./user/pages/register", {title:'WATCHBOX', messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -94,7 +94,7 @@ const loadOtp = asynchandler(async (req, res) => {
   try {
     email = req.session.userData.email;
     const messages = req.flash();
-    res.render("./user/pages/verifyOtp", { email: email, messages });
+    res.render("./user/pages/verifyOtp", {title:'WATCHBOX', email: email, messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -198,7 +198,7 @@ const logout = asynchandler(async (req, res) => {
 const loadSendEmail = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/otpVerification", { messages });
+    res.render("./user/pages/otpVerification", {title:'WATCHBOX', messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -238,7 +238,7 @@ const LoadVerifyEmail = asynchandler(async (req, res) => {
   try {
     const email = req.session.verifyEmail;
     const messages = req.flash();
-    res.render("./user/pages/emailVerification", { email, messages });
+    res.render("./user/pages/emailVerification", {title:'WATCHBOX', email, messages });
   } catch (error) {
     throw new Error(error);
   }

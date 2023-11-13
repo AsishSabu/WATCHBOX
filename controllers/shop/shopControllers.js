@@ -5,17 +5,14 @@ const category = require("../../models/categoryModel");
 // //----------------------load shop page ---------------------------------------
 exports.loadShop = asynchandler(async (req, res) => {
   try {
+
     const categories = await category.find({ isListed: true });
-
+    const listedCategoryIds = categories.map((category) => category._id);
     const products = await product
-      .find({ isListed: true })
-      .populate({
-        path: "categoryName",
-        match: { isListed: true },
-      })
-      .populate("images");
-
-    res.render("./user/pages/shop", { products, categories });
+      .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
+      .populate("images")
+      .limit(8);
+    res.render("./user/pages/shop", {title:'WATCHBOX', products, categories });
   } catch (error) {
     throw new Error(error);
   }
@@ -32,7 +29,7 @@ exports.loadProductDetails = asynchandler(async (req, res) => {
       .populate("categoryName");
     const relatedProducts = await product.find().populate("images");
 
-    res.render("./user/pages/productDetails", { Product, relatedProducts });
+    res.render("./user/pages/productDetails", {title:'WATCHBOX', Product, relatedProducts });
   } catch (error) {
     throw new Error(error);
   }

@@ -4,8 +4,10 @@ const passport = require('passport')
 const usercontroller = require("../controllers/shop/userController");
 const shopController = require("../controllers/shop/shopControllers");
 const cartController=require("../controllers/shop/cartController")
-const {ensureAuthenticated,ensureNotAuthenticated}=require("../middleware/userAuth")
-
+const {ensureAuthenticated,ensureNotAuthenticated}=require("../middleware/userAuth");
+const adminRoute = require("./adminRoute");
+const checkoutController=require('../controllers/shop/checkoutController')
+const addressController=require('../controllers/shop/addressControl')
 userRoute.use((req, res, next) => {
   req.app.set("layout", "user/layout/user");
   next();
@@ -54,7 +56,28 @@ userRoute.get("/viewProduct/:id", shopController.loadProductDetails);
 
 //------------------------user Cart page--------------------------------------------------- 
 
-userRoute.get('/cart',ensureAuthenticated,cartController.loadCart)
-userRoute.get('/addToCart/:id',ensureAuthenticated,cartController.addToCart)
+userRoute.get('/cart',ensureAuthenticated,cartController.loadCart);
+userRoute.get('/cart/add/:id',ensureAuthenticated,cartController.addToCart);
+userRoute.get('/cart/remove/:id',ensureAuthenticated,cartController.removeProduct);
+userRoute.get('/cart/inc/:id',ensureAuthenticated,cartController.incQuantity);
+userRoute.get('/cart/dec/:id',ensureAuthenticated,cartController.decQuantity)
+//---------------------------address Route------------
+
+userRoute.get('/addAddress',ensureAuthenticated,addressController.loadAddress);
+userRoute.post('/addAddress',ensureAuthenticated,addressController.insertAddress);
+
+//------------------------userr checkout mangement------------------------    
+
+userRoute.post('/checkout',ensureAuthenticated,checkoutController.cartPage)
+
+
+// 404 notfound page--
+// userRoute.get('*',(req,res)=>{
+//   try {
+//     res.render('./user/pages/404',{title:'Error..',})
+//   } catch (error) {
+//     throw new Error(error)
+//   }
+//  })
 
 module.exports = userRoute;
