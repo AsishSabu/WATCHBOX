@@ -27,7 +27,7 @@ userRoute.get("/reverifyEmail", usercontroller.reverifyEmail);
 userRoute.post("/login", usercontroller.userLogin);
 userRoute.post("/register", usercontroller.insertUser);
 userRoute.post("/verifyOtp", usercontroller.verifyOtp);
-userRoute.post("/logout", usercontroller.logout);q
+userRoute.post("/logout", usercontroller.logout);
 userRoute.post("/sendEmail", usercontroller.sendEmail);
 userRoute.post("/verifyEmail", usercontroller.verifyEmail);
 
