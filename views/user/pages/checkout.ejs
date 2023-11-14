@@ -16,7 +16,7 @@
   </div>
 </div>
 <!-- checkout-area start -->
-    <div class="checkout-area ptb-100">
+    <div class="checkout-area ptb-100 ">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -66,10 +66,12 @@
                 </div>
             </div>
             <div class="row">
+                <h1 class="text-grey text-center pb-5 fw-bolder">CHECKOUT</h1>
                 <div class="col-lg-6 col-md-12 col-12">
+                    
                     <form action="#">
                         <div class="checkbox-form">						
-                            <h3>Billing Details</h3>
+                          
                            <div class="row" >
                            
                                 <div class=" col-md-12 ">
@@ -89,10 +91,10 @@
                                                                 id="address<%= index %>" value="<%= item._id %>" required <%= index ===
                                                                 0 ? "checked" : "" %> />
                                                                 <label class="form-check-label" for="address<%= index %>">
-                                                                    <h5 class="card-title"><%= item.title %></h5>
+                                                                    <h5 class="card-title"><%= item.name %></h5>
                                                                     <p class="card-text">
-                                                                        <%= item.street %>, <%= item.city %>, <%= item.state %>, <%=
-                                                                        item.pincode %>
+                                                                        <%= item.address %>, <%= item.town %>, <%= item.state %>, <%=
+                                                                        item.postcode %>
                                                                     </p>
                                                                     <p class="card-text">Mobile: +91 <%= item.mobile %></p>
                                                                 </label>
@@ -100,104 +102,16 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <% }) %> <% } else { %> No Address Found
-                                                <!-- <a class="btn btn-dark h-auto" href="/addAddress">Add Address</a> -->
+                                                <% }) %> <% } else { %> 
+                                                    <p class="text-danger text-center fs-1 p-5">No Address Found</p>
+                                                
                                                 <% } %>
                                             </div>
                                     </div>
                                 </div>
                             </div>
                            </div>
-                            <div class="different-address">
-                                <div class="ship-different-title">
-                                    <h3>
-                                        <label>Ship to a different address?</label>
-                                        <input id="ship-box" type="checkbox" />
-                                    </h3>
-                                </div>
-                                <div id="ship-box-info" class="row">
-                                    <div class="col-md-12">
-                                        <div class="country-select">
-                                            <label>Country <span class="required">*</span></label>
-                                            <select>
-                                              <option value="volvo">bangladesh</option>
-                                              <option value="saab">Algeria</option>
-                                              <option value="mercedes">Afghanistan</option>
-                                              <option value="audi">Ghana</option>
-                                              <option value="audi2">Albania</option>
-                                              <option value="audi3">Bahrain</option>
-                                              <option value="audi4">Colombia</option>
-                                              <option value="audi5">Dominican Republic</option>
-                                            </select> 										
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>First Name <span class="required">*</span></label>										
-                                            <input type="text" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>Last Name <span class="required">*</span></label>										
-                                            <input type="text" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>Company Name</label>
-                                            <input type="text" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>Address <span class="required">*</span></label>
-                                            <input type="text" placeholder="Street address" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">									
-                                            <input type="text" placeholder="Apartment, suite, unit etc. (optional)" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>Town / City <span class="required">*</span></label>
-                                            <input type="text" placeholder="Town / City" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>State / County <span class="required">*</span></label>										
-                                            <input type="text" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>Postcode / Zip <span class="required">*</span></label>										
-                                            <input type="text" placeholder="Postcode / Zip" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>Email Address <span class="required">*</span></label>										
-                                            <input type="email" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="checkout-form-list">
-                                            <label>Phone  <span class="required">*</span></label>										
-                                            <input type="text" placeholder="Postcode / Zip" />
-                                        </div>
-                                    </div>								
-                                </div>
-                                <div class="order-notes">
-                                    <div class="checkout-form-list mrg-nn">
-                                        <label>Order Notes</label>
-                                        <textarea id="checkout-mess" cols="30" rows="10" placeholder="Notes about your order, e.g. special notes for delivery." ></textarea>
-                                    </div>									
-                                </div>
-                            </div>													
+                 												
                         </div>
                     </form>
                 </div>	
@@ -213,31 +127,34 @@
                                     </tr>							
                                 </thead>
                                 <tbody>
+                                    <% product.forEach(item=>{%>
+                                
                                     <tr class="cart_item">
                                         <td class="product-name">
-                                            Vestibulum suscipit <strong class="product-quantity"> × 1</strong>
+                                            <% if (item.product.title.length> 36) { %>
+                                                <small>
+                                                    <%= item.product.title.substring(0, 36) + '...' %>
+                                                </small>
+                                                <% } else { %> <small>
+                                                        <%= item.product.title %>
+                                                    </small>
+                                                    <% } %> <strong class="product-quantity"> × <%=item.quantity %></strong>
                                         </td>
                                         <td class="product-total">
-                                            <span class="amount">£165.00</span>
+                                            <span class="amount"><%=item.product.salePrice*item.quantity %></span>
                                         </td>
                                     </tr>
-                                    <tr class="cart_item">
-                                        <td class="product-name">
-                                            Vestibulum dictum magna	<strong class="product-quantity"> × 1</strong>
-                                        </td>
-                                        <td class="product-total">
-                                            <span class="amount">£50.00</span>
-                                        </td>
-                                    </tr>
+                                  
+                                    <%     }) %>
                                 </tbody>
                                 <tfoot>
                                     <tr class="cart-subtotal">
                                         <th>Cart Subtotal</th>
-                                        <td><span class="amount">£215.00</span></td>
+                                        <td><span class="amount">₹ <%= subtotal %></span></td>
                                     </tr>
                                     <tr class="order-total">
                                         <th>Order Total</th>
-                                        <td><strong><span class="amount">£215.00</span></strong>
+                                        <td><strong><span class="amount"> ₹  <%= total.toFixed(2) %></span></strong>
                                         </td>
                                     </tr>								
                                 </tfoot>
@@ -288,3 +205,8 @@
         </div>
     </div>
     <!-- checkout-area end -->	
+    <style>
+        body{
+            background-color: black;
+        }
+    </style>
