@@ -38,6 +38,7 @@ failureFlash: true, // enable flash messages
 }));
 userRoute.post("/register", usercontroller.insertUser);
 userRoute.post("/verifyOtp", usercontroller.verifyOtp);
+userRoute.post("/logout", usercontroller.logout);
 userRoute.post("/sendEmail", usercontroller.sendEmail);
 userRoute.post("/verifyEmail", usercontroller.verifyEmail);
 
@@ -65,11 +66,20 @@ userRoute.get('/cart/dec/:id',ensureAuthenticated,cartController.decQuantity)
 
 userRoute.get('/addAddress',ensureAuthenticated,addressController.loadAddress);
 userRoute.post('/addAddress',ensureAuthenticated,addressController.insertAddress);
+userRoute.get('/savedAddress',ensureAuthenticated,addressController.loadSavedAddress);
+userRoute.get('/editAddress/:id',ensureAuthenticated,addressController.loadEditAddress);
+userRoute.post('/editAddress/:id',ensureAuthenticated,addressController.editAddress)
+
 
 //------------------------userr checkout mangement------------------------    
 
 userRoute.post('/checkout',ensureAuthenticated,checkoutController.cartPage)
 
+
+
+userRoute.get("/test",(req,res)=>{
+  res.render('./user/pages/test',{title:'test'})
+});
 
 // 404 notfound page--
 // userRoute.get('*',(req,res)=>{
