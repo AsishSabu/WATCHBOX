@@ -78,7 +78,7 @@
                                     <div class="checkbox-form">
                                         <div class="d-flex">
                                             <h3>Select Address</h3>
-                                            <a href="/addAddress" class="btn btn-sm btn-dark" title="Add New Address">Add</a>
+                                            <a href="/addAddress" class="btn btn-lg rounded btn-outline-dark btn-light">Add</a>
                                         </div>
                                         <div class="different-address">
                                             <div id="" class="row">
@@ -160,45 +160,20 @@
                                 </tfoot>
                             </table>
                         </div>
+                        <% if(address&& address.length){ %>
                         <div class="payment-method">
                             <div class="payment-accordion">
-                                <div class="panel-group" id="faq">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h5 class="panel-title"><a data-bs-toggle="collapse" aria-expanded="true" href="#payment-1">Direct Bank Transfer.</a></h5>
-                                        </div>
-                                        <div id="payment-1" class="panel-collapse collapse show" data-bs-parent="#faq">
-                                            <div class="panel-body">
-                                                <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h5 class="panel-title"><a class="collapsed" data-bs-toggle="collapse" aria-expanded="false" href="#payment-2">Cheque Payment</a></h5>
-                                        </div>
-                                        <div id="payment-2" class="panel-collapse collapse" data-bs-parent="#faq">
-                                            <div class="panel-body">
-                                                <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h5 class="panel-title"><a class="collapsed" data-bs-toggle="collapse" aria-expanded="false" href="#payment-3">PayPal</a></h5>
-                                        </div>
-                                        <div id="payment-3" class="panel-collapse collapse" data-bs-parent="#faq">
-                                            <div class="panel-body">
-                                                <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                              
                                 <div class="order-button-payment">
-                                    <input type="submit" value="Place order" />
+                                    <input type="submit" value="CASH ON DELIVERY" />
                                 </div>								
                             </div>
                         </div>
+                    <% }else{ %>
+                        <div class="text-center">
+                            <p class="text-white bg-dark p-2 h5"> Please Add An Address</p>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
             </div>

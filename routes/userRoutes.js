@@ -26,6 +26,8 @@ userRoute.get("/verifyOtp", ensureNotAuthenticated, usercontroller.loadOtp);
 userRoute.get("/sendEmail", ensureNotAuthenticated, usercontroller.loadSendEmail);
 userRoute.get("/verifyEmail", ensureNotAuthenticated, usercontroller.LoadVerifyEmail);
 userRoute.get("/reverifyEmail",  ensureNotAuthenticated,usercontroller.reverifyEmail);
+userRoute.get('/profile', ensureAuthenticated, usercontroller.loadProfile);
+userRoute.post('/profile', ensureAuthenticated, usercontroller.editProfile);
 
 /*
     post methods

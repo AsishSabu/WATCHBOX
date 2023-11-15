@@ -287,6 +287,32 @@ const reverifyEmail = asynchandler(async (req, res) => {
   }
 });
 
+
+//--------------------------profile page loader------------------------
+
+const loadProfile=asynchandler(async(req,res)=>{
+  try {
+    const user=req.user;
+    console.log(user);
+    res.render('./user/pages/profile',{title:'WATCHBOX,user'})
+  } catch (error) {
+    throw new Error(error);
+  }
+})
+
+//--------------------------edit the profile page------------------------
+
+const editProfile=asynchandler(async(req,res)=>{
+  try {
+    console.log(req.body);
+    const userId=req.user.id;
+    const editedProfile=await User.findByIdAndUpdate({_id:userId},req.body)
+    res.redirect('/profile')
+  } catch (error) {
+    throw new Error(error);
+  }
+})
+
 //------------------------exported modules------------------------
 module.exports = {
   loadIndex,
@@ -303,4 +329,6 @@ module.exports = {
   LoadVerifyEmail,
   verifyEmail,
   reverifyEmail,
+  loadProfile,
+  editProfile
 };
