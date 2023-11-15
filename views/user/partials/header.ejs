@@ -35,6 +35,12 @@
           <div class="buy-now-btn">
             <a href="/register">Sign up</a>
           </div>
+          <ul>
+
+            <li class="m-3"><a href="/profile"><i class="ti-user text-danger"></i> Profile</a></li>
+
+          </ul>
+
           <% }else{ %>
           <div
             class="cartdiv d-flex"
@@ -48,10 +54,19 @@
                 <span id="cartCount" class="handicraft-count">cart</span>
               </a>
             </div>
+            <div class="ml-1">
+              <a href="/profile"><i class="ti-user text-danger"></i> <%=user.userName %></a>
+            </div>
+            
           </div>
+         
           <%} %>
         </div>
       </div>
     </div>
   </div>
 </header>
+
+<style>
+
+</style>
