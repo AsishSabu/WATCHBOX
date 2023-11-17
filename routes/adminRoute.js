@@ -56,7 +56,7 @@ adminRoute.get('/:id',isAdminLoggedin,categoryController.editCategory)
 adminRoute.post('/:id',isAdminLoggedin,upload.single('image'),categoryController.updateCategory)
 
 
-
+//-----------------order management ------------------------
 
 
 
