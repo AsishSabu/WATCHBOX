@@ -3,11 +3,15 @@ const userRoute = express();
 const passport = require('passport')
 const usercontroller = require("../controllers/shop/userController");
 const shopController = require("../controllers/shop/shopControllers");
-const cartController=require("../controllers/shop/cartController")
+const cartController=require("../controllers/shop/cartController");
 const {ensureAuthenticated,ensureNotAuthenticated}=require("../middleware/userAuth");
 const adminRoute = require("./adminRoute");
-const checkoutController=require('../controllers/shop/checkoutController')
-const addressController=require('../controllers/shop/addressControl')
+const checkoutController=require('../controllers/shop/checkoutController');
+const addressController=require('../controllers/shop/addressControl');
+const orderController=require('../controllers/shop/orderControllers');
+
+
+
 userRoute.use((req, res, next) => {
   req.app.set("layout", "user/layout/user");
   next();
@@ -79,6 +83,11 @@ userRoute.post('/checkout',ensureAuthenticated,checkoutController.cartPage)
 userRoute.get('/checkout/get',ensureAuthenticated,checkoutController.getCartData)
 userRoute.post('/place-order',ensureAuthenticated,checkoutController.placeOrder)
 userRoute.get("/order-placed/:id", checkoutController.orderPlaced);
+
+
+
+//-------------------order controller------------------------------
+userRoute.get('/order',ensureAuthenticated,orderController.orderPage)
 
 
 

@@ -11,7 +11,6 @@ const {generateUniqueOrderID}=require("../utils/genreateOrderId")
 
 exports.getCartItems=asyncHandler(async(userId)=>{
     try {
-        console.log('haiii');
         return await Cart.findOne({user:userId}).populate("products.product")
     } catch (error) {
         throw new Error(error)
