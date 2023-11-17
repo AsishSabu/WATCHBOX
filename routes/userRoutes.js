@@ -76,6 +76,11 @@ userRoute.post('/editAddress/:id',ensureAuthenticated,addressController.editAddr
 //------------------------userr checkout mangement------------------------    
 
 userRoute.post('/checkout',ensureAuthenticated,checkoutController.cartPage)
+userRoute.get('/checkout/get',ensureAuthenticated,checkoutController.getCartData)
+userRoute.post('/place-order',ensureAuthenticated,checkoutController.placeOrder)
+userRoute.get("/order-placed/:id", checkoutController.orderPlaced);
+
+
 
 
 
