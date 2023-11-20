@@ -1,106 +1,151 @@
-const form = document.getElementById("form");
-console.log(form);
-form.addEventListener("submit",async (event) => {
-  if (!(await validate())) {
-    event.preventDefault();
-  }
-});
-
-async function validate() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const cpassword = document.getElementById("cpassword").value;
+document.addEventListener("DOMContentLoaded", function () {
+  const registrationForm = document.getElementById("form");
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const cpasswordInput = document.getElementById("cpassword");
 
   const nameerr = document.getElementById("nameerr");
   const emailerr = document.getElementById("emailerr");
   const passworderr = document.getElementById("passworderr");
   const cpassworderr = document.getElementById("cpassworderr");
+  const formerr=document.getElementById("formerr");
 
-  const nameRegex = /^[A-Za-z\s]+$/;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // General email validation
 
-  let isValid = true;
+  const nameRegex = /^[A-Z][A-Za-z\s]*$/; // name validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // General email validation regex
 
-  // Name field
-  if (name.trim() === "") {
-    nameerr.textContent = "Field is required";
-    isValid = false;
-  } else if (name.trim().length < 4) {
-    nameerr.textContent = "Name must be at least 4 characters";
-    isValid = false;
-  } else if (!nameRegex.test(name.trim())) {
-    nameerr.textContent = "Name should start with a capital letter and only contain alphabetic characters";
-    isValid = false;
-  }
+  function validateUsername() {
+    const name = nameInput.value.trim();
 
-  // Email field
-  if (email.trim() === "") {
-    emailerr.textContent = "Field is required";
-    isValid = false;
-  } else if (!emailRegex.test(email.trim())) {
-    emailerr.textContent = "Invalid email format.";
-    isValid = false;
-  }else{   try {
-    const response = await fetch("/checkEmail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+    if (name === "") {
+      nameerr.textContent = "Field is required";
+    } else if (name.length < 4) {
+      nameerr.textContent = "Name must be at least 4 characters";
+    } else if (!nameRegex.test(name)) {
+      nameerr.textContent =
+        "Name should start with a capital letter and only contain alphabetic characters";
+    } else {
+      nameerr.textContent = ""; // Clear the error message when the input is valid
     }
+  }
 
-    const data = await response.json();
+  // Add a blur event listener to the nameInput
+  nameInput.addEventListener("blur", validateUsername);
 
-    if (data.message === "email already registered") {
-      emailerr.textContent = "Email is already registered.";
-      return false;
+  function validateEmail() {
+    const email = emailInput.value.trim();
+    if (email === "") {
+      emailerr.textContent = "Field is required";
+    } else if (!emailRegex.test(email)) {
+      emailerr.textContent = "Invalid email format.";
+    } else {
+      emailerr.textContent = "";
+//email availabiliity checking
+
+try {
+      fetch("/checkEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Network response was not ok");
+        }
+      })
+      .then((data) => {
+    
+       
+          emailerr.textContent = data;
+     
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+    
+        
+      }
+      catch(error) {
+        throw new Error( error);
+      }
+      
     }
-  } catch (error) {
-    console.error("An error occurred:", error);
-    return false;
-  }}
-  
-
-  
-
-  // Password field
-  if (password.trim() === "") {
-    passworderr.textContent = "Field is required";
-    isValid = false;
-  } else if (password.length < 4) {
-    passworderr.textContent = "Password must be at least 4 characters long";
-    isValid = false;
-  } else if (!/[A-Z]/.test(password)) {
-    passworderr.textContent = "Password must contain at least one uppercase letter";
-    isValid = false;
-  } else if (!/[a-z]/.test(password)) {
-    passworderr.textContent = "Password must contain at least one lowercase letter";
-    isValid = false;
-  }else if (!/[0-9]/.test(password)) {
-    passworderr.textContent = "Password must contain at least one number";
-    isValid = false;
   }
+  emailInput.addEventListener("blur", validateEmail);
 
-  // Confirm Password field
-  if (cpassword.trim() === "") {
-    cpassworderr.textContent = "Field is required";
-    isValid = false;
-  } else if (password !== cpassword) {
-    cpassworderr.textContent = "Passwords do not match.";
-    isValid = false;
+
+  function validatePassword() {
+    const password=passwordInput.value.trim();
+
+    if (password=== "") {
+          passworderr.textContent = "Field is required";
+         
+        } else if (password.length < 4) {
+          passworderr.textContent = "Password must be at least 4 characters long";
+      
+        } else if (!/[A-Z]/.test(password)) {
+          passworderr.textContent = "Password must contain at least one uppercase letter";
+      
+        } else if (!/[a-z]/.test(password)) {
+          passworderr.textContent = "Password must contain at least one lowercase letter";
+          
+        }else if (!/[0-9]/.test(password)) {
+          passworderr.textContent = "Password must contain at least one number";
+         
+        }else{
+          passworderr.textContent =""
+        }
+
+
   }
+  passwordInput.addEventListener("blur",validatePassword)
 
-  setTimeout(function () {
-    nameerr.textContent = "";
-    emailerr.textContent = "";
-    passworderr.textContent = "";
-    cpassworderr.textContent = "";
-  }, 3000);
+  function validateCpassword(){
+   const  cpassword=cpasswordInput.value.trim()
+   if (cpassword.trim() === "") {
+        cpassworderr.textContent = "Field is required";
+      
+      } else if (passwordInput.value.trim()!== cpassword) {
+        cpassworderr.textContent = "Passwords do not match.";
+      
+      }else{
+        cpassworderr.textContent =""
+      }
+  }
+  cpasswordInput.addEventListener("blur",validateCpassword)
+   
 
-  return isValid;
+
+
+
+function handleSubmit(event) {
+  event.preventDefault();
+
+  validateUsername();
+  validateEmail();
+  validatePassword();
+  validateCpassword();
+
+  const allErrors = [
+   document.getElementById("nameerr"),
+ document.getElementById("emailerr"),
+ document.getElementById("passworderr"),
+document.getElementById("cpassworderr")
+  ];
+  if (allErrors.every((error) => error.textContent=== "")) {
+
+   formerr.textContent = "";
+    registrationForm.submit();
+  } else {
+ 
+    formerr.textContent = "Please correct the errors in the form.";
+  }
 }
+
+  registrationForm.addEventListener("submit", handleSubmit);
+});

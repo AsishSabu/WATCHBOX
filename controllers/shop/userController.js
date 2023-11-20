@@ -47,16 +47,8 @@ const loadRegister = asynchandler(async (req, res) => {
 
 const insertUser = asynchandler(async (req, res) => {
   try {
-    const emailCheck = req.body.email;
-    const checkData = await User.findOne({ email: emailCheck });
+   
 
-    if (checkData) {
-      req.flash(
-        "danger",
-        "user is already registered, please try with another email"
-      );
-      res.redirect("/register");
-    } else {
       const userData = new User({
         userName: req.body.name,
         email: req.body.email,
@@ -78,7 +70,7 @@ const insertUser = asynchandler(async (req, res) => {
       //------------------------otp sending to mail ------------------------------
       const name = req.body.name;
       const otpSend = otpSetup.sendOtp(email, OTP, name);
-    }
+
     try {
       return res.redirect("/verifyOtp");
     } catch (error) {
@@ -317,10 +309,16 @@ const editProfile=asynchandler(async(req,res)=>{
 
 const checkEmail=asynchandler(async(req,res)=>{
   try {
-    const existingEmail=await User.find(req.body.email);
+
+   
+
+    const existingEmail=await User.findOne({email:req.body.email});
+  
     if(existingEmail){
+     
       res.json("email already registered")
     }else{
+     
       res.json("");
     }
     
