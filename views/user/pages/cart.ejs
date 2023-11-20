@@ -33,7 +33,7 @@
         <h1 class="cart-heading">Cart</h1>
         <form action="/checkout" method="post">
           <div class="table-content table-responsive">
-            <% if ( cartItems.products.length!==0) { %>
+            <% if ( cartItems.products.length) { %>
             <table class="table table-hover table-borderless">
               <thead class="bg-dark">
                 <tr>
@@ -55,7 +55,7 @@
                     ></a>
                   </td>
                   <td class="product-thumbnail">
-                    <a href="/product/<%= product.product._id %>">
+                    <a href="/viewProduct/<%=product.product?._id %>">
                       <% if (product.product && product.product.images &&
                       product.product.images[0] &&
                       product.product.images[0].thumbnailUrl) { %>

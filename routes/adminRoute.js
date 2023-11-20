@@ -3,6 +3,7 @@ const adminRoute = express();
 const adminController=require('../controllers/admin/adminController');
 const categoryController=require('../controllers/admin/categoryController')
 const productController=require('../controllers/admin/productControllers');
+const orderCOntroller=require('../controllers/admin/orderController')
 const {uploadMultiple,uploadSingle,upload}=require('../config/upload')
 const {isAdminLoggedOut, isAdminLoggedin}=require('../middleware/adminAuth')
 
@@ -11,7 +12,9 @@ adminRoute.use((req,res,next)=>{
     next(); 
 })
 
+
 //-------------------admin login ------------------------
+
 
 adminRoute.get('/',isAdminLoggedOut,adminController.loadLogin)
 adminRoute.post('/',adminController.verifyAdmin)
@@ -52,11 +55,15 @@ adminRoute.get('/addCategory',isAdminLoggedin,categoryController.addCategory)
 adminRoute.post('/addCategory',isAdminLoggedin,categoryController.insertCategory)
 adminRoute.get('/category/list/:id',isAdminLoggedin,categoryController.list)
 adminRoute.get('/category/unlist/:id',isAdminLoggedin,categoryController.unList)
-adminRoute.get('/:id',isAdminLoggedin,categoryController.editCategory)
-adminRoute.post('/:id',isAdminLoggedin,upload.single('image'),categoryController.updateCategory)
+adminRoute.get('/editCategory/:id',isAdminLoggedin,categoryController.editCategory)
+adminRoute.post('/editCategory/:id',isAdminLoggedin,categoryController.updateCategory)
 
 
-//-----------------order management ------------------------
+//-----------------order management -----------------------------------------------
+
+adminRoute.get('/orders',isAdminLoggedin,orderCOntroller.orderPage)
+adminRoute.get('/orders/:id',isAdminLoggedin,orderCOntroller.orderDetails)
+adminRoute.put("/orders/update/:id", orderCOntroller.orderStatus);
 
 
 

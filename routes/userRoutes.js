@@ -11,7 +11,6 @@ const addressController=require('../controllers/shop/addressControl');
 const orderController=require('../controllers/shop/orderControllers');
 
 
-
 userRoute.use((req, res, next) => {
   req.app.set("layout", "user/layout/user");
   next();
@@ -47,6 +46,7 @@ userRoute.post("/verifyOtp", usercontroller.verifyOtp);
 userRoute.post("/logout", usercontroller.logout);
 userRoute.post("/sendEmail", usercontroller.sendEmail);
 userRoute.post("/verifyEmail", usercontroller.verifyEmail);
+userRoute.post('/checkEmail',usercontroller.checkEmail)
 
 
 
@@ -84,13 +84,10 @@ userRoute.get('/checkout/get',ensureAuthenticated,checkoutController.getCartData
 userRoute.post('/place-order',ensureAuthenticated,checkoutController.placeOrder)
 userRoute.get("/order-placed/:id", checkoutController.orderPlaced);
 
-
-
 //-------------------order controller------------------------------
-userRoute.get('/order',ensureAuthenticated,orderController.orderPage)
-
-
-
+userRoute.get('/order',ensureAuthenticated,orderController.orderPage);
+userRoute.get('/orders/:id',ensureAuthenticated,orderController.viewOrder);
+userRoute.put('/orders/cancel/:id',ensureAuthenticated,orderController.cancelOrder)
 
 
 userRoute.get("/test",(req,res)=>{
