@@ -235,7 +235,8 @@
               <a
                 class="animate-top"
                 title="Add To Cart"
-                href="/cart/add/<%= Product._id %>"
+                onclick="addToCart(`<%= Product._id %>`)"
+               
               >
                 <i class="pe-7s-cart"></i>
               </a>
@@ -257,4 +258,5 @@
         margin-top: 200px;
     }
 </style>
+<script src="assets/js/shop/cart.js"></script>
 

@@ -14,6 +14,9 @@ passport.use(new LocalStrategy(
        if (!user || !await user.isPasswordMatched(password)) {
         return done(null, false, { message: 'Invalid credentials' });
       }
+      if(!user.isVerified){
+        return done(null, false, { message: 'please verify your account' });
+      }
 
        if(user.isBlock) {          /* checking the user is blocked or not */
         const messages = `OOPS! your Account ${user.email} is blocked for your suspicious acitivity,Please contact our customer team  for further assistance`
