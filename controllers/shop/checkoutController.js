@@ -106,6 +106,9 @@ const orderPlaced=asynchandler(async(req,res)=>{
   }
 })
 
+
+
+
 module.exports = {
   cartPage,
   getCartData,
