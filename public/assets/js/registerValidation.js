@@ -1,11 +1,12 @@
 const form = document.getElementById("form");
-form.addEventListener("submit", (event) => {
-  if (!validate()) {
+console.log(form);
+form.addEventListener("submit",async (event) => {
+  if (!(await validate())) {
     event.preventDefault();
   }
 });
 
-function validate() {
+async function validate() {
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -40,7 +41,32 @@ function validate() {
   } else if (!emailRegex.test(email.trim())) {
     emailerr.textContent = "Invalid email format.";
     isValid = false;
-  }
+  }else{   try {
+    const response = await fetch("/checkEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+
+    if (data.message === "email already registered") {
+      emailerr.textContent = "Email is already registered.";
+      return false;
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return false;
+  }}
+  
+
+  
 
   // Password field
   if (password.trim() === "") {

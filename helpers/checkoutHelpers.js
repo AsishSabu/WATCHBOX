@@ -53,19 +53,19 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod)=>{
 
     
 
-    const newOrder=await Order.create({
-     orderId:"OD"+generateUniqueOrderID(existingOrdersIds),
-     orderItems:orders,
-     shippingAddress:address.name,
-     state: address.state,
-     town:address.town,
-     postcode: address.postcode,
-     phone: address.mobile,
-     totalPrice:total.toFixed(2),
-     user:userId,
-     payment_method:paymentMethod
-     
-    });
+    const newOrder = await Order.create({
+        orderId: "OD" + generateUniqueOrderID(existingOrdersIds),
+        orderItems: orders,
+        shippingAddress: { name: address.name, address: address.address },
+        state: address.state,
+        town: address.town,
+        postcode: address.postcode,
+        phone: address.mobile,
+        totalPrice: total.toFixed(2), // Ensure that totalPrice is of the correct data type
+        user: userId,
+        payment_method: paymentMethod,
+      });
+      
 
     return newOrder;
 });

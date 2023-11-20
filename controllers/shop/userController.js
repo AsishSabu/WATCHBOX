@@ -149,32 +149,34 @@ const resendOtp = asynchandler(async (req, res) => {
 const userLogin = asynchandler(async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email }); //---------------checking email already registered-----------------------
+    const user = await User.findOne({ email: email }); 
+    console.log(user.isVerified);
+    //---------------checking email already registered-----------------------
 
-    if (!user) {
-      req.flash("danger", "User not found. Please check your email");
-      res.redirect("/login");
-    } else {
-      const passwordValid = await bcrypt.compare(password, user.password); //----------------compare enterd password and registered passwoerd-------
+    // if (!user) {
+    //   req.flash("danger", "User not found. Please check your email");
+    //   res.redirect("/login");
+    // } else {
+    //   const passwordValid = await bcrypt.compare(password, user.password); //----------------compare enterd password and registered passwoerd-------
 
-      if (!passwordValid) {
-        req.flash("danger", "invalid password");
-        res.redirect("/login");
-      } else {
-        if (user.isBlock) {
-          //---------------------------checking user i s blocked --------------------
-          req.flash("danger", "your permission declined");
-          res.redirect("/login");
-        } else if (!user.isVerified) {
-          req.flash("danger", "please verify your account");
-          res.redirect("/login");
-        } else {
-          req.session.user_id = user._id;
+    //   if (!passwordValid) {
+    //     req.flash("danger", "invalid password");
+    //     res.redirect("/login");
+    //   } else {
+    //     if (user.isBlock) {
+    //       //---------------------------checking user i s blocked --------------------
+    //       req.flash("danger", "your permission declined");
+    //       res.redirect("/login");
+    //     } else if (!user.isVerified) {
+    //       req.flash("danger", "please verify your account");
+    //       res.redirect("/login");
+    //     } else {
+    //       req.session.user_id = user._id;
 
-          res.redirect("/");
-        }
-      }
-    }
+    //       res.redirect("/");
+    //     }
+    //   }
+    // }
   } catch (error) {
     throw new Error(error);
   }
@@ -313,6 +315,20 @@ const editProfile=asynchandler(async(req,res)=>{
   }
 })
 
+const checkEmail=asynchandler(async(req,res)=>{
+  try {
+    const existingEmail=await User.find(req.body.email);
+    if(existingEmail){
+      res.json("email already registered")
+    }else{
+      res.json("");
+    }
+    
+  } catch (error) {
+    throw new Error(error);
+  }
+})
+
 //------------------------exported modules------------------------
 module.exports = {
   loadIndex,
@@ -330,5 +346,6 @@ module.exports = {
   verifyEmail,
   reverifyEmail,
   loadProfile,
-  editProfile
+  editProfile,
+  checkEmail
 };

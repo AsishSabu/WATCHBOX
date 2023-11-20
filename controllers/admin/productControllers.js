@@ -12,7 +12,7 @@ const loadProduct = asynchandler(async (req, res) => {
     const products = await product
       .find()
       .populate("categoryName")
-      .populate("images");
+      .populate("images").sort({ createdAt:-1})
 
       const messages=req.flash();
 
@@ -20,7 +20,7 @@ const loadProduct = asynchandler(async (req, res) => {
       title: "WATCHBOX/PRODUCTS",
       messages,
       products: products, // Pass the products to the view
-    });
+    })
   } catch (error) {
     // Handle the error appropriately, e.g., render an error page or log the error
     throw new Error(error);
