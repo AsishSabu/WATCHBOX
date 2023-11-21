@@ -6,6 +6,7 @@ const otpdb = require("../../models/otpModel");
 const bcrypt = require("bcrypt");
 const product = require("../../models/productModel");
 const category = require("../../models/categoryModel");
+const crypto = require("crypto");
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
@@ -17,7 +18,7 @@ const loadIndex = asynchandler(async (req, res) => {
       .populate("images")
       .limit(8);
 
-    res.render("./user/pages/index", {title:'WATCHBOX', topProduct });
+    res.render("./user/pages/index", { title: "WATCHBOX", topProduct });
   } catch (error) {
     throw new Error(error);
   }
@@ -27,7 +28,7 @@ const loadIndex = asynchandler(async (req, res) => {
 const loadLogin = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/login", {title:'WATCHBOX', messages });
+    res.render("./user/pages/login", { title: "WATCHBOX", messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -37,7 +38,7 @@ const loadLogin = asynchandler(async (req, res) => {
 const loadRegister = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/register", {title:'WATCHBOX', messages });
+    res.render("./user/pages/register", { title: "WATCHBOX", messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -47,29 +48,28 @@ const loadRegister = asynchandler(async (req, res) => {
 
 const insertUser = asynchandler(async (req, res) => {
   try {
-   
-
-      const userData = new User({
-        userName: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-      }); /*--------
+    const userData = new User({
+      userName: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      passwordChangedAt: Date.now(),
+    }); /*--------
             accessing the details of the user
                */
-      const userSave = await userData.save(); //-------------------user save to database-------------------
-      req.session.userData = userData; //-------------------userdata take to the  session----------------
+    const userSave = await userData.save(); //-------------------user save to database-------------------
+    req.session.userData = userData; //-------------------userdata take to the  session----------------
 
-      //--------------------generating otp --------------------
-      const OTP = otpSetup.generateNumericOTP();
-      console.log(OTP);
-      //--------------saving otp to databasse------------------------------
-      const email = req.body.email;
-      const otp = new otpdb({ email: email, otp: OTP });
-      const otpSave = await otp.save();
+    //--------------------generating otp --------------------
+    const OTP = otpSetup.generateNumericOTP();
+    console.log(OTP);
+    //--------------saving otp to databasse------------------------------
+    const email = req.body.email;
+    const otp = new otpdb({ email: email, otp: OTP });
+    const otpSave = await otp.save();
 
-      //------------------------otp sending to mail ------------------------------
-      const name = req.body.name;
-      const otpSend = otpSetup.sendOtp(email, OTP, name);
+    //------------------------otp sending to mail ------------------------------
+    const name = req.body.name;
+    const otpSend = otpSetup.sendOtp(email, OTP, name);
 
     try {
       return res.redirect("/verifyOtp");
@@ -86,7 +86,11 @@ const loadOtp = asynchandler(async (req, res) => {
   try {
     email = req.session.userData.email;
     const messages = req.flash();
-    res.render("./user/pages/verifyOtp", {title:'WATCHBOX', email: email, messages });
+    res.render("./user/pages/verifyOtp", {
+      title: "WATCHBOX",
+      email: email,
+      messages,
+    });
   } catch (error) {
     throw new Error(error);
   }
@@ -141,7 +145,7 @@ const resendOtp = asynchandler(async (req, res) => {
 const userLogin = asynchandler(async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email }); 
+    const user = await User.findOne({ email: email });
     console.log(user.isVerified);
     //---------------checking email already registered-----------------------
 
@@ -192,7 +196,7 @@ const logout = asynchandler(async (req, res) => {
 const loadSendEmail = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/otpVerification", {title:'WATCHBOX', messages });
+    res.render("./user/pages/otpVerification", { title: "WATCHBOX", messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -232,7 +236,11 @@ const LoadVerifyEmail = asynchandler(async (req, res) => {
   try {
     const email = req.session.verifyEmail;
     const messages = req.flash();
-    res.render("./user/pages/emailVerification", {title:'WATCHBOX', email, messages });
+    res.render("./user/pages/emailVerification", {
+      title: "WATCHBOX",
+      email,
+      messages,
+    });
   } catch (error) {
     throw new Error(error);
   }
@@ -281,51 +289,160 @@ const reverifyEmail = asynchandler(async (req, res) => {
   }
 });
 
-
 //--------------------------profile page loader------------------------
 
-const loadProfile=asynchandler(async(req,res)=>{
+const loadProfile = asynchandler(async (req, res) => {
   try {
-    const user=req.user;
+    const user = req.user;
     console.log(user);
-    res.render('./user/pages/profile',{title:'WATCHBOX,user'})
+    res.render("./user/pages/profile", { title: "WATCHBOX,user" });
   } catch (error) {
     throw new Error(error);
   }
-})
+});
 
 //--------------------------edit the profile page------------------------
 
-const editProfile=asynchandler(async(req,res)=>{
+const editProfile = asynchandler(async (req, res) => {
   try {
     console.log(req.body);
-    const userId=req.user.id;
-    const editedProfile=await User.findByIdAndUpdate({_id:userId},req.body)
-    res.redirect('/profile')
+    const userId = req.user.id;
+    const editedProfile = await User.findByIdAndUpdate(
+      { _id: userId },
+      req.body
+    );
+    res.redirect("/profile");
   } catch (error) {
     throw new Error(error);
   }
-})
+});
 
-const checkEmail=asynchandler(async(req,res)=>{
+//-----------check email if already existing
+const checkEmail = asynchandler(async (req, res) => {
   try {
+    const existingEmail = await User.findOne({ email: req.body.email });
 
-   
-
-    const existingEmail=await User.findOne({email:req.body.email});
-  
-    if(existingEmail){
-     
-      res.json("email already registered")
-    }else{
-     
+    if (existingEmail) {
+      res.json("email already registered");
+    } else {
       res.json("");
     }
-    
   } catch (error) {
     throw new Error(error);
   }
-})
+});
+//--------------load forgot password ----------------------------
+
+const loadforgotPassword = asynchandler(async (req, res) => {
+  try {
+    const messages = req.flash();
+    res.render("./user/pages/forgotPassword", { title: "WATCHBOX", messages });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// post method forgot----------------------
+
+const forgotPassword = asynchandler(async (req, res) => {
+  try {
+    const email = req.body.email;
+    console.log(email);
+    const user = await User.findOne({ email });
+    if (!user) {
+      req.flash("danger", "enter a registered email addresss");
+      res.redirect("back");
+    } else {
+      //generate a random reset token-------------------
+      const resetToken = await user.createResetPasswordToken();
+      await user.save();
+      console.log(user);
+      const name = user.userName;
+      const sendToken = await otpSetup.sendToken(email, resetToken, name);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+//----------------------email check-------------------------
+
+const emailcheck = asynchandler(async (req, res) => {
+  try {
+    const existingEmail = await User.findOne({ email: req.body.email });
+
+    if (!existingEmail) {
+      res.json("please register your email address");
+    } else {
+      res.json("");
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+//-------------------------reset password -----------------------------------
+
+const resetPassword = asynchandler(async (req, res) => {
+  try {
+    const resetToken = req.params.id; //accessing the token
+
+    const passwordResetToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    console.log(passwordResetToken);
+    const tokenCheck = await User.findOne({ passwordResetToken });
+    console.log(tokenCheck.passwordResetTokenExpires);
+    const time = tokenCheck.passwordResetTokenExpires;
+    if (time < Date.now()) {
+      // The reset token has expired
+      req.flash("danger", "the link expired,try new one");
+      res.redirect("/forgotPassword");
+    } else {
+      // The reset token is still valid
+      req.session.email = tokenCheck.email;
+      res.redirect("/newPassword");
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+//---------------------------load the new password --------------------------------
+
+const loadnewPassword = asynchandler(async (req, res) => {
+  try {
+    res.render("./user/pages/newPassword", { title: "WATCHBOX" });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+//---------------------------setting the new password --------------------------------
+
+const newPassword = asynchandler(async (req, res) => {
+  try {
+    const newPassword = req.body.newPassword;
+    const email = req.session.email;
+    const user = await User.findOne({ email });
+    if (user) {
+      const salt = bcrypt.genSaltSync(10);
+      
+      const password = await bcrypt.hash(newPassword, salt);
+      user.password = password;
+      user.passwordChangedAt = Date.now();
+      user.passwordResetToken = undefined;
+      user.passwordResetTokenExpires = undefined;
+      await user.save();
+      req.session.email = null;
+      res.redirect("/login");
+    } else {
+      res.json("some internal error" + user);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 //------------------------exported modules------------------------
 module.exports = {
@@ -345,5 +462,11 @@ module.exports = {
   reverifyEmail,
   loadProfile,
   editProfile,
-  checkEmail
+  checkEmail,
+  loadforgotPassword,
+  forgotPassword,
+  emailcheck,
+  resetPassword,
+  loadnewPassword,
+  newPassword,
 };
