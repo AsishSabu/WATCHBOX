@@ -359,6 +359,8 @@ const forgotPassword = asynchandler(async (req, res) => {
       console.log(user);
       const name = user.userName;
       const sendToken = await otpSetup.sendToken(email, resetToken, name);
+      req.flash('success',"verify link send to the email address")
+      res.redirect('/forgotPassword')
     }
   } catch (error) {
     throw new Error(error);
