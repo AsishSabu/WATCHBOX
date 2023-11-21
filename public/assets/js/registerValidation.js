@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const emailerr = document.getElementById("emailerr");
   const passworderr = document.getElementById("passworderr");
   const cpassworderr = document.getElementById("cpassworderr");
-  const formerr=document.getElementById("formerr");
-
+  const formerr = document.getElementById("formerr");
 
   const nameRegex = /^[A-Z][A-Za-z\s]*$/; // name validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // General email validation regex
@@ -41,111 +40,90 @@ document.addEventListener("DOMContentLoaded", function () {
       emailerr.textContent = "Invalid email format.";
     } else {
       emailerr.textContent = "";
-//email availabiliity checking
+      //email availabiliity checking
 
-try {
-      fetch("/checkEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Network response was not ok");
-        }
-      })
-      .then((data) => {
-    
-       
-          emailerr.textContent = data;
-     
-      })
-      .catch((error) => {
-        console.error("An error occurred:", error);
-      });
-    
-        
+      try {
+        fetch("/checkEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Network response was not ok");
+            }
+          })
+          .then((data) => {
+            emailerr.textContent = data;
+          })
+          .catch((error) => {
+            console.error("An error occurred:", error);
+          });
+      } catch (error) {
+        throw new Error(error);
       }
-      catch(error) {
-        throw new Error( error);
-      }
-      
     }
   }
   emailInput.addEventListener("blur", validateEmail);
 
-
   function validatePassword() {
-    const password=passwordInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    if (password=== "") {
-          passworderr.textContent = "Field is required";
-         
-        } else if (password.length < 4) {
-          passworderr.textContent = "Password must be at least 4 characters long";
-      
-        } else if (!/[A-Z]/.test(password)) {
-          passworderr.textContent = "Password must contain at least one uppercase letter";
-      
-        } else if (!/[a-z]/.test(password)) {
-          passworderr.textContent = "Password must contain at least one lowercase letter";
-          
-        }else if (!/[0-9]/.test(password)) {
-          passworderr.textContent = "Password must contain at least one number";
-         
-        }else{
-          passworderr.textContent =""
-        }
-
-
+    if (password === "") {
+      passworderr.textContent = "Field is required";
+    } else if (password.length < 4) {
+      passworderr.textContent = "Password must be at least 4 characters long";
+    } else if (!/[A-Z]/.test(password)) {
+      passworderr.textContent =
+        "Password must contain at least one uppercase letter";
+    } else if (!/[a-z]/.test(password)) {
+      passworderr.textContent =
+        "Password must contain at least one lowercase letter";
+    } else if (!/[0-9]/.test(password)) {
+      passworderr.textContent = "Password must contain at least one number";
+    } else {
+      passworderr.textContent = "";
+    }
   }
-  passwordInput.addEventListener("blur",validatePassword)
+  passwordInput.addEventListener("blur", validatePassword);
 
-  function validateCpassword(){
-   const  cpassword=cpasswordInput.value.trim()
-   if (cpassword.trim() === "") {
-        cpassworderr.textContent = "Field is required";
-      
-      } else if (passwordInput.value.trim()!== cpassword) {
-        cpassworderr.textContent = "Passwords do not match.";
-      
-      }else{
-        cpassworderr.textContent =""
-      }
+  function validateCpassword() {
+    const cpassword = cpasswordInput.value.trim();
+    if (cpassword.trim() === "") {
+      cpassworderr.textContent = "Field is required";
+    } else if (passwordInput.value.trim() !== cpassword) {
+      cpassworderr.textContent = "Passwords do not match.";
+    } else {
+      cpassworderr.textContent = "";
+    }
   }
-  cpasswordInput.addEventListener("blur",validateCpassword)
-   
+  cpasswordInput.addEventListener("blur", validateCpassword);
 
+  function handleSubmit(event) {
+    event.preventDefault();
 
+    validateUsername();
+    validateEmail();
+    validatePassword();
+    validateCpassword();
 
-
-function handleSubmit(event) {
-  event.preventDefault();
-
-  validateUsername();
-  validateEmail();
-  validatePassword();
-  validateCpassword();
-
-  const allErrors = [
-   document.getElementById("nameerr"),
- document.getElementById("emailerr"),
- document.getElementById("passworderr"),
-document.getElementById("cpassworderr")
-  ];
-  if (allErrors.every((error) => error.textContent=== "")) {
-
-   formerr.textContent = "";
-    registrationForm.submit();
-  } else {
- 
-    formerr.textContent = "Please correct the errors in the form.";
+    const allErrors = [
+      document.getElementById("nameerr"),
+      document.getElementById("emailerr"),
+      document.getElementById("passworderr"),
+      document.getElementById("cpassworderr"),
+    ];
+    if (allErrors.every((error) => error.textContent === "")) {
+      formerr.textContent = "";
+      registrationForm.submit();
+    } else {
+      formerr.textContent = "Please correct the errors in the form.";
+    }
   }
-}
 
   registrationForm.addEventListener("submit", handleSubmit);
 });
