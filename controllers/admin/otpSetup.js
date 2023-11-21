@@ -1,35 +1,36 @@
-const transporter=require('../../config/email')
-
+const transporter = require("../../config/email");
 
 //----------------function to generate otp--------------------
 // function generateNumericOTP() {
 //     const digits = '0123456789';
 //     let otp = '';
-    
+
 //     for (let i = 0; i < 4; i++) {
 //       const randomIndex = Math.floor(Math.random() * digits.length);
 //       otp += digits.charAt(randomIndex);
 //     }
-  
+
 //     return otp;
 //   }
 
 function generateNumericOTP() {
-    const min = 1000;
-    const max = 9999;
-    const otp = Math.floor(Math.random() * (max - min + 1)) + min;
-    return otp;
-  }
-  
-  //----------chechking code-------------------
+  const min = 1000;
+  const max = 9999;
+  const otp = Math.floor(Math.random() * (max - min + 1)) + min;
+  return otp;
+}
+
+//----------chechking code-------------------
 //   const otp = generateNumericOTP();
 //   console.log('Generated Numeric OTP:', otp);
 
-//----------send otp function--------------------------------   
+//----------send otp function--------------------------------
 
- function sendOtp(email,otp,name){
+function sendOtp(email, otp, name) {
+  if (otp.length < 5) {
+  }
 
-    const message = `
+  const message = `
 
     <!DOCTYPE html>
     <html lang="en">
@@ -82,35 +83,98 @@ function generateNumericOTP() {
     
     
     `;
-    const mailOptions={
-        from:`ashiasish@gmail.com`,
-        to:email,
-        subject:'Your OTP verification code',
-        html:message
+  const mailOptions = {
+    from: `ashiasish@gmail.com`,
+    to: email,
+    subject: "Your OTP verification code",
+    html: message,
+  };
 
-    };
-
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error('Error sending OTP:', error);
-        } else {
-            
-          console.log('OTP sent:', info.response);
-        }
-      });
-
- }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending OTP:", error);
+    } else {
+      console.log("OTP sent:", info.response);
+    }
+  });
+}
 
 //-----------------testing------------------------
 
 //  const recipientEmail = 'ashiasish1858@gmail.com';
 // const otp = generateNumericOTP();
 // const name ="bilby"// Replace with the generated OTP
-
-
-
-module.exports = {sendOtp,
-    generateNumericOTP};
-
+function sendToken(email,token, name) {
   
+  const message = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Forgot Password</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #000000;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #ffffff;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                border-radius: 5px;
+                margin-top: 50px;
+            }
+            h2 {
+                color: #000000;
+            }
+            p {
+                color: #000000;
+            }
+            .reset-link {
+                background-color: #000000;
+                color: #ffffff;
+                padding: 10px 15px;
+                text-decoration: none;
+                display: inline-block;
+                border-radius: 3px;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Forgot Your Password?</h2>
+            <p>Hello ${name},</p>
+            <p>We received a request to reset your password. If you did not make this request, please ignore this email.</p>
+            <p>To reset your password, click the following link:</p>
+            <form action="http://localhost:4000/resetPassword/${token}" method="post">
+            <button type="submit" class="reset-link">Reset Password</button>
+            </form>
+            <p>This link will expire in [Expiry Time].</p>
+            <p>Thank you,</p>
+            <p>WATCHBOX</p>
+        </div>
+    </body>
+    </html>;`
+
+  const mailOptions = {
+    from: `ashiasish@gmail.com`,
+    to: email,
+    subject: "Your OTP verification code",
+    html: message,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending OTP:", error);
+    } else {
+      console.log("OTP sent:", info.response);
+    }
+  });
+}
+
+module.exports = { sendOtp, sendToken, generateNumericOTP };
