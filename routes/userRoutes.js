@@ -8,7 +8,7 @@ const {ensureAuthenticated,ensureNotAuthenticated}=require("../middleware/userAu
 const checkoutController=require('../controllers/shop/checkoutController');
 const addressController=require('../controllers/shop/addressControl');
 const orderController=require('../controllers/shop/orderControllers');
-
+const validateID=require("../middleware/idValidation")
 
 userRoute.use((req, res, next) => {
   req.app.set("layout", "user/layout/user");
@@ -31,6 +31,7 @@ userRoute.get("/reverifyEmail",  ensureNotAuthenticated,usercontroller.reverifyE
 userRoute.get('/profile', ensureAuthenticated, usercontroller.loadProfile);
 userRoute.post('/profile', ensureAuthenticated, usercontroller.editProfile);
 
+
 /*
     post methods
     */
@@ -49,7 +50,7 @@ userRoute.post('/checkEmail',usercontroller.checkEmail)
 userRoute.post('/emailcheck',usercontroller.emailcheck)
 userRoute.get("/forgotPassword",usercontroller.loadforgotPassword)
 userRoute.post("/forgotPassword",usercontroller.forgotPassword)
-userRoute.post("/resetPassword/:id",usercontroller.resetPassword)
+userRoute.post("/resetPassword/:id",validateID,usercontroller.resetPassword)
 userRoute.get('/newPassword',usercontroller.loadnewPassword)
 userRoute.post('/newPassword',usercontroller.newPassword)
 
@@ -64,24 +65,24 @@ userRoute.get("/shop", shopController.loadShop);
 
 //-------------------------------productDetails page------------------------
 
-userRoute.get("/viewProduct/:id", shopController.loadProductDetails);
+userRoute.get("/viewProduct/:id",validateID, shopController.loadProductDetails);
 
 
 
 //------------------------user Cart page--------------------------------------------------- 
 
 userRoute.get('/cart',ensureAuthenticated,cartController.loadCart);
-userRoute.get('/cart/add/:id',ensureAuthenticated,cartController.addToCart);
-userRoute.get('/cart/remove/:id',ensureAuthenticated,cartController.removeProduct);
-userRoute.get('/cart/inc/:id',ensureAuthenticated,cartController.incQuantity);
-userRoute.get('/cart/dec/:id',ensureAuthenticated,cartController.decQuantity)
+userRoute.get('/cart/add/:id',validateID,ensureAuthenticated,cartController.addToCart);
+userRoute.get('/cart/remove/:id',validateID,ensureAuthenticated,cartController.removeProduct);
+userRoute.get('/cart/inc/:id',validateID,ensureAuthenticated,cartController.incQuantity);
+userRoute.get('/cart/dec/:id',validateID,ensureAuthenticated,cartController.decQuantity)
 //---------------------------address Route------------
 
-userRoute.get('/addAddress',ensureAuthenticated,addressController.loadAddress);
+userRoute.get('/addAddress',validateID,ensureAuthenticated,addressController.loadAddress);
 userRoute.post('/addAddress',ensureAuthenticated,addressController.insertAddress);
 userRoute.get('/savedAddress',ensureAuthenticated,addressController.loadSavedAddress);
-userRoute.get('/editAddress/:id',ensureAuthenticated,addressController.loadEditAddress);
-userRoute.post('/editAddress/:id',ensureAuthenticated,addressController.editAddress)
+userRoute.get('/editAddress/:id',validateID,ensureAuthenticated,addressController.loadEditAddress);
+userRoute.post('/editAddress/:id',validateID,ensureAuthenticated,addressController.editAddress)
 
 
 //------------------------userr checkout mangement------------------------    
@@ -89,12 +90,12 @@ userRoute.post('/editAddress/:id',ensureAuthenticated,addressController.editAddr
 userRoute.post('/checkout',ensureAuthenticated,checkoutController.cartPage)
 userRoute.get('/checkout/get',ensureAuthenticated,checkoutController.getCartData)
 userRoute.post('/place-order',ensureAuthenticated,checkoutController.placeOrder)
-userRoute.get("/order-placed/:id", checkoutController.orderPlaced);
+userRoute.get("/order-placed/:id",validateID, checkoutController.orderPlaced);
 
 //-------------------order controller------------------------------
 userRoute.get('/order',ensureAuthenticated,orderController.orderPage);
-userRoute.get('/orders/:id',ensureAuthenticated,orderController.viewOrder);
-userRoute.put('/orders/cancel/:id',ensureAuthenticated,orderController.cancelOrder)
+userRoute.get('/orders/:id',validateID,ensureAuthenticated,orderController.viewOrder);
+userRoute.put('/orders/cancel/:id', validateID,ensureAuthenticated,orderController.cancelOrder)
 
 
 userRoute.get("/test",(req,res)=>{

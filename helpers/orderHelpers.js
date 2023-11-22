@@ -18,8 +18,10 @@ exports.getOrders = expressAsyncHandler(async (userId) => {
         },
       },
     })
-    .select("orderId orderedDate shippingAddress town").sort({
-        orderedDate:-1})
+    .select("orderId orderedDate shippingAddress town")
+    .sort({
+      orderedDate: -1,
+    });
 
   return orders;
 });
@@ -36,16 +38,18 @@ exports.handleCancelledOrder = expressAsyncHandler(async (order) => {
 });
 
 exports.getSingleOrder = expressAsyncHandler(async (orderId) => {
-  const order = await OrderItem.findById(orderId).populate({
-    path: "product",
-    model: "Product",
-    populate: {
-      path: "images",
-      model: "Images",
-    },
-
-  }).sort({ 
-    createdAt: 1 });
+  const order = await OrderItem.findById(orderId)
+    .populate({
+      path: "product",
+      model: "Product",
+      populate: {
+        path: "images",
+        model: "Images",
+      },
+    })
+    .sort({
+      createdAt: 1,
+    });
 
   const orders = await Order.findOne({ orderItems: orderId }).select(
     "shippingAddress town orderedDate"
@@ -56,34 +60,49 @@ exports.getSingleOrder = expressAsyncHandler(async (orderId) => {
 
 //---------------------cancel order------------------------
 
-exports.cancelOrderById = expressAsyncHandler(async (Id) => {
-   
-  const order = await Order.findById(Id).populate("orderItems");
-  
-  if (order.orderItems.every((item) => item.status === status.cancelled)) {
-    return { message: "Order is already cancelled." };
-
-
-  } else if (order.payment_method === "cash_on_delivery") {
-
-
-    // Update product quantities and sold counts for each order item
-    for (const item of order.orderItems) {
-
-      await OrderItem.findByIdAndUpdate(item._id, {
+exports.cancelOrderByProductId = expressAsyncHandler(
+  async (orderItemId, userId) => {
+    try {
+      const updatedOrder = await OrderItem.findByIdAndUpdate(orderItemId, {
         status: status.cancelled,
       });
 
-      const cancelledProduct = await Product.findById(item.product);
-      cancelledProduct.quantity += item.quantity;
-      cancelledProduct.sold -= item.quantity;
+      const product = updatedOrder.product._id;
+
+      const cancelledProduct = await Product.findById(product);
+
+      cancelledProduct.quantity += updatedOrder.quantity;
+      cancelledProduct.sold -= updatedOrder.quantity;
       await cancelledProduct.save();
+
+      return "redirectBack";
+    } catch (error) {
+      throw new Error(error);
     }
 
-    // Update the order status
-    order.status = status.cancelled;
-    await order.save();
+    // if (order.orderItems.every((item) => item.status === status.cancelled)) {
+    //   return { message: "Order is already cancelled." };
 
-    return "redirectBack";
+    // } else if (order.payment_method === "cash_on_delivery") {
+
+    //   // Update product quantities and sold counts for each order item
+    //   for (const item of order.orderItems) {
+
+    //     await OrderItem.findByIdAndUpdate(item._id, {
+    //       status: status.cancelled,
+    //     });
+
+    //     const cancelledProduct = await Product.findById(item.product);
+    //     cancelledProduct.quantity += item.quantity;
+    //     cancelledProduct.sold -= item.quantity;
+    //     await cancelledProduct.save();
+    //   }
+
+    //   // Update the order status
+    //   order.status = status.cancelled;
+    //   await order.save();
+
+    //   return "redirectBack";
+    // }
   }
-});
+);

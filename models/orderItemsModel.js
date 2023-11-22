@@ -35,6 +35,9 @@ const orderItemSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  orderId:{
+    type: String,
+  }
 });
 
 module.exports = mongoose.model("OrderItem", orderItemSchema);
