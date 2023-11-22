@@ -83,13 +83,7 @@
                     src="<%= order.product.images[0].imageUrl %>" width="250">
                 </div>
               </div>
-              <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
-                <li class="step0 active" id="step1"><span
-                    style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
-                <li class="step0 active text-center" id="step2"><span>SHIPPED</span></li>
-                <li class="step0 text-muted text-end" id="step3"><span
-                    style="margin-right: 22px;">DELIVERED</span></li>
-              </ul>
+              <%-include('../partials/flashMessage.ejs')  %>
             </div>
             <div class="card-footer p-4">
               <div class="d-flex justify-content-between">
@@ -102,6 +96,7 @@
                         Cancel Order
                       </button>
                      <% } %>
+                     <button onclick="goBack()">Go Back</button>
 
                 <div class="border-start h-100"></div>
            
@@ -129,7 +124,7 @@
                 <form action="/orders/cancel/<%= order._id %>?_method=PUT" method="post">
                     <button type="submit" class="btn btn-danger h-auto" id="confirmCancelBtn">Confirm</button>
                 </form>
-                <button type="button" class="btn btn-secondary h-auto" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary h-auto" data-mdb-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -228,4 +223,23 @@
   .card-stepper {
   z-index: 0
   }
+  button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: 2px solid #ff0000; /* Red border */
+      border-radius: 10px; /* Rounded corners */
+      background-color: #ff5555; /* Light red background color */
+      color: #fff; /* White text color */
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #cc0000; /* Darker red on hover */
+    }
   </style>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>

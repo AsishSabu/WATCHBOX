@@ -63,8 +63,11 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod)=>{
         phone: address.mobile,
         totalPrice: total.toFixed(2), // Ensure that totalPrice is of the correct data type
         user: userId,
+      
         payment_method: paymentMethod,
       });
+      console.log(newOrder);
+      
       
 
     return newOrder;
