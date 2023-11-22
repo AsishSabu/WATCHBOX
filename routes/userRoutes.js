@@ -5,7 +5,6 @@ const usercontroller = require("../controllers/shop/userController");
 const shopController = require("../controllers/shop/shopControllers");
 const cartController=require("../controllers/shop/cartController");
 const {ensureAuthenticated,ensureNotAuthenticated}=require("../middleware/userAuth");
-const adminRoute = require("./adminRoute");
 const checkoutController=require('../controllers/shop/checkoutController');
 const addressController=require('../controllers/shop/addressControl');
 const orderController=require('../controllers/shop/orderControllers');
