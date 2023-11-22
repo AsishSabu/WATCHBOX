@@ -33,7 +33,7 @@
         <h1 class="cart-heading">Cart</h1>
         <form action="/checkout" method="post">
           <div class="table-content table-responsive">
-            <% if ( cartItems.products.length) { %>
+            <% if ( cartItems && cartItems.products && cartItems.products.length) { %>
             <table class="table table-hover table-borderless">
               <thead class="bg-dark">
                 <tr>
