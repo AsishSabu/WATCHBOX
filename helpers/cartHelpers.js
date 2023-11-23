@@ -35,7 +35,8 @@ const incrementQuantity = async (userId, productId, res) => {
              foundProduct.quantity += 1;
         await updatedProduct.save();
         const productTotal = product.salePrice * foundProduct.quantity;
-        const cart = await Cart.findOne({ user: userId }).populate("products.product");
+        const cart = await Cart.findOne({ user: userId }).populate("products.product").count();
+        console.log(cart);
         const { subtotal, total } = calculateCartTotals(cart.products);
         res.json({
             message: "Quantity Increased",

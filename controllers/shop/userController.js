@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const product = require("../../models/productModel");
 const category = require("../../models/categoryModel");
 const crypto = require("crypto");
+const Banner=require("../../models/bannerModel")
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
@@ -17,8 +18,9 @@ const loadIndex = asynchandler(async (req, res) => {
       .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
       .populate("images")
       .limit(8);
+      const banner=await Banner.find({isActive:true}).limit(1);
 
-    res.render("./user/pages/index", { title: "WATCHBOX", topProduct });
+    res.render("./user/pages/index", { title: "WATCHBOX", topProduct ,banner});
   } catch (error) {
     throw new Error(error);
   }

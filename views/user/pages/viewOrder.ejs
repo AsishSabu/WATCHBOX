@@ -95,7 +95,12 @@
                       data-mdb-target="#cancelOrderModal">
                         Cancel Order
                       </button>
-                     <% } %>
+                     <% }else if(order.status==="Delivered" ) { %>
+                      <button type="button" class="btn btn-danger h-auto"
+                       data-mdb-toggle="modal" data-mdb-target="#returnOrderModal">
+                          Return Order
+                        </button>
+                      <% } %>
                      <button onclick="goBack()">Go Back</button>
 
                 <div class="border-start h-100"></div>
@@ -109,6 +114,8 @@
         </div>
       </div>
     </div>
+
+    //------------cancel modal-------------------------------------------------------
     <div class="modal fade " id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -122,13 +129,65 @@
             <div class="modal-body">Are you sure you want to cancel this order?</div>
             <div class="modal-footer">
                 <form action="/orders/cancel/<%= order._id %>?_method=PUT" method="post">
-                    <button type="submit" class="btn btn-danger h-auto" id="confirmCancelBtn">Confirm</button>
+                    <button type="submit" class="btn btn-danger h-auto" id="confirmCancelBtn" onclick="cancelOrder()">Confirm</button>
                 </form>
                 <button type="button" class="btn btn-secondary h-auto" data-mdb-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
+
+//----------------------------------------return modal----------------------------------------------------
+
+<div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog" aria-labelledby="returnOrderModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="/orders/return/<%= order._id %>" method="POST">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="reason">Reason for Return</label>
+                        <select class="form-control" id="reason" name="reason" required>
+                            <option value="" disabled selected>Select a reason</option>
+                            <option value="item_description_mismatch">Item doesn't match the description</option>
+                            <option value="received_wrong_item">Received the wrong item</option>
+                            <option value="item_damaged_or_defective">Item arrived damaged or defective</option>
+                            <option value="changed_mind">Changed my mind</option>
+                            <option value="didnt_meet_expectations">Item didn't meet my expectations</option>
+                            <option value="no_longer_needed">Item is no longer needed</option>
+                            <option value="item_arrived_late">Item arrived late</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn  h-auto" data-mdb-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger h-auto" >Confirm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+  function cancelOrder() {
+  
+    Swal.fire({
+            
+                icon: "success",
+                title: "order cancelled",
+                showConfirmButton: false,
+                timer:10000
+              });
+          
+  }
+  </script>
 
   </section>
   
@@ -147,7 +206,7 @@
   }
   
   #progressbar-1 {
-  color: #455A64;
+  color: #898989;
   }
   
   #progressbar-1 li {
@@ -217,7 +276,7 @@
   
   #progressbar-1 li.active:before,
   #progressbar-1 li.active:after {
-  background: #1266f1;
+  background: #ffffff;
   }
   
   .card-stepper {
@@ -228,7 +287,7 @@
       font-size: 16px;
       border: 2px solid #ff0000; /* Red border */
       border-radius: 10px; /* Rounded corners */
-      background-color: #ff5555; /* Light red background color */
+      background-color: #0d0606; /* Light red background color */
       color: #fff; /* White text color */
       cursor: pointer;
       transition: background-color 0.3s ease;
@@ -237,6 +296,7 @@
     button:hover {
       background-color: #cc0000; /* Darker red on hover */
     }
+    
   </style>
   <script>
     function goBack() {

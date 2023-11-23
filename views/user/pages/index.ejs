@@ -1,5 +1,42 @@
 
-<div id="home-area" class="height-100vh bg-img watch-slider" style="background-image: url('/assets/img/slider/w3.jpg');">
+
+<% if(banner&& banner.length) {%>
+    <% banner.forEach(banner=>{ %>
+        <% banner.bannerImage.forEach(image=>{ %>
+    <div id="home-area" class="height-100vh bg-img watch-slider" style="background-image: url(/admin/uploads/<%=image.name%>)">
+    
+        <div class="table">
+            <div class="table-cell">
+                <div class="container ">
+                    <div class="row">
+                        <div class="col-md-6 align-items-center">
+                            <div class="slider-text">
+                                <h2 class="tlt1 neon"><%=banner.title%></h2>
+                                <p class="flux"><%=banner.description %></p>
+                                <div class="button-set">
+                                    <!-- <a class="explore-btn video-popup" href="/shop">
+                                        Explore More <i class="ti-control-play"></i>
+                                    </a> -->
+                                    <a class="explore-btn" href=<%= banner.productUrl %>>
+                                        Shop Now <i class="ti-control-play"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-6">
+                            <div class="wacth-img tilter">
+                                <img src="assets/img/slider/1.png" alt="" >
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }) %>
+    <% }) %>
+        <% } else { %>
+        <div id="home-area" class="height-100vh bg-img watch-slider" style="background-image: url('/assets/img/slider/w3.jpg');">
     
     <div class="table">
         <div class="table-cell">
@@ -7,7 +44,8 @@
                 <div class="row">
                     <div class="col-md-6 align-items-center">
                         <div class="slider-text">
-                            <h2 class="tlt1">Most <br>intelligent <br>& Smart Watch.</h2>
+                            <h2 class="tlt1 ">Most <br>intelligent <br> & Smart Watch.</h2>
+                            
                             <div class="button-set">
                                 <!-- <a class="explore-btn video-popup" href="/shop">
                                     Explore More <i class="ti-control-play"></i>
@@ -28,6 +66,8 @@
         </div>
     </div>
 </div>
+        <%} %>
+
 
 
 
@@ -139,4 +179,68 @@
     height: 200px; /* Set the desired height for the product images */
     object-fit: cover; /* This property ensures that the image covers the specified dimensions */
 }
+@font-face {
+  font-family: neon;
+  src: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/707108/neon.ttf);
+}
+
+.container {
+
+ 
+  vertical-align: middle;
+}
+
+.neon {
+  font-family: neon;
+  color: #FB4264;
+  font-size: 9vw;
+  line-height: 9vw;
+  text-shadow: 0 0 3vw #F40A35;
+}
+
+.flux {
+  font-family: neon;
+  color: #2152f4;
+  font-size: 2vw;
+  line-height: 1vw;
+  text-shadow: 0 0 3vw #2356FF;
+}
+
+.neon {
+  animation: neon 1s ease infinite;
+  -moz-animation: neon 1s ease infinite;
+  -webkit-animation: neon 1s ease infinite;
+}
+
+@keyframes neon {
+  0%,
+  100% {
+    text-shadow: 0 0 1vw #FA1C16, 0 0 3vw #FA1C16, 0 0 10vw #FA1C16, 0 0 10vw #FA1C16, 0 0 .4vw #FED128, .5vw .5vw .1vw #806914;
+    color: #FED128;
+  }
+  50% {
+    text-shadow: 0 0 .5vw #800E0B, 0 0 1.5vw #800E0B, 0 0 5vw #800E0B, 0 0 5vw #800E0B, 0 0 .2vw #800E0B, .5vw .5vw .1vw #40340A;
+    color: #806914;
+  }
+}
+
+.flux {
+  animation: flux 2s linear infinite;
+  -moz-animation: flux 2s linear infinite;
+  -webkit-animation: flux 2s linear infinite;
+  -o-animation: flux 2s linear infinite;
+}
+
+@keyframes flux {
+  0%,
+  100% {
+    text-shadow: 0 0 1vw #1041FF, 0 0 3vw #1041FF, 0 0 10vw #1041FF, 0 0 10vw #1041FF, 0 0 .4vw #8BFDFE, .5vw .5vw .1vw #147280;
+    color: #28D7FE;
+  }
+  50% {
+    text-shadow: 0 0 .5vw #082180, 0 0 1.5vw #082180, 0 0 5vw #082180, 0 0 5vw #082180, 0 0 .2vw #082180, .5vw .5vw .1vw #0A3940;
+    color: #146C80;
+  }
+}
+
 </style>
