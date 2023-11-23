@@ -16,7 +16,8 @@ function updateCartMessage(data) {
 }
 
 function updateCartCount(data) {
-  const cartCount = document.getElementById("cartCount");
+ 
+  console.log("hloooooooooooooooooooo");
 
   if (data.count !== undefined) {
     cartCount.innerText = data.count;
@@ -112,11 +113,13 @@ function addToCart(id) {
   const url = `/cart/add/${productId}`;
   const cartCount = document.getElementById("cartCount");
   const cartMessage = document.getElementById("cart-message");
+  const cartQuantity= document.getElementById("cart-quantity");
 
   fetch(url, {
     method: "GET",
   })
     .then((response) => {
+      console.log("res", response);
       if (response.ok) {
         console.log("json response is sending ");
         return response.json();
@@ -126,6 +129,7 @@ function addToCart(id) {
       }
     })
     .then((data) => {
+      console.log("Server Response:", data);
       if (data) {
         if (data.count && data.message) {
           console.log("json response is sending in the kunji box  ");
@@ -139,7 +143,7 @@ function addToCart(id) {
             cartMessage.style.display = "none";
           }, 3000);
         } else {
-          console.error("Unexpected data format");
+          console.error("Unexpected data format",data);
         }
       }
     })
