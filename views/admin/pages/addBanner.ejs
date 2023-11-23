@@ -1,0 +1,106 @@
+
+
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
+
+<div class="container">
+    <h1 class="card-title fw-semibold mb-4">Add Banner</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="productName">Banner Title</label>
+        <input type="text" class="form-control"id="title" name="title" required />
+      </div>
+    
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="fw-bold"   for="category">Product Url</label>
+        <select name="productUrl" id="select-state" placeholder="Pick a Product*" class="form-control" required>
+          <option value="">Select a Product...</option>
+          <% Products.forEach(element=> { %>
+              <option value="viewProduct/<%= element._id %>">
+                  <%= element.title %>
+              </option>
+              <% }) %>
+     
+        </select>
+      </div>
+    
+    
+      <div class="form-group">
+        <label for="productImage">Banner Image</label>
+        <input type="file" class="form-control-file" id="image" name="bannerImage" accept="image/*" required />
+      </div>
+      <button type="submit" class="btn btn-primary">Add Banner</button>
+    </form>
+  </div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('select').selectize({
+            createFilter: function (input) {
+                return input;
+            },
+            sortField: {
+                field: 'text',
+                direction: 'asc'
+            }
+        });
+    });
+</script>
+
+  <style>
+   
+  
+    body {
+        background-color: #fff;
+      }
+  
+      .container {
+        position: absolute;
+      margin-top: 72px;
+        background-color: #fff;
+        border: 1px solid #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+  
+      .form-group {
+        margin-bottom: 20px;
+      }
+  
+      label {
+        font-weight: bold;
+      }
+  
+      .form-control {
+        width: 100%;
+      }
+  
+      .btn-primary {
+        background-color: #007bff;
+        border: none;
+      }
+  
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+  
+      /* Additional styling for responsiveness */
+      @media (max-width: 768px) {
+        .container {
+          margin: 20px;
+        }
+      }
+  </style>
+  
+  

@@ -96,6 +96,8 @@ userRoute.get("/order-placed/:id",validateID, checkoutController.orderPlaced);
 userRoute.get('/order',ensureAuthenticated,orderController.orderPage);
 userRoute.get('/orders/:id',validateID,ensureAuthenticated,orderController.viewOrder);
 userRoute.put('/orders/cancel/:id', validateID,ensureAuthenticated,orderController.cancelOrder)
+userRoute.post(" /orders/return/:id",validateID,orderController.ReturnOrder)
+
 
 
 userRoute.get("/test",(req,res)=>{

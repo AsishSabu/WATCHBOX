@@ -4,7 +4,8 @@ const User = require("../../models/userModels");
 const orderItem=require("../../models/orderItemsModel")
 const asynchandler = require("express-async-handler");
 const Orders=require("../../models/orderModel")
-const {getOrders,getSingleOrder, cancelOrderByProductId}=require("../../helpers/orderHelpers");
+const {getOrders,getSingleOrder, cancelOrderByProductId,returnOrder}=require("../../helpers/orderHelpers");
+
 
 
 
@@ -35,8 +36,8 @@ const viewOrder=asynchandler(async(req,res)=>{
         const orderId=req.params.id
         console.log(orderId);
         const {order,orders}=await getSingleOrder(orderId)
-        const messages=req.flash()
-        res.render("./user/pages/viewOrder",{title:"WATCHBOX",order,orders,messages})
+        
+        res.render("./user/pages/viewOrder",{title:"WATCHBOX",order,orders})
     } catch (error) {
         throw new Error(error.message)
     }
@@ -50,7 +51,7 @@ const cancelOrder = asynchandler(async (req, res) => {
             
 
         if (result === "redirectBack") {
-          req.flash("danger","order cancelled")
+            
             res.redirect("back");
         } else {
             res.json(result);
@@ -60,10 +61,30 @@ const cancelOrder = asynchandler(async (req, res) => {
     }
 });
 
+  //---------------------order returning-----------------------------------------------
+
+  const ReturnOrder = asynchandler(async (req, res) => {
+    try {
+        const returnOrderItemId = req.params.id;
+        const result = await returnOrder(returnOrderItemId);
+
+        if (result === "redirectBack") {
+            res.redirect("back");
+        } else {
+            res.json(result);
+        }
+    } catch (error) {
+        throw new Error(error);
+    } 
+});
+
+
+
 module.exports={
     orderPage,
     viewOrder,
-    cancelOrder
+    cancelOrder,
+    ReturnOrder
 }
 
 
