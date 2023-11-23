@@ -4,8 +4,9 @@ const adminController=require('../controllers/admin/adminController');
 const categoryController=require('../controllers/admin/categoryController')
 const productController=require('../controllers/admin/productControllers');
 const orderCOntroller=require('../controllers/admin/orderController')
-const {uploadMultiple,uploadSingle,upload}=require('../config/upload')
+const {upload}=require('../config/upload')
 const {isAdminLoggedOut, isAdminLoggedin}=require('../middleware/adminAuth')
+const bannerController=require("../controllers/admin/bannerControl")
 
 adminRoute.use((req,res,next)=>{
     req.app.set('layout','admin/layout/admin')
@@ -36,7 +37,7 @@ adminRoute.post('/unblockUser/:id',isAdminLoggedin,adminController.unblockUser)
 
 adminRoute.get('/products',isAdminLoggedin,productController.loadProduct)
 adminRoute.get('/addProduct',isAdminLoggedin,productController.addProduct)
-adminRoute.post('/addProduct',uploadMultiple,productController.insertProduct)
+adminRoute.post('/addProduct',upload.array("files",4),productController.insertProduct)
 adminRoute.post('/product/list/:id',isAdminLoggedin,productController.listProduct)
 adminRoute.post('/product/unlist/:id',isAdminLoggedin,productController.unListProduct)
 adminRoute.get('/product/editProduct/:id',isAdminLoggedin,productController.editProduct)
@@ -64,6 +65,17 @@ adminRoute.post('/editCategory/:id',isAdminLoggedin,categoryController.updateCat
 adminRoute.get('/orders',isAdminLoggedin,orderCOntroller.orderPage)
 adminRoute.get('/orders/:id',isAdminLoggedin,orderCOntroller.orderDetails)
 adminRoute.put("/orders/update/:id", orderCOntroller.orderStatus);
+
+
+
+//-----------------------banner Management--------------------------------
+
+adminRoute.get("/banner",isAdminLoggedin,bannerController.bannerList)
+adminRoute.get("/addBanner",isAdminLoggedin,bannerController.loadAddBanner)
+adminRoute.post("/addBanner",isAdminLoggedin,upload.single('bannerImage'),bannerController.createBanner)
+adminRoute.post("/banner/list/:id",isAdminLoggedin,bannerController.listBanner)
+adminRoute.post("/banner/unlist/:id",isAdminLoggedin,bannerController.unlistBanner)
+
 
 
 

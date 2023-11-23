@@ -112,6 +112,13 @@
                 >₹ <%= Product.productPrice %></span
               >
             </div>
+            <div class=" mb-3 text-warning">
+              <% if (Product.quantity < 5 && Product.quantity>1) { %>
+                  <span>
+                      Hurry Only <%= Product.quantity%> left!
+                  </span>
+                  <% }%>
+          </div>
             <div class="">
               <span class="h3 text-success"
                 ></span
@@ -132,7 +139,7 @@
                           <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
                       </div>
                       <div class="quickview-btn-cart">
-                          <a class="btn-hover-black rounded-pill" href="#">add to cart</a>
+                          <a class="btn-hover-black rounded-pill" title="Add To Cart" onclick="addToCart(`<%= Product._id %>`)">add to cart</a>
                       </div>
                       <div class="quickview-btn-wishlist">
                           <a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
