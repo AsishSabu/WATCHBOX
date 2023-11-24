@@ -55,6 +55,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  walletPayment: {
+    type: Number,
+    default: 0
+},
  
   paidAmount: {
       type: Number,

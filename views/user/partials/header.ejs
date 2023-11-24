@@ -50,14 +50,11 @@
             </div>
             <div class="header-cart-2 m-2">
               <a class="icon-cart text-white" href="/cart">
-                <i class="ti-shopping-cart">
-                  <span id="cart-quantity  " class="text-danger js-cart-quantity ">0</span>
-                </i>
-               
-                <span id="cartCount" class="handicraft-count">cart</span>
-               
+                  <span id="cart-quantity" class="text-danger js-cart-quantity">0</span>
+                  <i class="ti-shopping-cart"></i>
+                  <span id="cartCount" class="handicraft-count">cart</span>
               </a>
-            </div>
+          </div>
             <div class="ml-1">
               <a href="/profile"><i class="ti-user text-danger"></i> <%=user.userName %></a>
             </div>
@@ -72,6 +69,33 @@
 </header>
 
 <style>
+.header-cart-2 {
+    position: relative;
+}
+
+.icon-cart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.js-cart-quantity {
+    position: absolute;
+    top: 25px; /* Adjust this value to position the quantity properly */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f9f9f9;
+    color: #000000;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.handicraft-count {
+    margin-top: 4px; /* Adjust this value to provide spacing between the number and "cart" text */
+}
 
 
 </style>

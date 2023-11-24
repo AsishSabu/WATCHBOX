@@ -11,7 +11,7 @@ exports.loadShop = asynchandler(async (req, res) => {
     const products = await product
       .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
       .populate("images")
-      .limit(8);
+      .limit(12);
     res.render("./user/pages/shop", {title:'WATCHBOX', products, categories });
   } catch (error) {
     throw new Error(error);

@@ -33,12 +33,16 @@
         <td>$<%= product.productPrice %></td>
         <td><%= product.quantity %></td>
         <td class="align-middle">
+          <% if(product&&product.images&&product.images[0]&&product.images[0].thumbnailUrl){ %>
           <img
             class="img-fluid img-thumbnail"
             src="<%= product.images[0].thumbnailUrl %>"
-            alt=""
+            alt="no image"
             style="width: 100px; height: 100px"
           />
+          <%} else{ %>
+            <p class="text-danger">no image found</p>
+         <% } %>
         </td>
         <td>
           <div class="btn-group" role="group" aria-label="Product Actions">

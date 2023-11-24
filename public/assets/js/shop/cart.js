@@ -1,4 +1,11 @@
 let data;
+
+
+function currentCartData(){
+  const cartData =0
+  const countSpan=document.getElementById('countSpan')
+
+}
 const checkoutBtn = document.getElementById("checkoutBtn");
 
 function updateCartMessage(data) {
@@ -17,7 +24,8 @@ function updateCartMessage(data) {
 
 function updateCartCount(data) {
  
-  console.log("hloooooooooooooooooooo");
+  const cartCount = document.getElementById("cartCount");
+
 
   if (data.count !== undefined) {
     cartCount.innerText = data.count;
@@ -108,7 +116,7 @@ minusButtons.forEach((button) => {
 });
 
 function addToCart(id) {
-  console.log("in the add to cart ");
+  console.log("in the add to cart ...............................................................................................");
   const productId = id;
   const url = `/cart/add/${productId}`;
   const cartCount = document.getElementById("cartCount");

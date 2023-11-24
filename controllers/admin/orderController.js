@@ -2,7 +2,9 @@ const expressHandler = require("express-async-handler");
 const Order = require("../../models/orderModel");
 const orderItem=require("../../models/orderItemsModel");
 const {status}=require("../../utils/status");
-const {handleCancelledOrder,handleReturnedOrder}=require("../../helpers/orderHelpers")
+const orderHelper=require("../../helpers/orderHelpers")
+const AdminOrderHelpers=require("../../helpers/adminOrderHelpers.js")
+
 
 const orderPage = expressHandler(async (req, res) => {
   try {
@@ -61,13 +63,13 @@ const orderDetails=expressHandler(async (req, res) => {
 
 const orderStatus=expressHandler(async(req,res)=>{
 
-    console.log('haiiii');
+    
     const orderId = req.params.id;
     const newStatus = req.body.status
     
     
             const order = await orderItem.findByIdAndUpdate(orderId, { status: newStatus })
-            console.log(order);
+           
            
             if (req.body.status === status.shipped) {
                 order.shippedDate = Date.now();
@@ -77,11 +79,12 @@ const orderStatus=expressHandler(async(req,res)=>{
           
             await order.save();
             if (req.body.status === status.cancelled) {
-                await handleCancelledOrder(order);
+                await orderHelper.handleCancelledOrder(order);
             }
         
             if (order.status === status.returnPending) {
-                await handleReturnedOrder(order);
+              
+                await AdminOrderHelpers.handleReturnedOrder(order);
             }
     
             res.redirect("back");
