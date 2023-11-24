@@ -4,7 +4,7 @@ const User=require('../../models/userModels')
 
 const loadAddress = asyncHandler(async(req,res)=>{
     try {
-        res.render('./user/pages/addAddress',{title:'WATCHBOX'})
+        res.render('./user/pages/Address',{title:'WATCHBOX'})
     } catch (error) {
         throw new Error(error)
     }

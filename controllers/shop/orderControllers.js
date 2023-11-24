@@ -4,7 +4,7 @@ const User = require("../../models/userModels");
 const orderItem=require("../../models/orderItemsModel")
 const asynchandler = require("express-async-handler");
 const Orders=require("../../models/orderModel")
-const {getOrders,getSingleOrder, cancelOrderByProductId,returnOrder}=require("../../helpers/orderHelpers");
+const orderHelpers=require("../../helpers/orderHelpers");
 
 
 
@@ -12,15 +12,26 @@ const {getOrders,getSingleOrder, cancelOrderByProductId,returnOrder}=require("..
 const orderPage=asynchandler(async(req,res)=>{ 
 try {
     const userId = req.user._id;
-    
-
-    const user=await User.findById(userId)
-    
-    const orders = await getOrders(userId)
-    
-
+  
+    const user=await User.findById(userId)  
    
-
+    const orders = await Orders.find({ user: userId })
+    .populate({
+      path: "orderItems",
+      select: "product status _id",
+      populate: {
+        path: "product",
+        select: "title images",
+        populate: {
+          path: "images",
+        },
+      },
+    })
+    .select("orderId orderedDate shippingAddress town")
+    .sort({
+      orderedDate: -1,
+    });
+    console.log(orders);
     res.render("./user/pages/orders",{title:"WATCHBOX",orders,user})
 } catch (error) {
     throw new Error(error.message)
@@ -34,8 +45,9 @@ try {
 const viewOrder=asynchandler(async(req,res)=>{
     try {
         const orderId=req.params.id
-        console.log(orderId);
-        const {order,orders}=await getSingleOrder(orderId)
+       
+        const {order,orders}=await orderHelpers.getSingleOrder(orderId)
+        console.log(order);
         
         res.render("./user/pages/viewOrder",{title:"WATCHBOX",order,orders})
     } catch (error) {
@@ -47,7 +59,7 @@ const cancelOrder = asynchandler(async (req, res) => {
     try {
         const orderItemId = req.params.id;
 
-        const result = await cancelOrderByProductId(orderItemId, req.user._id);
+        const result =await orderHelpers.cancelOrderByProductId(orderItemId, req.user._id);
             
 
         if (result === "redirectBack") {
@@ -66,7 +78,7 @@ const cancelOrder = asynchandler(async (req, res) => {
   const ReturnOrder = asynchandler(async (req, res) => {
     try {
         const returnOrderItemId = req.params.id;
-        const result = await returnOrder(returnOrderItemId);
+        const result = await orderHelpers. returnOrder(returnOrderItemId);
 
         if (result === "redirectBack") {
             res.redirect("back");

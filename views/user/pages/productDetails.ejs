@@ -5,20 +5,20 @@
         <div class="product-details-img-content ">
           <div class="product-details-tab mr-35 product-details-tab2">
             <div
-              class="product-details-small nav mr-10 product-details-2"
+              class="product-details-small nav mr-5 product-details-2"
               role="tablist"
             >
               <a
-                class="active mb-10 "
+                class="active mb-2 "
                 href="#pro-details1"
                 data-bs-toggle="tab"
                 role="tab"
                 aria-selected="true"
               >
-                <img src="" alt="" />
+                <img src="<%= Product?.images[0]?.imageUrl %>" alt="" />
               </a>
               <a
-                class="mb-10"
+                class="mb-2"
                 href="#pro-details2 "
                 data-bs-toggle="tab"
                 role="tab"
@@ -27,7 +27,7 @@
                 <img src="<%= Product?.images[1]?.thumbnailUrl %>" alt="" />
               </a>
               <a
-                class="mb-10 "
+                class="mb-2 "
                 href="#pro-details3 "
                 data-bs-toggle="tab"
                 role="tab"
@@ -36,7 +36,7 @@
                 <img src="<%= Product?.images[2]?.thumbnailUrl %>" alt="" />
               </a>
               <a
-                class="mb-10 "
+                class="mb-2 "
                 href="#pro-details4"
                 data-bs-toggle="tab"
                 role="tab"
@@ -46,7 +46,7 @@
               </a>
             </div>
             <div
-              class="product-details-large tab-content"
+              class="product-details-small tab-content"
               style="height: 400px; width: 400px"
             >
               <div
@@ -130,16 +130,16 @@
           <smal class="text-danger h4">Out Of Stock!</smal>
           <% } else if (Product.quantity < 5) { %>
           <smal class="text-warning h5"
-            >Hurry, Only <%= Product.quantity %> more left!</smal
+            >Hurry, Only <%=Product.quantity %> more left!</smal
           >
           <% } %>
 
           <div class="quickview-plus-minus">
-                      <div class="cart-plus-minus">
+                      <!-- <div class="cart-plus-minus">
                           <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
-                      </div>
+                      </div> -->
                       <div class="quickview-btn-cart">
-                          <a class="btn-hover-black rounded-pill" title="Add To Cart" onclick="addToCart(`<%= Product._id %>`)">add to cart</a>
+                          <a class="btn-hover-black rounded-pill" title="" onclick="addcart(`<%=Product._id%>`)">add to cart</a>
                       </div>
                       <div class="quickview-btn-wishlist">
                           <a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
@@ -265,5 +265,51 @@
         margin-top: 200px;
     }
 </style>
-<script src="assets/js/shop/cart.js"></script>
+<script>
+  function addcart(id) {
+  console.log("in the add to cart ...............................................................................................");
+  const productId = id;
+  const url = `/cart/add/${productId}`;
+
+  const cartMessage = document.getElementById("cart-message");
+ 
+
+  fetch(url, {
+    method: "GET",
+  })
+    .then((response) => {
+      console.log("res", response);
+      if (response.ok) {
+        console.log("json response is sending ");
+        return response.json();
+      } else {
+        console.log("json response is sending failed");
+        console.error("Failed");
+      }
+    })
+    .then((data) => {
+      console.log("Server Response:", data);
+      if (data) {
+        if (data.count && data.message) {
+          console.log("json response is sending in the kunji box  ");
+          // cartCount.innerText = data.count;
+          cartMessage.innerText = data.message;
+
+          cartMessage.className = `position-fixed bg-${data.status} text-white p-2 rounded`;
+          cartMessage.style.display = "block";
+
+          setTimeout(function () {
+            cartMessage.style.display = "none";
+          }, 3000);
+        } else {
+          console.error("Unexpected data format",data);
+        }
+      }
+    })
+    .catch((error) => {
+      console.error("An error occurred:", error);
+    });
+  }
+</script>
+
 

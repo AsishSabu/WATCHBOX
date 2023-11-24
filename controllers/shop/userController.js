@@ -8,6 +8,7 @@ const product = require("../../models/productModel");
 const category = require("../../models/categoryModel");
 const crypto = require("crypto");
 const Banner=require("../../models/bannerModel")
+const Wallet=require("../../models/walletModel")
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
@@ -18,7 +19,7 @@ const loadIndex = asynchandler(async (req, res) => {
       .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
       .populate("images")
       .limit(8);
-      const banner=await Banner.find({isActive:true}).limit(1);
+      const banner=await Banner.find({isActive:true});
 
     res.render("./user/pages/index", { title: "WATCHBOX", topProduct ,banner});
   } catch (error) {
@@ -60,6 +61,11 @@ const insertUser = asynchandler(async (req, res) => {
                */
     const userSave = await userData.save(); //-------------------user save to database-------------------
     req.session.userData = userData; //-------------------userdata take to the  session----------------
+
+    const userWallet= await Wallet.create({user:userData._id})
+    console.log(userWallet);
+    const userwallet=await User.findByIdAndUpdate(userData._id,{wallet:userWallet._id})
+    console.log(userwallet);
 
     //--------------------generating otp --------------------
     const OTP = otpSetup.generateNumericOTP();

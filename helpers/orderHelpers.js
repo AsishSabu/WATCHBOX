@@ -4,27 +4,8 @@ const User = require("../models/userModels");
 const expressAsyncHandler = require("express-async-handler");
 const OrderItem = require("../models/orderItemsModel");
 const { status } = require("../utils/status");
+const { ReturnOrder } = require("../controllers/shop/orderControllers");
 
-exports.getOrders = expressAsyncHandler(async (userId) => {
-  const orders = await Order.find({ user: userId })
-    .populate({
-      path: "orderItems",
-      select: "product status _id",
-      populate: {
-        path: "product",
-        select: "title images",
-        populate: {
-          path: "images",
-        },
-      },
-    })
-    .select("orderId orderedDate shippingAddress town")
-    .sort({
-      orderedDate: -1,
-    });
-
-  return orders;
-});
 
 exports.handleCancelledOrder = expressAsyncHandler(async (order) => {
   if (order.isPaid !== "pending") {
@@ -50,10 +31,12 @@ exports.getSingleOrder = expressAsyncHandler(async (orderId) => {
     .sort({
       createdAt: 1,
     });
+    
 
   const orders = await Order.findOne({ orderItems: orderId }).select(
     "shippingAddress town orderedDate"
   );
+
 
   return { order, orders };
 });
@@ -110,3 +93,10 @@ exports.cancelOrderByProductId = expressAsyncHandler(
 
 //----------return order function-----------------------------
 
+exports.returnOrder=expressAsyncHandler(async(returnOrderId)=>{
+  const returnOrder = await OrderItem.findByIdAndUpdate(returnOrderId, {
+    status: status.returnPending,
+});
+
+return "redirectBack";
+})

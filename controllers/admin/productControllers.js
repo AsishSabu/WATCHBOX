@@ -52,6 +52,7 @@ const insertProduct = asynchandler(async (req, res) => {
 
     // Check if req.files exists and has images
     if (req.files && req.files.images.length > 0) {
+      console.log("......................");
       const images = req.files.images;
 
       for (const file of images) {
@@ -210,7 +211,9 @@ const deleteImage = asynchandler(async (req, res) => {
 //--------------------------------------------
 const addNewImages = asynchandler(async (req, res) => {
   try {
-    const files = req.files;
+    console.log("hi.....................");
+    const files = req.files.images;;
+    console.log(files);
     const imageUrls = [];
     const productId = req.params.id;
 
@@ -221,15 +224,15 @@ const addNewImages = asynchandler(async (req, res) => {
 
         const imageUrl = path.join("/admin/uploads", file.filename);
         const thumbnailUrl = path.join("/admin/uploads", file.filename);
-        imageUrls.push(imageUrl, thumbnailUrl);
+        imageUrls.push({imageUrl, thumbnailUrl})
       } catch (error) {
-        console.log("error processing in image", error);
+          console.log("Error Processing image: ", error);
       }
     }
-
+console.log("hloooooooooooooooooooooooooooooo");
       const image = await Images.create(imageUrls);
       const ids = image.map((image) => image._id);
-      const product = await product.findByIdAndUpdate(productId, {
+      const Product = await product.findByIdAndUpdate(productId, {
         $push: { images: ids },
       });
       req.flash("success", "Image added");

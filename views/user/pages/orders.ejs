@@ -52,7 +52,9 @@
                                   <strong class="text-success"><%= orderItem.status %></strong>
                                 <% } else if (orderItem.status === 'Returned') { %>
                                   <strong class="text-info"><%= orderItem.status %></strong>
-                                <% } %>
+                                  <% } else if (orderItem.status === 'Return Requested') { %>
+                                    <strong class="text-info"><%= orderItem.status %></strong>
+                                  <% } %>
                               </small>
                             </div>
                             <div class="col-auto"><small>1</small></div>
@@ -76,7 +78,7 @@
             <h4 class="mb-0">
               Please order something, <span class="change-color"><%= user.userName %></span>!
             </h4>
-            <a href="/shop<%= orderItem._id %>" class="btn btn-dark h-auto">Shop</a>
+            <a href="/shop" class="btn btn-dark h-auto">Shop</a>
           </div>
         </div>
       </div>
@@ -87,5 +89,9 @@
     .card{
         width: 80%;
         margin-top: 10%;
+    }
+    .card-header{
+      margin-top: 200px;
+      margin-bottom: 200px;
     }
   </style>

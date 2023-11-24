@@ -22,22 +22,25 @@ const findProductById = async (productId) => {
 };
 
 const incrementQuantity = async (userId, productId, res) => {
-    
     const updatedProduct = await findCartItem(userId, productId);
-   
 
     if (!updatedProduct) {
         return res.json({ message: "Product not found in cart", status: "error" });
     }
+
     const foundProduct = updatedProduct.products.find((cartProduct) => cartProduct.product.equals(productId));
+
     const product = await findProductById(productId);
+
     if (foundProduct.quantity < product.quantity) {
-             foundProduct.quantity += 1;
+        foundProduct.quantity += 1;
+
         await updatedProduct.save();
+
         const productTotal = product.salePrice * foundProduct.quantity;
-        const cart = await Cart.findOne({ user: userId }).populate("products.product").count();
-        console.log(cart);
+        const cart = await Cart.findOne({ user: userId }).populate("products.product");
         const { subtotal, total } = calculateCartTotals(cart.products);
+
         res.json({
             message: "Quantity Increased",
             quantity: foundProduct.quantity,

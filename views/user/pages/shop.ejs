@@ -1,241 +1,533 @@
-<div class="shop-page-wrapper ptb-100">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="shop-sidebar">
-                    <div class="sidebar-widget mb-50">
-                        <h3 class="sidebar-title">Search Products</h3>
-                        <div class="sidebar-search">
-                            <form action="#">
-                                <input placeholder="Search Products..." type="text">
-                                <button><i class="ti-search"></i></button>
-                            </form>
+<div class="main">
+    <div class="shop-page-wrapper ">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-2">
+                    <div class="shop-sidebar">
+                        <div class="sidebar-widget mb-50">
+                            <h3 class="sidebar-title">Search Products</h3>
+                            <div class="sidebar-search">
+                                <form action="#">
+                                    <input placeholder="Search Products..." type="text">
+                                    <button><i class="ti-search"></i></button>
+                                </form>
+                            </div>
                         </div>
+                        <div class="sidebar-widget mb-40">
+                            <h3 class="sidebar-title">Filter by Price</h3>
+                            <div class="price_filter">
+                                <div id="slider-range"></div>
+                                <div class="price_slider_amount">
+                                    <div class="label-input">
+                                        <label>price : </label>
+                                        <input type="text" id="amount" name="price"  placeholder="Add Your Price" />
+                                    </div>
+                                    <button type="button">Filter</button> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar-widget mb-45">
+                            <h3 class="sidebar-title">Categories</h3>
+                            <div class="sidebar-categories">
+                                <ul>
+                                    <% categories.forEach(element=>{ %>
+    
+                                    <li><a href=""><%= element.categoryName %><span></span></a>
+                                    </li>
+                                    <% }) %>
+                            
+     
+                                </ul>
+                            </div>
+                        </div>
+                       
+                        <!-- <div class="sidebar-widget mb-40">
+                            <h3 class="sidebar-title">size</h3>
+                            <div class="product-size">
+                                <ul>
+                                    <li><a href="#">xl</a></li>
+                                    <li><a href="#">m</a></li>
+                                    <li><a href="#">l</a></li>
+                                    <li><a href="#">ml</a></li>
+                                    <li><a href="#">lm</a></li>
+                                </ul>
+                            </div>
+                        </div> -->
+                        <!-- <div class="sidebar-widget mb-50">
+                            <h3 class="sidebar-title">Top rated products</h3>
+                            <div class="sidebar-top-rated-all">
+                                <div class="sidebar-top-rated mb-30">
+                                    <div class="single-top-rated">
+                                        <div class="top-rated-img">
+                                            <a href="#"><img src="assets/img/product/sidebar-product/1.jpg" alt=""></a>
+                                        </div>
+                                        <div class="top-rated-text">
+                                            <h4><a href="#">Flying Drone</a></h4>
+                                            <div class="top-rated-rating">
+                                                <ul>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                </ul>
+                                            </div>
+                                            <span>$140.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sidebar-top-rated mb-30">
+                                    <div class="single-top-rated">
+                                        <div class="top-rated-img">
+                                            <a href="#"><img src="assets/img/product/sidebar-product/2.jpg" alt=""></a>
+                                        </div>
+                                        <div class="top-rated-text">
+                                            <h4><a href="#">Flying Drone</a></h4>
+                                            <div class="top-rated-rating">
+                                                <ul>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                </ul>
+                                            </div>
+                                            <span>$140.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sidebar-top-rated mb-30">
+                                    <div class="single-top-rated">
+                                        <div class="top-rated-img">
+                                            <a href="#"><img src="" alt=""></a>
+                                        </div>
+                                        <div class="top-rated-text">
+                                            <h4><a href="#">Flying Drone</a></h4>
+                                            <div class="top-rated-rating">
+                                                <ul>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                </ul>
+                                            </div>
+                                            <span>$140.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sidebar-top-rated mb-30">
+                                    <div class="single-top-rated">
+                                        <div class="top-rated-img">
+                                            <a href="#"><img src="assets/img/product/sidebar-product/4.jpg" alt=""></a>
+                                        </div>
+                                        <div class="top-rated-text">
+                                            <h4><a href="#">Flying Drone</a></h4>
+                                            <div class="top-rated-rating">
+                                                <ul>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                    <li><i class="pe-7s-star"></i></li>
+                                                </ul>
+                                            </div>
+                                            <span>$140.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
-                    <div class="sidebar-widget mb-40">
-                        <h3 class="sidebar-title">Filter by Price</h3>
-                        <div class="price_filter">
-                            <div id="slider-range"></div>
-                            <div class="price_slider_amount">
-                                <div class="label-input">
-                                    <label>price : </label>
-                                    <input type="text" id="amount" name="price"  placeholder="Add Your Price" />
-                                </div>
-                                <button type="button">Filter</button> 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sidebar-widget mb-45">
-                        <h3 class="sidebar-title">Categories</h3>
-                        <div class="sidebar-categories">
-                            <ul>
-                                <% categories.forEach(element=>{ %>
-
-                                <li><a href=""><%= element.categoryName %><span></span></a>
-                                </li>
-                                <% }) %>
-                        
- 
-                            </ul>
-                        </div>
-                    </div>
-                   
-                    <!-- <div class="sidebar-widget mb-40">
-                        <h3 class="sidebar-title">size</h3>
-                        <div class="product-size">
-                            <ul>
-                                <li><a href="#">xl</a></li>
-                                <li><a href="#">m</a></li>
-                                <li><a href="#">l</a></li>
-                                <li><a href="#">ml</a></li>
-                                <li><a href="#">lm</a></li>
-                            </ul>
-                        </div>
-                    </div> -->
-                    <!-- <div class="sidebar-widget mb-50">
-                        <h3 class="sidebar-title">Top rated products</h3>
-                        <div class="sidebar-top-rated-all">
-                            <div class="sidebar-top-rated mb-30">
-                                <div class="single-top-rated">
-                                    <div class="top-rated-img">
-                                        <a href="#"><img src="assets/img/product/sidebar-product/1.jpg" alt=""></a>
-                                    </div>
-                                    <div class="top-rated-text">
-                                        <h4><a href="#">Flying Drone</a></h4>
-                                        <div class="top-rated-rating">
-                                            <ul>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <span>$140.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sidebar-top-rated mb-30">
-                                <div class="single-top-rated">
-                                    <div class="top-rated-img">
-                                        <a href="#"><img src="assets/img/product/sidebar-product/2.jpg" alt=""></a>
-                                    </div>
-                                    <div class="top-rated-text">
-                                        <h4><a href="#">Flying Drone</a></h4>
-                                        <div class="top-rated-rating">
-                                            <ul>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <span>$140.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sidebar-top-rated mb-30">
-                                <div class="single-top-rated">
-                                    <div class="top-rated-img">
-                                        <a href="#"><img src="" alt=""></a>
-                                    </div>
-                                    <div class="top-rated-text">
-                                        <h4><a href="#">Flying Drone</a></h4>
-                                        <div class="top-rated-rating">
-                                            <ul>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <span>$140.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sidebar-top-rated mb-30">
-                                <div class="single-top-rated">
-                                    <div class="top-rated-img">
-                                        <a href="#"><img src="assets/img/product/sidebar-product/4.jpg" alt=""></a>
-                                    </div>
-                                    <div class="top-rated-text">
-                                        <h4><a href="#">Flying Drone</a></h4>
-                                        <div class="top-rated-rating">
-                                            <ul>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <span>$140.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
-            </div>
-            <div class="col-lg-9 order-1 order-lg-2">
-                <div class="shop-product-wrapper">
-                    <div class="shop-bar-area">
-                        <div class="shop-bar pb-60">
-                            <div class="shop-found-selector">
-                                <div class="shop-found">
-                                    <!-- <p><span>23</span> Product Found of <span>50</span></p> -->
+                <div class="col-lg-10 order-1 order-lg-2">
+                    <div class="shop-product-wrapper">
+                        <div class="shop-bar-area">
+                            <div class="shop-bar pb-60">
+                                <div class="shop-found-selector">
+                                    <div class="shop-found">
+                                        <!-- <p><span>23</span> Product Found of <span>50</span></p> -->
+                                    </div>
+                                    <div class="shop-selector">
+                                        <label>Sort By : </label>
+                                        <select name="select">
+                                            <option value="">Default</option>
+                                            <option value="">A to Z</option>
+                                            <option value=""> Z to A</option>
+                                            <option value="">In stock</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="shop-selector">
-                                    <label>Sort By : </label>
-                                    <select name="select">
-                                        <option value="">Default</option>
-                                        <option value="">A to Z</option>
-                                        <option value=""> Z to A</option>
-                                        <option value="">In stock</option>
-                                    </select>
+                                <div class="shop-filter-tab">
+                                    <div class="shop-tab nav" role=tablist>
+                                        <a class="active" href="#grid-sidebar7" data-bs-toggle="tab" role="tab" aria-selected="false">
+                                            <i class="ti-layout-grid4-alt"></i>
+                                        </a>
+                                        <a href="#grid-sidebar8" data-bs-toggle="tab" role="tab" aria-selected="true">
+                                            <i class="ti-menu"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="shop-filter-tab">
-                                <div class="shop-tab nav" role=tablist>
-                                    <a class="active" href="#grid-sidebar7" data-bs-toggle="tab" role="tab" aria-selected="false">
-                                        <i class="ti-layout-grid4-alt"></i>
-                                    </a>
-                                    <a href="#grid-sidebar8" data-bs-toggle="tab" role="tab" aria-selected="true">
-                                        <i class="ti-menu"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="shop-product-content tab-content">
-                            <div id="grid-sidebar7" class="tab-pane fade active show">
-                                <div class="row">
-                                    <% products.forEach(product=>{ %>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="product-wrapper product-box-style mb-30 border" >
-                                            <div class="product-img k">
-                                                <a href="/viewProduct/<%= product?._id %>">
-                                                    <img src="<%= product.images[0].thumbnailUrl%>" alt="<%= product.title %>">
-                                                </a>
-                                               
-                                                <div class="product-action">
-                                                    <a class="animate-left" title="Wishlist" href="#">
-                                                        <i class="pe-7s-like"></i>
+                            <div class="shop-product-content tab-content ">
+                                
+    
+    
+    
+                                
+                                <div id="grid-sidebar" class="tab-pane fade active show">
+                                    <div class="row">
+                                        <% products.forEach(product => { %>
+                                        <div class="col-lg-3 col-md-5">
+                                            <div class="product-wrapper product-box-style mb-30 border">
+                                                <div class="product-img">
+                                                    <a href="/viewProduct/<%= product?._id %>">
+                                                        <img src="<%= product.images[0].thumbnailUrl%>" alt="<%= product.title %>">
                                                     </a>
-                                                    <a class="animate-top" title="Add To Cart" onclick="addToCart(`<%= product._id %>`)">
-                                                        <i class="pe-7s-cart"></i>
-                                                    </a>
-                                                    <a class="animate-right" title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
-                                                        <i class="pe-7s-look"></i>
-                                                    </a>
+                                                    <div class="product-action">
+                                                        <a class="animate-left" title="Wishlist" href="#">
+                                                            <i class="pe-7s-like"></i>
+                                                        </a>
+                                                        <a class="animate-top" title="Add To Cart" onclick="addToCart('<%= product._id %>')">
+                                                            <i class="pe-7s-cart"></i>
+                                                        </a>
+                                                        <a class="animate-right" title="Quick View" href="/viewProduct/<%= product?._id %>">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content">
+                                                    <h4><a href="#"><%= product.title%></a></h4>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <span class="text-decoration-line-through text-secondary">
+                                                        ₹ <%= product.productPrice %>
+                                                    </span>
+                                                    <span>₹ <%= product.salePrice %></span>
                                                 </div>
                                             </div>
-                                            <div class="product-content">
-                                                <h4><a href="#"><%= product.title%></a></h4>
-                                            </div>
-                                            <div class="d-flex justify-content-between">
-                                                <span
-                                                  class="text-decoration-line-through text-secondary"
-                                                  >₹ <%= product.productPrice %></span
-                                                >
-                                                <span>₹ <%= product.salePrice %></span>
-                                              </div>
                                         </div>
-                                   </div>
-                                   <% }) %>
-                               
+                                        <% }) %>
+                                    </div>
                                 </div>
+                                
+                            
                             </div>
-                        
                         </div>
                     </div>
-                </div>
-                <div class="pagination-style mt-10 text-center">
-                    <ul>
-                        <li><a href="#"><i class="ti-angle-left"></i></a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">19</a></li>
-                        <li class="active"><a href="#"><i class="ti-angle-right"></i></a></li>
-                    </ul>
+                    <div class="pagination-style mt-10 text-center">
+                        <ul>
+                            <li><a href="#"><i class="ti-angle-left"></i></a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">...</a></li>
+                            <li><a href="#">19</a></li>
+                            <li class="active"><a href="#"><i class="ti-angle-right"></i></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <style>
-    .container {
+    .main{
         margin-top: 100px;
+       
     }
-    .k {
-    width: 200px; /* Set the desired width for the product images */
-    height: 200px; /* Set the desired height for the product images */
-    object-fit: cover; /* This property ensures that the image covers the specified dimensions */
-}
+    .shop-page-wrapper {
+       
+        width: 100%;
+        background-color: #ffffff;
+      
+    }
+
+    .shop-sidebar {
+        background-color: #ffffff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .sidebar-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .sidebar-search form {
+        display: flex;
+    }
+
+    .sidebar-search input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 5px;
+    }
+
+    .sidebar-search button {
+        background-color: #000000;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .price_filter {
+        margin-top: 20px;
+    }
+
+    #slider-range {
+        width: 100%;
+    }
+
+    .price_slider_amount {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .label-input {
+        margin-right: 10px;
+    }
+
+    .label-input label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .price_slider_amount input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .price_slider_amount button {
+        background-color: #0f0f10;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .sidebar-categories ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar-categories li {
+        margin-bottom: 10px;
+    }
+
+    .sidebar-categories a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .sidebar-categories a span {
+        background-color: #2c2d2d;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-left: 5px;
+    }
+
+    .shop-product-wrapper {
+        background-color: #ffffff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        border-radius: 8px;
+        width: 100%;
+    }
+
+    .shop-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .shop-found-selector {
+        display: flex;
+        align-items: center;
+    }
+
+    .shop-found p {
+        font-size: 14px;
+        color: #333;
+        margin: 0;
+    }
+
+    .shop-selector label {
+        margin-right: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .shop-selector select {
+        padding: 8px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .shop-filter-tab .shop-tab a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: #333;
+        margin-right: 15px;
+        cursor: pointer;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .shop-filter-tab .shop-tab a.active,
+    .shop-filter-tab .shop-tab a:hover {
+        color: #67615f;
+    }
+
+    .shop-product-content {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .pagination-style {
+        margin-top: 20px;
+    }
+
+    .pagination-style ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination-style li {
+        margin: 0 5px;
+    }
+
+    .pagination-style a {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #333;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .pagination-style a.active,
+    .pagination-style a:hover {
+        background-color: #343638;
+        color: #fff;
+        border-color: #000000;
+    }
+
+    .product-wrapper {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .product-img {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-img a {
+        display: block;
+    }
+
+    .product-img img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .product-img:hover img {
+        transform: scale(1.05);
+    }
+
+    .product-action {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .product-img:hover .product-action {
+        opacity: 1;
+    }
+
+    .product-action a {
+        display: block;
+        font-size: 18px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        border-radius: 50%;
+        margin: 5px;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .product-action a:hover {
+        background-color: #535354;
+    }
+
+    .product-content {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .product-content h4 {
+        font-size: 18px;
+        margin: 0;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .justify-content-between {
+        justify-content: space-between;
+    }
+
+    .text-decoration-line-through {
+        text-decoration: line-through;
+    }
+
+    .text-secondary {
+        color: #6c757d;
+    }
 </style>
+
+
 <!-- <script src="assets/js/shop/cart.js"></script> -->
 
 <script>

@@ -9,6 +9,7 @@ const checkoutController=require('../controllers/shop/checkoutController');
 const addressController=require('../controllers/shop/addressControl');
 const orderController=require('../controllers/shop/orderControllers');
 const validateID=require("../middleware/idValidation")
+const walletController=require("../controllers/shop/walletController")
 
 userRoute.use((req, res, next) => {
   req.app.set("layout", "user/layout/user");
@@ -72,13 +73,13 @@ userRoute.get("/viewProduct/:id",validateID, shopController.loadProductDetails);
 //------------------------user Cart page--------------------------------------------------- 
 
 userRoute.get('/cart',ensureAuthenticated,cartController.loadCart);
-userRoute.get('/cart/add/:id',validateID,ensureAuthenticated,cartController.addToCart);
+userRoute.get('/cart/add/:id',validateID, ensureAuthenticated,cartController.addToCart);
 userRoute.get('/cart/remove/:id',validateID,ensureAuthenticated,cartController.removeProduct);
 userRoute.get('/cart/inc/:id',validateID,ensureAuthenticated,cartController.incQuantity);
 userRoute.get('/cart/dec/:id',validateID,ensureAuthenticated,cartController.decQuantity)
 //---------------------------address Route------------
 
-userRoute.get('/addAddress',validateID,ensureAuthenticated,addressController.loadAddress);
+userRoute.get('/addAddress',ensureAuthenticated,addressController.loadAddress);
 userRoute.post('/addAddress',ensureAuthenticated,addressController.insertAddress);
 userRoute.get('/savedAddress',ensureAuthenticated,addressController.loadSavedAddress);
 userRoute.get('/editAddress/:id',validateID,ensureAuthenticated,addressController.loadEditAddress);
@@ -96,8 +97,12 @@ userRoute.get("/order-placed/:id",validateID, checkoutController.orderPlaced);
 userRoute.get('/order',ensureAuthenticated,orderController.orderPage);
 userRoute.get('/orders/:id',validateID,ensureAuthenticated,orderController.viewOrder);
 userRoute.put('/orders/cancel/:id', validateID,ensureAuthenticated,orderController.cancelOrder)
-userRoute.post(" /orders/return/:id",validateID,orderController.ReturnOrder)
+userRoute.post("/orders/return/:id",validateID,orderController.ReturnOrder)
 
+
+//-------------------------wallet History------------------------------------
+
+userRoute.get("/walletHistory",ensureAuthenticated,walletController.viewWallet)
 
 
 userRoute.get("/test",(req,res)=>{

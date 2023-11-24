@@ -36,6 +36,7 @@ const userSchema = new Schema(
         quantity: Number,
       },
     ],
+    wallet: { type: mongoose.Schema.Types.ObjectId, ref: 'Wallet' },
     addresses: [
       {
         type: mongoose.Schema.Types.ObjectId,
