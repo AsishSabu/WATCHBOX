@@ -1,11 +1,34 @@
 let data;
 
+async function currentCartData() {
+  try {
+    const response = await fetch('/getCartCount', { method: 'GET' });
 
-function currentCartData(){
-  const cartData =0
-  const countSpan=document.getElementById('countSpan')
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
+    const data = await response.json();
+
+   
+    const count = data.count;
+
+   
+    const countSpan = document.getElementById('countSpan');
+    if (countSpan) {
+      countSpan.textContent = count;
+    }
+  } catch (error) {
+   
+    console.error('Error fetching cart count:', error);
+  }
 }
+
+// Call currentCartData to initiate the process
+currentCartData();
+
+
+
 const checkoutBtn = document.getElementById("checkoutBtn");
 
 function updateCartMessage(data) {
@@ -29,6 +52,7 @@ function updateCartCount(data) {
 
   if (data.count !== undefined) {
     cartCount.innerText = data.count;
+    currentCartData();
   }
 }
 

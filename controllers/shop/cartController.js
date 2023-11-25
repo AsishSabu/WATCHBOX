@@ -124,10 +124,28 @@ const decQuantity=asynchandler(async(req,res)=>{
   }
 })
 
+
+const getCartCount = asynchandler(async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const userCart = await Cart.findOne({ user: userId });
+    const count = userCart.products.length;
+
+    // Return the count as JSON response
+    res.json({ count });
+  } catch (error) {
+    // Handle errors
+    console.error('Error getting cart count:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 module.exports = {
   loadCart,
   addToCart,
   removeProduct,
   incQuantity,
-  decQuantity
+  decQuantity,
+  getCartCount
 };

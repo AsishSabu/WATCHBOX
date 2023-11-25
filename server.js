@@ -10,6 +10,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const override = require('method-override');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
+const Cart=require("./models/cartModel")
 
 require('dotenv').config();
 

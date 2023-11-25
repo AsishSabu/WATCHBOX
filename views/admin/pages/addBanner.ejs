@@ -1,106 +1,237 @@
-
-
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
-integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
-
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+  integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg="
+  crossorigin="anonymous"
+/>
 
 <div class="container">
-    <h1 class="card-title fw-semibold mb-4">Add Banner</h1>
-    <form action="" method="post" enctype="multipart/form-data">
-      <div class="form-group">
-        <label for="productName">Banner Title</label>
-        <input type="text" class="form-control"id="title" name="title" required />
-      </div>
-    
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
-      </div>
-      <div class="form-group">
-        <label class="fw-bold"   for="category">Product Url</label>
-        <select name="productUrl" id="select-state" placeholder="Pick a Product*" class="form-control" required>
-          <option value="">Select a Product...</option>
-          <% Products.forEach(element=> { %>
-              <option value="viewProduct/<%= element._id %>">
-                  <%= element.title %>
-              </option>
-              <% }) %>
-     
-        </select>
-      </div>
-    
-    
-      <div class="form-group">
-        <label for="productImage">Banner Image</label>
-        <input type="file" class="form-control-file" id="image" name="bannerImage" accept="image/*" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Add Banner</button>
-    </form>
-  </div>
+  <h1 class="card-title fw-semibold mb-4">Add Banner</h1>
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="productName">Banner Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        required
+      />
+    </div>
 
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        rows="4"
+        required
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label class="fw-bold" for="category">Product Url</label>
+      <select
+        name="productUrl"
+        id="select-state"
+        placeholder="Pick a Product*"
+        class="form-control"
+        required
+      >
+        <option value="">Select a Product...</option>
+        <% Products.forEach(element=> { %>
+        <option value="viewProduct/<%= element._id %>">
+          <%= element.title %>
+        </option>
+        <% }) %>
+      </select>
+    </div>
 
+    <div class="form-group">
+      <label for="productImage">Banner Image</label>
+      <input
+        type="file"
+        class="form-control-file"
+        id="image"
+        name="bannerImage"
+        accept="image/*"
+        required
+      />
+    </div>
+    <input type="hidden" id="cropped-image" name="croppedImage" value="" />
+    <button type="button" class="btn btn-primary" id="crop-button"  data-mdb-toggle="modal"
+    data-mdb-target="#imageCroppingModal>
+      Crop Image
+    </button>
+    <button type="submit" class="btn btn-primary">Add Banner</button>
+  </form>
+</div>
+<div class="col-md-6">
+  <div class="text-center">
+    <h5 class="mb-3">Image Preview</h5>
+    <div class="image-container">
+      <img
+        id="image-preview"
+        src="#"
+        alt="Image Preview"
+        class="img-thumbnail"
+      />
+    </div>
 
-<script>
-    $(document).ready(function () {
-        $('select').selectize({
-            createFilter: function (input) {
-                return input;
-            },
-            sortField: {
-                field: 'text',
-                direction: 'asc'
-            }
+    <div
+      class="modal fade"
+      id="imageCroppingModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="imageCroppingModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="imageCroppingModalLabel">Crop Image</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="croppie-container"></div>
+            <!-- Croppie container div -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="crop-button-modal"
+            >
+              Crop and Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $("select").selectize({
+          createFilter: function (input) {
+            return input;
+          },
+          sortField: {
+            field: "text",
+            direction: "asc",
+          },
         });
-    });
-</script>
-
-  <style>
-   
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const image = document.getElementById("image-preview");
+          const cropButton = document.getElementById("crop-button");
+          const cropButtonModal = document.getElementById("crop-button-modal");
+          const croppedImageInput = document.getElementById("cropped-image");
+          const imageCroppingModal = new bootstrap.Modal(document.getElementById("imageCroppingModal"));
   
-    body {
+          const croppieContainer = document.getElementById("croppie-container");
+  
+          const scaleFactor = 0.4;
+  
+          // Calculate the reduced dimensions based on the scale factor
+          const reducedWidth = 1920 * scaleFactor;
+          const reducedHeight = 800 * scaleFactor;
+  
+          const croppie = new Croppie(croppieContainer, {
+              enableZoom: true,
+              viewport: { width: reducedWidth, height: reducedHeight }, // Reduced width and height
+              boundary: { width: reducedWidth, height: reducedHeight }, // Reduced width and height
+          });
+  
+          // Handle the file input change event
+          document.getElementById("image").addEventListener("change", function (e) {
+              const file = e.target.files[0];
+              if (file) {
+                  const reader = new FileReader();
+                  reader.onload = function (e) {
+                      croppie.bind({
+                          url: e.target.result,
+                      });
+                  };
+                  reader.readAsDataURL(file);
+                  imageCroppingModal.show(); // Show the modal when an image is selected
+              }
+          });
+  
+          // Handle the crop button click event
+          cropButton.addEventListener("click", function () {
+              imageCroppingModal.show(); // Show the modal when the "Crop Image" button is clicked
+          });
+  
+          // Handle the crop button in the modal
+          cropButtonModal.addEventListener("click", function () {
+              croppie.result("base64").then(function (base64) {
+                  image.src = base64; // Update the image preview
+                  croppedImageInput.value = base64; // Set the base64 data in the hidden input
+                  imageCroppingModal.hide(); // Hide the modal after cropping
+              });
+          });
+      });
+  </script>
+
+    <style>
+      body {
         background-color: #fff;
       }
-  
+
       .container {
         position: absolute;
-      margin-top: 72px;
+        margin-top: 72px;
         background-color: #fff;
         border: 1px solid #ffffff;
         border-radius: 5px;
         padding: 20px;
-        
+
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-  
+
       .form-group {
         margin-bottom: 20px;
       }
-  
+
       label {
         font-weight: bold;
       }
-  
+
       .form-control {
         width: 100%;
       }
-  
+
       .btn-primary {
         background-color: #007bff;
         border: none;
       }
-  
+
       .btn-primary:hover {
         background-color: #0056b3;
       }
-  
+
       /* Additional styling for responsiveness */
       @media (max-width: 768px) {
         .container {
           margin: 20px;
         }
       }
-  </style>
-  
-  
+    </style>
+  </div>
+</div>

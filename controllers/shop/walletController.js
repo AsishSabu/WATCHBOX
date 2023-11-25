@@ -16,7 +16,9 @@ exports.viewWallet=expressAsyncHandler(async(req,res)=>{
             walletHistory=walletTransaction.transactions
 
         }
-        res.render("./user/pages/viewWallet",{title:WATCHBOX,walletHistory})
+        const walletBalance=findWallet.wallet.balance
+        console.log(walletBalance);
+        res.render("./user/pages/viewWallet",{title:"WATCHBOX",walletHistory,walletBalance})
         
     } catch (error) {
         throw new Error(error)
