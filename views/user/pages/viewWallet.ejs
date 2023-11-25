@@ -2,6 +2,7 @@
     .bod{
         font-family: Arial, sans-serif;
         padding: 200px;
+        background-color: black;
     }
 
     .wallet-container {
@@ -10,10 +11,7 @@
         
     }
 
-    .wallet-icon {
-        font-size: 64px;
-        color: #007bff; /* Bootstrap primary color */
-    }
+    
 
     .wallet-amount {
         font-size: 24px;
@@ -22,11 +20,11 @@
 
     table {
         width: 100%;
-        border-collapse: collapse;
+     
         margin-top: 20px;
     }
 
-    th, td {
+    th, td,tbody {
         border: 1px solid #ddd;
         padding: 12px;
         text-align: left;
@@ -37,49 +35,67 @@
     }
 
     tr:hover {
-        background-color: #f5f5f5;
+        background-color: #cfcfcf;
     }
 </style>
 
 <div class="bod">
 
     <div class="wallet-container">
-        <div class="wallet-icon text-danger ">
+        <div class="wallet-icon text-danger">
             <!-- Bootstrap Wallet Icon -->
-            <span id="boot-icon" class="bi bi-wallet" style="font-size:10rem"></span>
+            <i class="icon-wallet danger font-large-5"></i> 
+         
         </div>
-        <div class="wallet-amount">
-            $500.00 <!-- Replace with dynamic wallet amount -->
+        <div class="wallet-amount success">
+            ₹ <%=walletBalance %><!-- Replace with dynamic wallet amount -->
         </div>
     </div>
 
     <h2>Wallet History</h2>
 
-    <table class="table">
+    <%if(walletHistory&&walletHistory.length){ %>
+    <table class="table bg-white">
         <thead>
             <tr>
                 <th>Date</th>
+                <th>Event</th>
                 <th>Type</th>
-                <th>Description</th>
                 <th>Amount</th>
             </tr>
         </thead>
         <tbody>
+            <%walletHistory.forEach(transaction=>{%>
             <tr>
-                <td>2023-01-01</td>
-                <td>Deposit</td>
-                <td>Initial Deposit</td>
-                <td>+$100.00</td>
+                <td><%= (transaction.timestamp).toLocaleDateString('en-IN', { year: 'numeric' , month: 'long' ,
+                    day: 'numeric' ,hour:'numeric',minute:'numeric' }) %></td>
+
+                <td><span><%transaction.event%></span>
+                    <% if (transaction.orderId) { %>
+                    <small class="text-secondary"><%= transaction.orderId %> <% } %></small>
+                    </td>
+                    <% if (transaction.type === "credit") { %>
+                <td class="text-success"><%= transaction.type %></td>
+                <% } else { %>
+                <td class="text-danger"><%= transaction.type %></td>
+                <% } %>
+                <% if (transaction.type=='credit' ) { %>
+                    <td class="text-success">+ ₹<%= (transaction.amount).toLocaleString() %>
+                    </td>
+                    <% } else { %>
+                    <td class="text-danger">- ₹<%= (transaction.amount).toLocaleString() %>
+                        </td>
+                        <% } %>
             </tr>
-            <tr>
-                <td>2023-01-05</td>
-                <td>Withdrawal</td>
-                <td>Online Purchase</td>
-                <td>-$30.00</td>
-            </tr>
-            <!-- Add more rows as needed -->
+            <% }) %>
         </tbody>
     </table>
+   <% } else { %>
+        <h2 class="text-center mb-4">No Transactions yet</h2>
+
+        <% } %>
+
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

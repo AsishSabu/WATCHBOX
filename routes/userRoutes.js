@@ -77,6 +77,8 @@ userRoute.get('/cart/add/:id',validateID, ensureAuthenticated,cartController.add
 userRoute.get('/cart/remove/:id',validateID,ensureAuthenticated,cartController.removeProduct);
 userRoute.get('/cart/inc/:id',validateID,ensureAuthenticated,cartController.incQuantity);
 userRoute.get('/cart/dec/:id',validateID,ensureAuthenticated,cartController.decQuantity)
+
+userRoute.get('/getCartCount',ensureAuthenticated,cartController.getCartCount)
 //---------------------------address Route------------
 
 userRoute.get('/addAddress',ensureAuthenticated,addressController.loadAddress);

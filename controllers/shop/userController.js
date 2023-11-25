@@ -9,6 +9,7 @@ const category = require("../../models/categoryModel");
 const crypto = require("crypto");
 const Banner=require("../../models/bannerModel")
 const Wallet=require("../../models/walletModel")
+const Orders=require('../../models/orderModel')
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
@@ -302,8 +303,10 @@ const reverifyEmail = asynchandler(async (req, res) => {
 const loadProfile = asynchandler(async (req, res) => {
   try {
     const user = req.user;
-    console.log(user);
-    res.render("./user/pages/profile", { title: "WATCHBOX,user" });
+    const wallet=await Wallet.findOne({user:req.user._id})
+    const order=await Orders.findOne({user:req.user._id}).count()
+    
+    res.render("./user/pages/profile", { title: "WATCHBOX",wallet,order});
   } catch (error) {
     throw new Error(error);
   }
