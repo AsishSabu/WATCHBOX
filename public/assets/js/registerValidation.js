@@ -102,28 +102,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   cpasswordInput.addEventListener("blur", validateCpassword);
-
   function handleSubmit(event) {
     event.preventDefault();
-
+  
     validateUsername();
     validateEmail();
     validatePassword();
     validateCpassword();
-
+  
     const allErrors = [
-      document.getElementById("nameerr"),
-      document.getElementById("emailerr"),
-      document.getElementById("passworderr"),
-      document.getElementById("cpassworderr"),
+     nameerr,
+     emailerr,
+     passworderr,cpassworderr
+
     ];
+  
+    const hasErrors = allErrors.some((error) => error.textContent !== "");
+  
     if (allErrors.every((error) => error.textContent === "")) {
       formerr.textContent = "";
       registrationForm.submit();
-    } else {
+    }  else {
       formerr.textContent = "Please correct the errors in the form.";
     }
   }
-
+  
   registrationForm.addEventListener("submit", handleSubmit);
+  
+
+  
 });

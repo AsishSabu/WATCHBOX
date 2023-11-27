@@ -25,14 +25,16 @@ async function currentCartData() {
 }
 
 // Call currentCartData to initiate the process
-currentCartData();
 
+currentCartData();
 
 
 const checkoutBtn = document.getElementById("checkoutBtn");
 
 function updateCartMessage(data) {
   const cartMessage = document.getElementById("cart-message");
+            
+currentCartData();
 
   // Update the cart message
   cartMessage.innerHTML = data.message;
@@ -52,7 +54,7 @@ function updateCartCount(data) {
 
   if (data.count !== undefined) {
     cartCount.innerText = data.count;
-    currentCartData();
+  
   }
 }
 
@@ -64,10 +66,13 @@ function updateQuantityDisplay(id, data) {
   if (quantitySpan) {
     quantitySpan.innerText = data.quantity;
     totalProductPrice.innerText = data.productTotal.toFixed(2);
+    
   }
 }
 
 function updateCartTotal(data) {
+            
+currentCartData();
   const subTotal = document.getElementById("subtotal");
   const cartTotal = document.getElementById("cart-total");
   subTotal.innerText = data.subtotal;
@@ -104,7 +109,7 @@ function updateQuantity(id, isIncrement) {
         if (data.quantity <= 0) {
           location.reload();
         }
-
+        currentCartData();
         updateCartMessage(data);
 
         updateCartCount(data);
@@ -134,6 +139,7 @@ plusButtons.forEach((button) => {
 minusButtons.forEach((button) => {
   button.addEventListener("click", function () {
     console.log("-button");
+    
     const productId = this.getAttribute("data-product-id");
     updateQuantity(productId, false);
   });
@@ -165,6 +171,8 @@ function addToCart(id) {
       if (data) {
         if (data.count && data.message) {
           console.log("json response is sending in the kunji box  ");
+          
+currentCartData();
           // cartCount.innerText = data.count;
           cartMessage.innerText = data.message;
 

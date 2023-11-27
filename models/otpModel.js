@@ -24,7 +24,7 @@ const otpSchema = new Schema({
     }
 }, { timestamps: true });
 
-otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 30 });
+otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 20 });
 
 const otpdb = model('otpDb', otpSchema);
 

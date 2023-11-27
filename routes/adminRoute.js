@@ -71,18 +71,7 @@ adminRoute.put(
 );
 adminRoute.put(
   "/product/editImage/upload/:id",
-  (req, res, next) => {
-    upload.fields([{ name: "images", maxCount: 4 }])(req, res, (err) => {
-      if (err) {
-        if (req.fileValidationError) {
-          return res.status(400).send(req.fileValidationError);
-        } else {
-          return handleError(err, req, res, next);
-        }
-      }
-      next();
-    });
-  },
+  upload.fields([{ name: "images", maxCount: 4 }]),
   isAdminLoggedin,
   productController.addNewImages
 );

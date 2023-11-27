@@ -129,8 +129,11 @@ const getCartCount = asynchandler(async (req, res) => {
   try {
     const userId = req.user._id;
     const userCart = await Cart.findOne({ user: userId });
-    const count = userCart.products.length;
+    let count =0
 
+    userCart.products.forEach(product=>{
+      count+=product.quantity
+    })
     // Return the count as JSON response
     res.json({ count });
   } catch (error) {

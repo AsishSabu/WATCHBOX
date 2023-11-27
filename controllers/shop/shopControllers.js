@@ -2,7 +2,7 @@ const asynchandler = require("express-async-handler");
 const product = require("../../models/productModel");
 const category = require("../../models/categoryModel");
 
-// //----------------------load shop page ---------------------------------------
+//----------------------load shop page ---------------------------------------
 exports.loadShop = asynchandler(async (req, res) => {
   try {
 
@@ -18,7 +18,7 @@ exports.loadShop = asynchandler(async (req, res) => {
   }
 });
 
-// //--------------------------load product details-------------------------------
+//--------------------------load product details-------------------------------
 
 exports.loadProductDetails = asynchandler(async (req, res) => {
   try {
@@ -29,7 +29,7 @@ exports.loadProductDetails = asynchandler(async (req, res) => {
       .populate("categoryName");
     const relatedProducts = await product.find().populate("images");
 
-    res.render("./user/pages/productDetails", {title:'WATCHBOX', Product, relatedProducts });
+    res.render("./user/pages/productDetails", {title:'WATCHBOX/PRODUCTdETAILS', Product, relatedProducts });
   } catch (error) {
     throw new Error(error);
   }

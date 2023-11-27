@@ -51,7 +51,7 @@ userRoute.post('/checkEmail',usercontroller.checkEmail)
 userRoute.post('/emailcheck',usercontroller.emailcheck)
 userRoute.get("/forgotPassword",usercontroller.loadforgotPassword)
 userRoute.post("/forgotPassword",usercontroller.forgotPassword)
-userRoute.post("/resetPassword/:id",validateID,usercontroller.resetPassword)
+userRoute.post("/resetPassword/:id",usercontroller.resetPassword)
 userRoute.get('/newPassword',usercontroller.loadnewPassword)
 userRoute.post('/newPassword',usercontroller.newPassword)
 

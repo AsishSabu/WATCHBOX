@@ -48,13 +48,25 @@
             <div class="buy-now-btn m-2">
               <a href="/logout">Sign Out</a>
             </div>
+          <% if(title==="WATCHBOX/PRODUCTdETAILS") {%>
             <div class="header-cart-2 m-2">
               <a class="icon-cart text-white" href="/cart">
-                  <span id="countSpan" class="text-danger js-cart-quantity  ">0</span>
+                  
                   <i class="ti-shopping-cart"></i>
                   <span id="cartCount" class="handicraft-count">cart</span>
               </a>
           </div>
+
+            <% }else{ %>
+              <div class="header-cart-2 m-2">
+                <a class="icon-cart text-white" href="/cart">
+                    <span id="countSpan" class="text-danger js-cart-quantity  ">0</span>
+                    <i class="ti-shopping-cart"></i>
+                    <span id="cartCount" class="handicraft-count">cart</span>
+                </a>
+            </div>
+              <% } %>
+            
             <div class="ml-1">
               <a href="/profile"><i class="ti-user text-danger"></i> <%=user.userName %></a>
             </div>
