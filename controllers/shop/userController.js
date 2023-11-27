@@ -20,7 +20,7 @@ const loadIndex = asynchandler(async (req, res) => {
       .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
       .populate("images")
       .limit(8);
-      const banner=await Banner.find({isActive:true});
+      const banner=await Banner.find({isActive:true}).limit(1);
 
     res.render("./user/pages/index", { title: "WATCHBOX", topProduct ,banner});
   } catch (error) {
@@ -57,7 +57,18 @@ const insertUser = asynchandler(async (req, res) => {
       email: req.body.email,
       password: req.body.password,
       passwordChangedAt: Date.now(),
-    }); /*--------
+    });
+    
+    
+    try {
+      const existingEmail = await User.findOne({ email: req.body.email });
+  
+      if (existingEmail) {
+        req.flash("danger","email already registered please try with another")
+        res.redirect("back")
+      
+      } else {
+          /*--------
             accessing the details of the user
                */
     const userSave = await userData.save(); //-------------------user save to database-------------------
@@ -79,6 +90,12 @@ const insertUser = asynchandler(async (req, res) => {
     //------------------------otp sending to mail ------------------------------
     const name = req.body.name;
     const otpSend = otpSetup.sendOtp(email, OTP, name);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+    
+  
 
     try {
       return res.redirect("/verifyOtp");
@@ -217,13 +234,18 @@ const sendEmail = asynchandler(async (req, res) => {
     const email = req.body.email;
     const user = await User.findOne({ email: email }); //---------------checking email already registered-----------------------
 
-    if (user.isVerified) {
+    if(!user){
+      req.flash("danger", "please register first");
+      res.redirect("/sendEmail");
+    }
+
+   else if (user.isVerified) {
       req.flash("danger", "you are already verified");
       res.redirect("/sendEmail");
     } else {
       req.session.verifyEmail = email;
       const OTP = otpSetup.generateNumericOTP();
-      console.log(OTP);
+      console.log(OTP+"token is here");
       const otp = new otpdb({ email: email, otp: OTP });
       const otpSave = await otp.save();
       name = user.userName;
@@ -347,7 +369,7 @@ const checkEmail = asynchandler(async (req, res) => {
 const loadforgotPassword = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/forgotPassword", { title: "WATCHBOX", messages });
+    res.render("./user/pages/forgotPassword", { title:"WAT", messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -398,6 +420,7 @@ const emailcheck = asynchandler(async (req, res) => {
 const resetPassword = asynchandler(async (req, res) => {
   try {
     const resetToken = req.params.id; //accessing the token
+    console.log(resetToken);
 
     const passwordResetToken = crypto
       .createHash("sha256")
@@ -425,7 +448,7 @@ const resetPassword = asynchandler(async (req, res) => {
 
 const loadnewPassword = asynchandler(async (req, res) => {
   try {
-    res.render("./user/pages/newPassword", { title: "WATCHBOX" });
+    res.render("./user/pages/newPassword", {title:"WATCHBOX"});
   } catch (error) {
     throw new Error(error);
   }

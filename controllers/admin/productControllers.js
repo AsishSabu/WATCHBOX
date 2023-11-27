@@ -213,7 +213,6 @@ const addNewImages = asynchandler(async (req, res) => {
   try {
     console.log("hi.....................");
     const files = req.files.images;;
-    console.log(files);
     const imageUrls = [];
     const productId = req.params.id;
 
@@ -230,13 +229,20 @@ const addNewImages = asynchandler(async (req, res) => {
       }
     }
 console.log("hloooooooooooooooooooooooooooooo");
-      const image = await Images.create(imageUrls);
-      const ids = image.map((image) => image._id);
-      const Product = await product.findByIdAndUpdate(productId, {
-        $push: { images: ids },
-      });
-      req.flash("success", "Image added");
-      res.redirect("back");
+     // Find the existing product
+     const existingProduct = await product.findById(productId);
+
+     // Remove the old images from the database
+     await Images.deleteMany({ _id: { $in: existingProduct.images } });
+ 
+     // Create and store the new images
+     const newImages = await Images.create(imageUrls);
+     
+     // Update the product with the new image ids
+     await product.findByIdAndUpdate(productId, { images: newImages.map(image => image._id) });
+ 
+     req.flash("success", "Images replaced");
+     res.redirect("back");
     
   } catch (error) {
    console.log(error.message);

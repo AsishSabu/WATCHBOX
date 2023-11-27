@@ -1,4 +1,4 @@
-<div class="product-details pt-100 ">
+<div class="product-details pt-100 pb-0  mb-0">
   <div class="container">
     <div class="row">
       <div class="col-md-12 col-lg-7 col-12">
@@ -139,10 +139,19 @@
                           <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
                       </div> -->
                       <div class="quickview-btn-cart">
-                          <a class="btn-hover-black rounded-pill" title="" onclick="addcart(`<%=Product._id%>`)">add to cart</a>
+                        <% if(!user){ %>
+                          <a class="btn-hover-black rounded-pill" title="" href="/login">add to cart</a>
+                          <% }else{ %>
+                            <a class="btn-hover-black rounded-pill" title="" onclick="addcart(`<%=Product._id%>`)">add to cart</a>
+                            <% } %>
                       </div>
                       <div class="quickview-btn-wishlist">
-                          <a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
+                        <% if(!user){ %>
+                          <a class="btn-hover" href="/login"><i class="pe-7s-like"></i></a>
+                          <% }else{ %>
+                            <a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
+                            <% } %>
+                         
                       </div>
                   </div>
                   
@@ -177,7 +186,7 @@
     </div>
   </div>
 </div>
-<div class="product-description-review-area pb-1">
+<div class="product-description-review-area ">
   <div class="container">
     <div class="product-description-review text-center">
       <div class="description-review-title nav" role="tablist">
@@ -213,58 +222,70 @@
 
 
 
-<div class="product-area pb-95">
+<div class="product-area ">
   <div class="container">
-    <div class="section-title-3 text-center mb-50">
+    <div class="section-title-3 text-center mb-5">
       <h2>Related products</h2>
     </div>
-    <div class="product-style">
-      <div class="related-product-active owl-carousel">
-        <% relatedProducts.forEach(item => { %>
-        <div class="product-wrapper">
-          <div class="product-img">
-            <a href="/product/<%= item._id %>">
-              <img
-                src="<%= item.images[0].thumbnailUrl %>"
-                alt=""
-                width="100px"
-                height="300px"
-              />
-            </a>
-            <div class="product-action">
-              <a
-                class="animate-left"
-                title="Wishlist"
-                href="/wishlist/add/<%= Product._id %>"
-              >
-                <i class="pe-7s-like"></i>
-              </a>
-              <a
-                class="animate-top"
-                title="Add To Cart"
-                onclick="addToCart(`<%= Product._id %>`)"
-               
-              >
-                <i class="pe-7s-cart"></i>
-              </a>
-            </div>
+    <div id="grid-sidebar" class="tab-pane fade active show">
+      <div class="row">
+          <% relatedProducts.forEach(product => { %>
+          <div class="col-lg-3 col-md-5">
+              <div class="product-wrapper product-box-style mb-30 border">
+                  <div class="product-img">
+                      <a href="/viewProduct/<%= product?._id %>">
+                          <img src="<%= product.images[0].thumbnailUrl%>" alt="<%= product.title %>">
+                      </a>
+                      <div class="product-action">
+                         
+                          <% if(!user){ %>
+                            <a class="animate-left" title="Wishlist" href="/login">
+                              <i class="pe-7s-like"></i>
+                          </a>
+                            <% }else{ %>
+                              <a class="animate-left" title="Wishlist" href="#">
+                                <i class="pe-7s-like"></i>
+                            </a>
+                            <% } %>
+                          <% if(!user){ %>
+                          <a class="animate-top" title="Add To Cart" href="/login">
+                              <i class="pe-7s-cart"></i>
+                          </a>
+                          <% }else{ %>
+                            <a class="animate-top" title="Add To Cart" onclick="addToCart('<%= product._id %>')">
+                              <i class="pe-7s-cart"></i>
+                          </a>
+                          <% } %>
+                          <a class="animate-right" title="Quick View" href="/viewProduct/<%= product?._id %>">
+                            <i class="pe-7s-look"></i>
+                        </a>
+                      </div>
+                  </div>
+                  <div class="product-content">
+                      <h4><a href="#"><%= product.title%></a></h4>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                      <span class="text-decoration-line-through text-secondary">
+                          ₹ <%= product.productPrice %>
+                      </span>
+                      <span>₹ <%= product.salePrice %></span>
+                  </div>
+              </div>
           </div>
-          <div class="product-content">
-            <h4><a href="#"><%= item.title %></a></h4>
-            <span>₹ <%= item.salePrice %></span>
-          </div>
-        </div>
-        <% }) %>
+          <% }) %>
       </div>
-    </div>
+  </div>
   </div>
 </div>
 
 <style>
     .container{
-        margin-top: 200px;
+        margin-top: 100px;
     }
 </style>
+
+
+
 <script>
   function addcart(id) {
   console.log("in the add to cart ...............................................................................................");
@@ -311,5 +332,6 @@
     });
   }
 </script>
+
 
 

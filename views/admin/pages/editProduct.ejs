@@ -10,6 +10,7 @@
         <form
           action="/admin/product/editProduct/<%= Product._id %>"
           method="post"
+          id="editProduct"
         >
           <div class="form-group mt-2">
             <label for="productName">Product Name:</label>
@@ -22,7 +23,9 @@
               placeholder="Enter Product name"
               required
             />
+            <div id="nameErr" class="text-danger text-center"></div>
           </div>
+        
           <div class="form-group mt-2">
             <label for="category">Category:</label>
             <select
@@ -52,9 +55,11 @@
               placeholder="Enter Product description"
               required
             >
-<%= Product.description %></textarea>
+            <%= Product.description %></textarea>
             >
+            <div id="decErr" class="text-danger text-center"></div>
           </div>
+         
           <div class="form-group mt-2">
             <label for="productPrice">Product Price:</label>
             <input
@@ -66,6 +71,7 @@
               placeholder="Enter Product price"
               required
             />
+            <div id="productPriceErr" class="text-danger text-center"></div>
           </div>
           <div class="form-group mt-2">
             <label for="salesPrice">Sales Price:</label>
@@ -78,7 +84,9 @@
               placeholder="Enter sales price"
               required
             />
+            <div id="salePriceErr" class="text-danger text-center"></div>
           </div>
+         
           <div class="form-group mt-2">
             <label for="quantity">Quantity:</label>
             <input
@@ -90,7 +98,27 @@
               placeholder="Enter quantity"
               required
             />
+            <div id="quantityErr"></div>
           </div>
+
+          <div class="form-group mt-2">
+            <label for="brand">Brand:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="brand"
+              name="brand"
+              value="<%= Product.brand %>"
+             
+              required
+            />
+            <div id="brandErr"></div>
+          </div>
+       
+          
+
+
+          
           <button type="submit" class="btn btn-primary mt-2">
             Save Changes
           </button>
@@ -163,7 +191,8 @@
                     <input
                       type="file"
                       class="form-control"
-                      id="newImages"
+                      
+        id='newImages'
                       accept="image/*"
                       name="images"
                       multiple
@@ -174,6 +203,7 @@
                         type="button"
                         class="btn btn-sm btn-primary update-image-button"
                         onclick="document.getElementById('newImages').click()"
+                      
                       >
                         <i class="fas fa-upload"></i> Select Images
                       </button>
@@ -185,6 +215,7 @@
                       >
                         <i class="fas fa-edit"></i> Upload Images
                       </button>
+                      <div id="imageerr" class="text-danger text-center"></div>
                     </div>
                   </div>
                 </div>
@@ -257,37 +288,212 @@
     const previewContainer = document.getElementById("previewNewImages");
     previewContainer.innerHTML = ""; // Clear previous previews
     const files = this.files;
+    const selectedFiles = []; // Array to store selected files
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const reader = new FileReader();
+
       reader.onload = function (e) {
         const img = document.createElement("img");
         img.src = e.target.result;
         img.classList.add("img-thumbnail");
         img.style.maxWidth = "150px";
+
         const previewDiv = document.createElement("div");
         previewDiv.style.position = "relative";
+
         const removeButton = document.createElement("button");
         removeButton.innerText = "X";
-        removeButton.classList.add(
-          "btn",
-          "btn-sm",
-          "btn-danger",
-          "remove-button"
-        );
+        removeButton.classList.add("btn", "btn-sm", "btn-danger", "remove-button");
         removeButton.style.position = "absolute";
         removeButton.style.top = "0";
         removeButton.style.left = "0";
+
         removeButton.addEventListener("click", function () {
+          // Remove the preview from the UI
           previewDiv.remove();
+
+          // Remove the file from the selectedFiles array
+          const index = selectedFiles.indexOf(file);
+          if (index !== -1) {
+            selectedFiles.splice(index, 1);
+          }
         });
+
         previewDiv.appendChild(img);
         previewDiv.appendChild(removeButton);
         previewContainer.appendChild(previewDiv);
+
+        // Add the file to the selectedFiles array
+        selectedFiles.push(file);
       };
+
       reader.readAsDataURL(file);
     }
+
     // Enable the "Upload Images" button
     document.getElementById("submitNewImages").removeAttribute("disabled");
+
+    // Update the input files with the selectedFiles array
+    document.getElementById("newImages").files = new FileList(selectedFiles);
   });
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const productForm = document.getElementById("editProduct");
+  const productInput = document.getElementById("productName");
+  const nameerr = document.getElementById("nameErr");
+  const descriptionInput = document.getElementById("description");
+  const decerr = document.getElementById("decErr");
+  const productPriceInput = document.getElementById("productPrice");
+  const productPriceErr = document.getElementById("productPriceErr");
+  const salePrice = document.getElementById("salesPrice");
+  const saleerr = document.getElementById("salePriceErr");
+  const Quantity = document.getElementById("quantity");
+  const Qerr = document.getElementById("quantityErr");
+  const brand = document.getElementById("brand");
+  const branderr = document.getElementById("branderr");
+  const image = document.getElementById("product-images");
+  const imageerr = document.getElementById("imageerr");
+
+
+  function validateName() {
+    const name = productInput.value.trim();
+
+    if (name === "") {
+      nameerr.textContent = "Field is required";
+    } else if (name.length < 4) {
+      nameerr.textContent = "Name must be at least 4 characters";
+    } else {
+      nameerr.textContent = "";
+    }
+  }
+
+  productInput.addEventListener("blur", validateName);
+
+  function validateDec() {
+    const dec = descriptionInput.value.trim();
+
+    if (dec === "") {
+      decerr.textContent = "Field is required";
+    } else if (dec.length < 10) {
+      decerr.textContent = "Name must be at least 10 characters";
+    } else {
+      decerr.textContent = "";
+    }
+  }
+
+  descriptionInput.addEventListener("blur", validateDec);
+
+  function validateProductPrice() {
+    const price = productPriceInput.value.trim();
+    if (price === "") {
+      productPriceErr.textContent = "Field is required";
+    } else if (price <= 0) {
+      productPriceErr.textContent = "Price should be a positive number";
+    } else {
+      productPriceErr.textContent = "";
+    }
+  }
+
+  productPriceInput.addEventListener("blur", validateProductPrice);
+
+  function validateSalePrice() {
+    const price = salePrice.value.trim();
+    if (price === "") {
+      saleerr.textContent = "Field is required";
+    } else if (price <= 0) {
+      saleerr.textContent = "Price should be a positive number";
+    } else {
+      saleerr.textContent = "";
+    }
+  }
+
+  salePrice.addEventListener("blur", validateSalePrice);
+
+  function validateBrandName() {
+    const name = brand.value.trim();
+
+    if (name === "") {
+      branderr.textContent = "Field is required";
+    } else {
+      branderr.textContent = "";
+    }
+  }
+
+  brand.addEventListener("blur", validateBrandName);
+
+  function validatequantity() {
+    const quantity = Quantity.value.trim();
+    if (quantity === "") {
+      Qerr.textContent = "Field is required";
+    } else if (quantity <= 0) {
+      Qerr.textContent = "Quantity should be a positive number";
+    } else {
+      Qerr.textContent = "";
+    }
+  }
+
+  Quantity.addEventListener("blur", validatequantity);
+
+  function validateBrandName() {
+    const name = brand.value.trim();
+
+    if (name === "") {
+      branderr.textContent = "Field is required";
+    } else {
+      branderr.textContent = "";
+    }
+  }
+
+  brand.addEventListener("blur", validateBrandName);
+
+  function validateImage() {
+    const files = image.files;
+    if (files.length === 0) {
+      imageerr.textContent = "Please select at least one image";
+    } else if (files.length > 4) {
+      imageerr.textContent = "Maximum of 4 images allowed";
+    } else {
+      imageerr.textContent = "";
+    }
+  }
+
+  image.addEventListener("change", validateImage);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    validateBrandName();
+    validateDec();
+    validateName();
+    validateProductPrice();
+    validateSalePrice();
+    validatequantity();
+    validateImage();
+
+    const allErrors = [
+      nameerr,
+      decerr,
+      productPriceErr,
+      saleerr,
+      Qerr,
+      branderr,
+      // imageerr,
+    ];
+
+    if (allErrors.every((error) => error.textContent === "")) {
+      formerr.textContent = "";
+      productForm.submit();
+    } else {
+      alert("please provide appropriate data")
+    }
+  }
+
+  productForm.addEventListener("submit", handleSubmit);
+});
+
 </script>
