@@ -2,7 +2,7 @@
 <div><section class="h-100  h-custom" style="background-color: #eee;">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-lg-8 col-xl-6">
+        <div class="col-lg-8 col-xl-8">
           <div class="card border-top border-bottom border-3" style="border-color: #f37a27 !important;">
             <div class="card-body  p-5">
   
@@ -68,7 +68,7 @@
                         <p><strong class="bg-primary text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
                         <% } else if (item.status === "Delivered") { %>
                         <p><strong class="bg-success text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
-                        <% } else if (item.status === "Cancelled") { %>
+                        <% } else if (item.status === "Cancel Requested") { %>
                         <p><strong class="bg-danger text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
                         <% } else if (item.status === "Returned") { %>
                         <p><strong class="bg-info text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
@@ -81,7 +81,7 @@
                         <p><strong>Price:</strong> <%= item.price %></p>
                     </div>
                     <% if (item.status !== "Cancelled" && item.status !== "Delivered" && item.status !== "Return Requested"
-                    && item.status !== "Returned") { %>
+                    && item.status !== "Returned"  && item.status !== "Cancel Requested") { %>
                     <div class="col-md-2 d-flex flex-column d-flex flex-column justify-content-center">
                         <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
                             <select name="status" class="form-control mb-3">
@@ -96,6 +96,7 @@
                                     <option value="Cancelled" <%= item.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                 <% } %>
                             </select>
+                            <input type="hidden" name="orderId" value="<%=order.orderId%>" >
                             <button class="btn btn-sm btn-primary btn-block" type="submit">Update</button>
                         </form>
                     </div>
@@ -122,7 +123,17 @@
                     <% } else if (item.status === "Return Requested") { %>
                     <div class="col-md-2 d-flex flex-column justify-content-center">
                         <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
+                          <input type="hidden" name="orderId" value="<%=order.orderId%>">
+                          <input type="hidden" name="status" value="Return Requested">
                             <button class="btn btn-danger text-white">Confirm Return</button>
+                        </form>
+                    </div>
+                    <% }  else if (item.status ==="Cancel Requested") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
+                          <input type="hidden" name="orderId" value="<%=order.orderId%>">
+                          <input type="hidden" name="status" value="Cancelled">
+                            <button class="btn btn-danger text-white">Confirm Cancel</button>
                         </form>
                     </div>
                     <% } else if (item.status === "Returned") { %>
@@ -136,6 +147,7 @@
                     </div>
                     <% } %>
                 </div>
+               
                 <% if (index !== order.orderItems.length - 1) { %>
                 <hr class="border-1 bg-dark" />
                 <% } %> <% }) %>

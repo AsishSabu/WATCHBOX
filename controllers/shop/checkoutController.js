@@ -2,7 +2,7 @@ const Cart = require("../../models/cartModel");
 const Product = require("../../models/productModel");
 const User = require("../../models/userModels");
 const Order=require("../../models/orderModel")
-const OrderItems=require("../../models/orderItemsModel")
+// const OrderItems=require("../../models/orderItemsModel")
 const asynchandler = require("express-async-handler");
 const checkoutHelper = require("../../helpers/checkoutHelpers");
 const { calculateCartTotals } = require("../../helpers/cartHelpers");
@@ -53,6 +53,7 @@ const placeOrder=asynchandler(async (req, res) => {
     console.log('reached in place order');
     const userId=req.user._id
     const {addressId,payment_method}=req.body;
+    console.log(req.body);
     const newOrder = await checkoutHelper.placeOrder(userId,addressId,payment_method) 
    
     if(payment_method==="cash_on_delivery"){
