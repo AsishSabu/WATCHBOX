@@ -7,96 +7,46 @@ const { status } = require("../utils/status");
 const { ReturnOrder } = require("../controllers/shop/orderControllers");
 
 
-exports.handleCancelledOrder = expressAsyncHandler(async (order) => {
-  if (order.isPaid !== "pending") {
-    const product = await Product.findById(order.product);
-    product.sold -= order.quantity;
-    product.quantity += order.quantity;
-    await product.save();
+exports.handleCancelledOrder = expressAsyncHandler(async (product) => {
+  console.log(product.status);
+  if (product.isPaid !== "pending") {
+   
+   
+    const product = await Product.findById(order);
+    console.log(product);
+    
+    // product.sold -= order.quantity;
+    // product.quantity += order.quantity;
+    // await product.save();
+  }else{
+    const quantity=product.quantity
+    product.product.quantity+=quantity
+    product.product.sold-=quantity
+    product.status=status.cancelled
+    await product.save()
+    
+    
+    
   }
 
-  const orders = await Order.findOne({ orderItems: order._id });
+  return product
 });
 
 exports.getSingleOrder = expressAsyncHandler(async (orderId) => {
-  const order = await OrderItem.findById(orderId)
+  console.log(orderId);
+  const order = await Order.findOne({_id: orderId,
+  })
     .populate({
-      path: "product",
-      model: "Product",
-      populate: {
-        path: "images",
-        model: "Images",
-      },
+      path: "orderItems.product",
+      model:'Product',
+      populate: { path: "images" },
     })
+    .select("orderId orderItems orderedDate shippingAddress town createdAt") 
     .sort({
       createdAt: 1,
     });
-    
 
-  const orders = await Order.findOne({ orderItems: orderId }).select(
-    "shippingAddress town orderedDate"
-  );
-
-
-  return { order, orders };
+return  order;
 });
 
-//---------------------cancel order------------------------
 
-exports.cancelOrderByProductId = expressAsyncHandler(
-  async (orderItemId, userId) => {
-    try {
-      const updatedOrder = await OrderItem.findByIdAndUpdate(orderItemId, {
-        status: status.cancelled,
-      });
-
-      const product = updatedOrder.product._id;
-
-      const cancelledProduct = await Product.findById(product);
-
-      cancelledProduct.quantity += updatedOrder.quantity;
-      cancelledProduct.sold -= updatedOrder.quantity;
-      await cancelledProduct.save();
-
-      return "redirectBack";
-    } catch (error) {
-      throw new Error(error);
-    }
-
-    // if (order.orderItems.every((item) => item.status === status.cancelled)) {
-    //   return { message: "Order is already cancelled." };
-
-    // } else if (order.payment_method === "cash_on_delivery") {
-
-    //   // Update product quantities and sold counts for each order item
-    //   for (const item of order.orderItems) {
-
-    //     await OrderItem.findByIdAndUpdate(item._id, {
-    //       status: status.cancelled,
-    //     });
-
-    //     const cancelledProduct = await Product.findById(item.product);
-    //     cancelledProduct.quantity += item.quantity;
-    //     cancelledProduct.sold -= item.quantity;
-    //     await cancelledProduct.save();
-    //   }
-
-    //   // Update the order status
-    //   order.status = status.cancelled;
-    //   await order.save();
-
-    //   return "redirectBack";
-    // }
-  }
-);
-
-
-//----------return order function-----------------------------
-
-exports.returnOrder=expressAsyncHandler(async(returnOrderId)=>{
-  const returnOrder = await OrderItem.findByIdAndUpdate(returnOrderId, {
-    status: status.returnPending,
-});
-
-return "redirectBack";
-})
