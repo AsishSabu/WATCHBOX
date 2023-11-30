@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Address = require("../models/addressModel");
 const Cart = require("../models/cartModel");
 const Product = require("../models/productModel");
-const OrderItems=require("../models/orderItemsModel");
+// const OrderItems=require("../models/orderItemsModel");
 const Order=require("../models/orderModel");
 const {generateUniqueOrderID}=require("../utils/genreateOrderId")
 
@@ -21,6 +21,7 @@ exports.getCartItems=asyncHandler(async(userId)=>{
 
 exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod)=>{
     const cartItems= await exports.getCartItems(userId);
+  
    
     if(!cartItems && cartItems.length){
         throw new Error('cart not found or empty');
@@ -30,18 +31,19 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod)=>{
     let total=0;
 
     for(const cartItem of cartItems.products){
+   
         const productTotal=parseFloat(cartItem.product.salePrice)*cartItem.quantity;
         total+=productTotal;
+        
     
-        const item = await OrderItems.create({
+        const orderItems= {
             quantity: cartItem.quantity,
             price: cartItem.product.salePrice,
             product: cartItem.product._id,
-        });
-       
-        orders.push(item);
-       
-    }
+        }
+        orders.push(orderItems);
+        console.log(orders);      
+}
 
 
 
