@@ -1,6 +1,5 @@
 const Product=require("../models/productModel");
 const user=require("../models/userModels")
-const OrderItems=require("../models/orderItemsModel");
 const Order=require("../models/orderModel");
 const Wallet=require("../models/walletModel")
 const walletTransactions=require("../models/transactionModel")

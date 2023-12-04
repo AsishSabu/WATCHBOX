@@ -2,7 +2,6 @@ const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const User = require("../models/userModels");
 const expressAsyncHandler = require("express-async-handler");
-const OrderItem = require("../models/orderItemsModel");
 const { status } = require("../utils/status");
 const { ReturnOrder } = require("../controllers/shop/orderControllers");
 

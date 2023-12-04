@@ -2,9 +2,10 @@ const asyncHandler = require("express-async-handler");
 const Address = require("../models/addressModel");
 const Cart = require("../models/cartModel");
 const Product = require("../models/productModel");
-// const OrderItems=require("../models/orderItemsModel");
 const Order=require("../models/orderModel");
 const {generateUniqueOrderID}=require("../utils/genreateOrderId")
+const Crypto = require("crypto");
+const Wallet=require("../models/walletModel")
 
 
 
@@ -19,7 +20,7 @@ exports.getCartItems=asyncHandler(async(userId)=>{
 
 //----------------------place an order-------------------------
 
-exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod)=>{
+exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet)=>{
     const cartItems= await exports.getCartItems(userId);
   
    
@@ -34,27 +35,16 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod)=>{
    
         const productTotal=parseFloat(cartItem.product.salePrice)*cartItem.quantity;
         total+=productTotal;
-        
-    
-        const orderItems= {
+            const orderItems= {
             quantity: cartItem.quantity,
             price: cartItem.product.salePrice,
             product: cartItem.product._id,
         }
         orders.push(orderItems);
-        console.log(orders);      
+//         console.log(orders);      
 }
-
-
-
     const address=await Address.findById(addressId);
-    
-
     const existingOrdersIds= await Order.find().select("orderId");
-  
-
-    
-
     const newOrder = await Order.create({
         orderId: "OD" + generateUniqueOrderID(existingOrdersIds),
         orderItems: orders,
@@ -65,13 +55,62 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod)=>{
         phone: address.mobile,
         totalPrice: total.toFixed(2), // Ensure that totalPrice is of the correct data type
         user: userId,
-      
         payment_method: paymentMethod,
       });
-      console.log(newOrder);
-      
-      
-
     return newOrder;
 });
 
+
+exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWallet) => {
+
+    console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,",payWithWallet);
+    const wallet = await Wallet.findOne({ user: userid });
+    let subtotal = 0;
+    for (const product of cartItems.products) {
+        const productTotal = parseFloat(product.product.salePrice) * product.quantity;
+        subtotal += productTotal;
+    }
+    let total;
+    let usedFromWallet = 0;
+    if (wallet && payWithWallet) {
+        total = subtotal;
+
+        if (total <= wallet.balance) {
+            usedFromWallet = total;
+            wallet.balance -= total;
+            total = 0;
+        } else {
+            usedFromWallet = wallet.balance;
+            total = subtotal - wallet.balance ;
+            wallet.balance = 0;
+        }
+        return { subtotal, total, usedFromWallet, walletBalance: wallet.balance,  };
+    } else {
+        total = subtotal;
+       
+        return {
+            subtotal,
+            total,
+            usedFromWallet,
+            walletBalance: wallet ? wallet.balance : 0,
+        };
+    }
+});
+
+
+/**
+ * Verify payment using Razorpay
+ */
+exports.verifyPayment = asyncHandler(async (razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId) => {
+
+    console.log('in verify payment');
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    console.log(process.env.RAZORPAY_SECRET_KEY);
+    const expectedSign = Crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY).update(sign.toString()).digest("hex");
+    console.log(expectedSign);
+    if (razorpay_signature === expectedSign) {
+        return { message: "success", orderId: orderId };
+    } else {
+        throw new Error("Payment verification failed");
+    }
+});
