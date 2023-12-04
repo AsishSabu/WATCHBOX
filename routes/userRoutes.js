@@ -94,10 +94,13 @@ userRoute.post('/checkout',ensureAuthenticated,checkoutController.cartPage)
 userRoute.get('/checkout/get',ensureAuthenticated,checkoutController.getCartData)
 userRoute.post('/place-order',ensureAuthenticated,checkoutController.placeOrder)
 userRoute.get("/order-placed/:id",validateID, checkoutController.orderPlaced);
+userRoute.post("/verify-payment",ensureAuthenticated,checkoutController.verifyPayment)
+userRoute.post("/update",ensureAuthenticated,checkoutController.updatePage)
 
 //-------------------order controller------------------------------
 userRoute.get('/order',ensureAuthenticated,orderController.orderPage);
 userRoute.post('/orders/:id',validateID,ensureAuthenticated,orderController.viewOrder);
+userRoute.put("/orders/:id", orderController.cancelOrder);
 userRoute.put('/orders/cancel/:id', validateID,ensureAuthenticated,orderController.cancelOrder)
 userRoute.post("/orders/return/:id",validateID,orderController.ReturnOrder)
 

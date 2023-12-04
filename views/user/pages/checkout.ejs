@@ -170,11 +170,32 @@
                   <th>Cart Subtotal</th>
                   <td><span class="amount">₹ <%= subtotal %></span></td>
                 </tr>
+                 <tr class="wallet-payment">
+                                            <td colspan="2">
+                                                <div class="wallet-info d-flex justify-content-between align-items-center">
+                                                    <div class="d-flex flex-column ml-10">
+                                                        <div class="d-flex align-items-center">
+                                                            <input type="checkbox" id="wallet" name="wallet" value="wallet"
+                                                            style="width: 20px; height: 20px; margin-right: 10px" <%=
+                                                            wallet.balance === 0 ? "disabled" : "" %> />
+                                                            <label for="wallet">Pay with Wallet:</label>
+                                                        </div>
+                                                        <small
+                                                            >Available Balance: ₹
+                                                            <span id="available-balance"
+                                                                ><%= wallet?.balance ?? "0" %></span
+                                                            ></small
+                                                        >
+                                                    </div>
+                                                    <span>- ₹<span id="wallet-amount" class="mr-90">0</span></span>
+                                                </div>
+                                            </td>
+                                        </tr>
                 <tr class="order-total">
                   <th>Order Total</th>
                   <td>
                     <strong
-                      ><span class="amount">
+                      ><span id="total" class="amount">
                         ₹ <%= total.toFixed(2) %></span
                       ></strong
                     >
@@ -196,7 +217,24 @@
                   >
                     CASH ON DELIVERY
                   </button>
-                  <!-- <input type="submit" value="CASH ON DELIVERY" /> -->
+                  <button
+                    class="btn btn-primary h-auto rounded-0 fw-bold"
+                    style="padding: 12px"
+                    type="button"
+                    id="rzp-button"
+                    value="submit"
+                  >
+                    Pay with Razorypay
+                  </button>
+                  <button
+                    class="btn btn-success h-auto rounded-0 fw-bold"
+                    style="padding: 12px"
+                    type="button"
+                    id="wlt-button"
+                    value="submit"
+                  >
+                    Pay With Wallet
+                  </button>
                 </div>
               </div>
             </div>
@@ -216,12 +254,16 @@
       background-color: black;
     }
   </style>
-
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     let selectedAddressId = null;
+    const wallet = document.getElementById("wallet");
+    
 
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.querySelector("form");
+      const rzpBtn = document.getElementById("rzp-button");
+      const wltBtn = document.getElementById("wlt-button");
       const codBtn = document.getElementById("cod-button");
       const addressRadios = document.querySelectorAll(
         'input[name="addressId"]'
@@ -238,8 +280,24 @@
           selectedAddressId = event.target.value;
         });
       });
-
+      handleWalletPayment();
       codBtn.addEventListener("click", handleCodButtonClick);
+      rzpBtn.addEventListener("click", handleRzpButtonClick);
+      wltBtn.addEventListener("click", handleWltButtonClick);
+     
+
+      async function handleWltButtonClick(event) {
+        event.preventDefault();
+        if (await checkCartData()) {
+          const data = {
+            addressId: selectedAddressId,
+            payment_method: "wallet_payment",
+            isWallet: wallet.checked,
+          };
+          console.log(data);
+          await placeOrder("/place-order", data);
+        }
+      }
 
       async function handleCodButtonClick(event) {
         event.preventDefault();
@@ -248,8 +306,22 @@
           const data = {
             addressId: selectedAddressId,
             payment_method: "cash_on_delivery",
+            isWallet: wallet.checked,
           };
 
+          await placeOrder("/place-order", data);
+        }
+      }
+
+      //----------------------razorpay payament --------------------
+      async function handleRzpButtonClick() {
+        if (await checkCartData()) {
+          const data = {
+            addressId: selectedAddressId,
+            payment_method: "online_payment",
+            isWallet: wallet.checked,
+          };
+          console.log(data);
           await placeOrder("/place-order", data);
         }
       }
@@ -259,20 +331,27 @@
       async function placeOrder(url, data) {
         try {
           console.log("Before fetch request");
-          const response = await fetch("/place-order", {
+          const response = await fetch(url, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
           });
-          console.log("After fetch request");
+          console.log("After fetch request",response);
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           const responseData = await response.json();
+          console.log(responseData);
           if (data.payment_method === "cash_on_delivery") {
+           
             handleCodPayment(responseData);
+          } else if (data.payment_method === "online_payment") {
+            handleRzpPayment(responseData);
+          } else if (data.payment_method === "wallet_payment") {
+            console.log(responseData);
+            handleWltPayment(responseData);
           }
         } catch (error) {
           handleError(error);
@@ -287,12 +366,14 @@
             document.getElementById("originalCartData").value
           );
           const response = await fetch("/checkout/get");
+         
 
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
 
           const currentCartData = await response.json();
+       
 
           if (
             currentCartData !== null &&
@@ -308,39 +389,176 @@
         }
       }
 
-      //---------------------------------
+      //---------------------------------handle cod payment-------------------------------------------------------
 
-    async  function handleCodPayment(responseData) {
+
+      async function handleCodPayment(responseData) {
         window.location.href = `/order-placed/${responseData.orderId}`;
+      }
+
+      //--------------------------------handle wallet payment----------------------------------------------------------------
+
+      function handleWltPayment(responseData) {
+            window.location.href = `/order-placed/${responseData.orderId}`;
+        }
+      //--------------------------handle razorpay------------------------------------------------------------------
+
+      function handleRzpPayment(responseData) {
+        const options = {
+          key: "rzp_test_oyly1h0q9HqilB",
+          amount: responseData.order.totalPrice * 100,
+          currency: "INR",
+          name: "WATCHBOX",
+          description: "Test Transaction",
+          image: "https://example.com/your_logo.png",
+          order_id: responseData.order.id,
+          handler: function (response) {
+            handleSuccessPayment(response, responseData);
+          },
+          prefill: {
+            name: responseData.user.userName,
+            email: responseData.user.email,
+            contact: responseData.user.mobile,
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#000000",
+          },
+          modal: {
+            ondismiss: function () {
+              handlePaymentFailure(responseData.orderId);
+            },
+          },
+        };
+
+        const rzp1 = new Razorpay(options);
+
+        rzp1.on("payment.failed", function (response) {
+          handlePaymentFailure(responseData.orderId);
+        });
+
+        rzp1.open();
+      }
+
+      //------------------------------------------------------------
+
+      function handleSuccessPayment(response, responseData) {
+        const postData = {
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_signature: response.razorpay_signature,
+          orderId: responseData.orderId,
+          userId: responseData.user._id,
+          walletAmount: response.walletamount
+        };
+        console.log(postData);
+
+        fetch(`/verify-payment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Error fetching data");
+            }
+          })
+          .then((data) => {
+            window.location.href = `/order-placed/${data.orderId}`;
+          })
+          .catch((error) => {
+            handleError(error);
+          });
+      }
+
+      //------------------------------handle razorpay payment  failure--------------------------------------------------------------
 
       
+      async function handlePaymentFailure(orderId) {
+            try {
+                const cancelOrderUrl = `/orders/${orderId}`;
+                const requestOptions = {
+                    method: "PUT",
+                };
+                const response = await fetch(cancelOrderUrl, requestOptions);
+
+                if (response.ok) {
+                    console.log("Order cancellation request succeeded.");
+                    return response.json();
+                } else {
+                    console.error("Order cancellation request failed.");
+                }
+            } catch (error) {
+                handleError(error);
+            }
+        }
 
 
-//         let timerInterval;
-// Swal.fire({
-//   title: "Auto close alert!",
-//   html: "I will close in <b></b> milliseconds.",
-//   timer: 2000,
-//   timerProgressBar: true,
-//   didOpen: () => {
-//     Swal.showLoading();
-//     const timer = Swal.getPopup().querySelector("b");
-//     timerInterval = setInterval(() => {
-//       timer.textContent = `${Swal.getTimerLeft()}`;
-//     }, 100);
-//   },
-//   willClose: () => {
-//     clearInterval(timerInterval);
-//   }
-// }).then((result) => {
-//   /* Read more about handling dismissals below */
-//   if (result.dismiss === Swal.DismissReason.timer) {
-//     console.log("I was closed by the timer");
-//   }
-// });
+    //-------------------------------------------------------------------------------------------------------------
 
 
-      }
+    function handleWalletPayment() {
+      const wltBtn = document.getElementById("wlt-button");
+      const availableBalance = document.getElementById("available-balance");
+       if(availableBalance.innerText<0){
+        wallet.disabled
+        wltBtn.style.display = "none";
+       }
+
+            wallet.removeEventListener("change", handlePaymentChange);
+            wallet.addEventListener("change", handlePaymentChange);
+         
+        }
+
+        function handlePaymentChange() {
+            const totalAmount = document.getElementById("total");
+            const walletAmount = document.getElementById("wallet-amount");
+            const codBtn = document.getElementById("cod-button");
+
+            const rzpBtn = document.getElementById("rzp-button");
+            const payWithWallet = this.checked ? true : false;
+    
+            if (payWithWallet) {
+                codBtn.classList.add("d-none");
+            } else {
+                codBtn.classList.remove("d-none");
+            }
+
+            fetch("/update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ payWithWallet }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log(data);
+                    totalAmount.innerText = data.total.toFixed(2);
+                    walletAmount.innerText = data.usedFromWallet.toFixed(2);
+                    availableBalance.innerText = data.walletBalance.toFixed(2);
+                    if (data.total === 0) {
+                        wltBtn.style.display = "grid";
+                        rzpBtn.style.display = "none";
+                    } else {
+                        wltBtn.style.display = "none";
+                        rzpBtn.style.display = "grid";
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error updating checkout page:", error);
+                });
+        }
+
+
+
+
       //--------------------------compare JSON strings----------------------------------------------------------------
 
       function compareJSONStrings(jsonString1, jsonString2) {

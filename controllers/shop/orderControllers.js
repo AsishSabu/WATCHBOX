@@ -1,7 +1,7 @@
 const Cart = require("../../models/cartModel");
 const Product = require("../../models/productModel");
 const User = require("../../models/userModels");
-// const orderItem=require("../../models/orderItemsModel")
+
 const asynchandler = require("express-async-handler");
 const Orders = require("../../models/orderModel");
 const orderHelpers = require("../../helpers/orderHelpers");

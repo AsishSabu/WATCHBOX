@@ -1,9 +1,27 @@
-<div class="main">
-    <div class="shop-page-wrapper ">
+
+
+
+<body>
+    <!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+   
+    <div class="breadcrumb-area pt-205 breadcrumb-padding pb-210" style="background-image: url(assets/img/bg/breadcrumb.jpg)">
         <div class="container-fluid">
-            <div class="row no-gutters">
-                <div class="col-2">
-                    <div class="shop-sidebar">
+            <div class="breadcrumb-content text-center">
+                <h2> shop grid</h2>
+                <ul>
+                    <li><a href="#">home</a></li>
+                    <li>shop grid</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="shop-page-wrapper shop-page-padding ptb-100">
+        <div class="container-fluid">
+            <div class="row gy-5">
+                <div class="col-lg-3 order-2 order-lg-1">
+                    <div class="shop-sidebar mr-50">
                         <div class="sidebar-widget mb-50">
                             <h3 class="sidebar-title">Search Products</h3>
                             <div class="sidebar-search">
@@ -31,29 +49,29 @@
                             <div class="sidebar-categories">
                                 <ul>
                                     <% categories.forEach(element=>{ %>
-    
+        
                                     <li><a href=""><%= element.categoryName %><span></span></a>
                                     </li>
                                     <% }) %>
                             
-     
+        
                                 </ul>
                             </div>
                         </div>
-                       
-                        <!-- <div class="sidebar-widget mb-40">
-                            <h3 class="sidebar-title">size</h3>
-                            <div class="product-size">
+                      
+                        <div class="sidebar-widget mb-40">
+                            <h3 class="sidebar-title">tag</h3>
+                            <div class="product-tags">
                                 <ul>
-                                    <li><a href="#">xl</a></li>
-                                    <li><a href="#">m</a></li>
-                                    <li><a href="#">l</a></li>
-                                    <li><a href="#">ml</a></li>
-                                    <li><a href="#">lm</a></li>
+                                    <li><a href="#">Clothing</a></li>
+                                    <li><a href="#">Bag</a></li>
+                                    <li><a href="#">Women</a></li>
+                                    <li><a href="#">Tie</a></li>
+                                    <li><a href="#">Women</a></li>
                                 </ul>
                             </div>
-                        </div> -->
-                        <!-- <div class="sidebar-widget mb-50">
+                        </div>
+                        <div class="sidebar-widget mb-50">
                             <h3 class="sidebar-title">Top rated products</h3>
                             <div class="sidebar-top-rated-all">
                                 <div class="sidebar-top-rated mb-30">
@@ -99,7 +117,7 @@
                                 <div class="sidebar-top-rated mb-30">
                                     <div class="single-top-rated">
                                         <div class="top-rated-img">
-                                            <a href="#"><img src="" alt=""></a>
+                                            <a href="#"><img src="assets/img/product/sidebar-product/3.jpg" alt=""></a>
                                         </div>
                                         <div class="top-rated-text">
                                             <h4><a href="#">Flying Drone</a></h4>
@@ -137,16 +155,16 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-10 order-1 order-lg-2">
-                    <div class="shop-product-wrapper">
+                <div class="col-lg-9 order-1 order-lg-2">
+                    <div class="shop-product-wrapper res-xl res-xl-btn">
                         <div class="shop-bar-area">
                             <div class="shop-bar pb-60">
                                 <div class="shop-found-selector">
                                     <div class="shop-found">
-                                        <!-- <p><span>23</span> Product Found of <span>50</span></p> -->
+                                        <p><span>23</span> Product Found of <span>50</span></p>
                                     </div>
                                     <div class="shop-selector">
                                         <label>Sort By : </label>
@@ -160,58 +178,57 @@
                                 </div>
                                 <div class="shop-filter-tab">
                                     <div class="shop-tab nav" role=tablist>
-                                        <a class="active" href="#grid-sidebar7" data-bs-toggle="tab" role="tab" aria-selected="false">
+                                        <a class="active" href="#grid-sidebar1" data-bs-toggle="tab" role="tab" aria-selected="false">
                                             <i class="ti-layout-grid4-alt"></i>
                                         </a>
-                                        <a href="#grid-sidebar8" data-bs-toggle="tab" role="tab" aria-selected="true">
+                                        <a href="#grid-sidebar2" data-bs-toggle="tab" role="tab" aria-selected="true">
                                             <i class="ti-menu"></i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="shop-product-content tab-content ">
-                                
-    
-    
-    
-                                
-                                <div id="grid-sidebar" class="tab-pane fade active show">
+                            <div class="shop-product-content tab-content">
+                                <div id="grid-sidebar1" class="tab-pane fade active show">
                                     <div class="row">
                                         <% products.forEach(product => { %>
-                                        <div class="col-lg-3 col-md-5">
-                                            <div class="product-wrapper product-box-style mb-30 border">
+                                        <div class="col-lg-6 col-md-6 col-xl-3">
+                                            <div class="product-wrapper mb-30">
                                                 <div class="product-img">
-                                                    <a href="/viewProduct/<%= product?._id %>">
-                                                        <img src="<%= product.images[0].thumbnailUrl%>" alt="<%= product.title %>">
+                                                    <a href="#">
+                                                      
+                                                            <img src="<%= product.images[0].thumbnailUrl%>" alt="<%= product.title %>">
                                                     </a>
+                                                    <span>hot</span>
                                                     <div class="product-action">
+                                                        
+
                                                         <% if(!user) {%>
-                                                        <a class="animate-left" title="Wishlist" href="/login">
-                                                            <i class="pe-7s-like"></i>
-                                                        </a>
-                                                        <% }else{ %>
-                                                            <a class="animate-left" title="Wishlist" href="#">
+                                                            <a class="animate-left" title="Wishlist" href="/login">
                                                                 <i class="pe-7s-like"></i>
                                                             </a>
-                                                            <% } %>
-
-                                                            <% if(!user) {%>
-                                                                <a class="animate-top" title="Add To Cart" href="/login">
-                                                                    <i class="pe-7s-cart"></i>
+                                                            <% }else{ %>
+                                                                <a class="animate-left" title="Wishlist" href="#">
+                                                                    <i class="pe-7s-like"></i>
                                                                 </a>
-        
-                                                                <% }else{ %>
-                                                                    <a class="animate-top" title="Add To Cart" onclick="addToCart('<%= product._id %>')">
+                                                                <% } %>
+            
+                                                                <% if(!user) {%>
+                                                                    <a class="animate-top" title="Add To Cart" href="/login">
                                                                         <i class="pe-7s-cart"></i>
                                                                     </a>
             
-                                                                    <% } %>
-                                                  
-                                                        <a class="animate-right" title="Quick View" href="/viewProduct/<%= product?._id %>">
-                                                            <i class="pe-7s-look"></i>
-                                                        </a>
+                                                                    <% }else{ %>
+                                                                        <a class="animate-top" title="Add To Cart" onclick="addToCart('<%= product._id %>')">
+                                                                            <i class="pe-7s-cart"></i>
+                                                                        </a>
+                
+                                                                        <% } %>
+                                                                        <a class="animate-right" title="Quick View" href="/viewProduct/<%= product?._id %>">
+                                                                            <i class="pe-7s-look"></i>
+                                                                        </a>
                                                     </div>
                                                 </div>
+
                                                 <div class="product-content">
                                                     <h4><a href="#"><%= product.title%></a></h4>
                                                 </div>
@@ -221,17 +238,210 @@
                                                     </span>
                                                     <span>₹ <%= product.salePrice %></span>
                                                 </div>
+                                               
                                             </div>
-                                        </div>
-                                        <% }) %>
+                                       </div>
+                                       <% }) %>
+                                      
                                     </div>
                                 </div>
-                                
-                            
+                                <div id="grid-sidebar2" class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-xl-6">
+                                            <div class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60">
+                                                <div class="product-img list-img-width">
+                                                    <a href="#">
+                                                        <img src="assets/img/product/fashion-colorful/1.jpg" alt="">
+                                                    </a>
+                                                    <span>hot</span>
+                                                    <div class="product-action-list-style">
+                                                        <a class="animate-right" title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-list">
+                                                    <div class="product-list-info">
+                                                        <h4><a href="#">Dagger Smart Trousers</a></h4>
+                                                        <span>$150.00</span>
+                                                        <p>Lorem ipsum dolor sit amet, mana consectetur adipisicing elit, sed do eiusmod tempor labore. </p>
+                                                    </div>
+                                                    <div class="product-list-cart-wishlist">
+                                                        <div class="product-list-cart">
+                                                            <a class="btn-hover list-btn-style" href="#">add to cart</a>
+                                                        </div>
+                                                        <div class="product-list-wishlist">
+                                                            <a class="btn-hover list-btn-wishlist" href="#">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-xl-6">
+                                            <div class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60">
+                                                <div class="product-img list-img-width">
+                                                    <a href="#">
+                                                        <img src="assets/img/product/fashion-colorful/2.jpg" alt="">
+                                                    </a>
+                                                    <div class="product-action-list-style">
+                                                        <a class="animate-right" title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-list">
+                                                    <div class="product-list-info">
+                                                        <h4><a href="#">Homme Tapered Smart</a></h4>
+                                                        <span>$180.00</span>
+                                                        <p>Lorem ipsum dolor sit amet, mana consectetur adipisicing elit, sed do eiusmod tempor labore. </p>
+                                                    </div>
+                                                    <div class="product-list-cart-wishlist">
+                                                        <div class="product-list-cart">
+                                                            <a class="btn-hover list-btn-style" href="#">add to cart</a>
+                                                        </div>
+                                                        <div class="product-list-wishlist">
+                                                            <a class="btn-hover list-btn-wishlist" href="#">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-xl-6">
+                                            <div class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60">
+                                                <div class="product-img list-img-width">
+                                                    <a href="#">
+                                                        <img src="assets/img/product/fashion-colorful/3.jpg" alt="">
+                                                    </a>
+                                                    <div class="product-action-list-style">
+                                                        <a class="animate-right" title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-list">
+                                                    <div class="product-list-info">
+                                                        <h4><a href="#">Skinny Jeans Terry</a></h4>
+                                                        <span>$130.00</span>
+                                                        <p>Lorem ipsum dolor sit amet, mana consectetur adipisicing elit, sed do eiusmod tempor labore. </p>
+                                                    </div>
+                                                    <div class="product-list-cart-wishlist">
+                                                        <div class="product-list-cart">
+                                                            <a class="btn-hover list-btn-style" href="#">add to cart</a>
+                                                        </div>
+                                                        <div class="product-list-wishlist">
+                                                            <a class="btn-hover list-btn-wishlist" href="#">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-xl-6">
+                                            <div class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60">
+                                                <div class="product-img list-img-width">
+                                                    <a href="#">
+                                                        <img src="assets/img/product/fashion-colorful/4.jpg" alt="">
+                                                    </a>
+                                                    <span>new</span>
+                                                    <div class="product-action-list-style">
+                                                        <a class="animate-right" title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-list">
+                                                    <div class="product-list-info">
+                                                        <h4><a href="#">Navy Bird Print</a></h4>
+                                                        <span>$120.00</span>
+                                                        <p>Lorem ipsum dolor sit amet, mana consectetur adipisicing elit, sed do eiusmod tempor labore. </p>
+                                                    </div>
+                                                    <div class="product-list-cart-wishlist">
+                                                        <div class="product-list-cart">
+                                                            <a class="btn-hover list-btn-style" href="#">add to cart</a>
+                                                        </div>
+                                                        <div class="product-list-wishlist">
+                                                            <a class="btn-hover list-btn-wishlist" href="#">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-xl-6">
+                                            <div class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60">
+                                                <div class="product-img list-img-width">
+                                                    <a href="#">
+                                                        <img src="assets/img/product/fashion-colorful/5.jpg" alt="">
+                                                    </a>
+                                                    <span>hot</span>
+                                                    <div class="product-action-list-style">
+                                                        <a class="animate-right" title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-list">
+                                                    <div class="product-list-info">
+                                                        <h4><a href="#">Leg Smart Trousers </a></h4>
+                                                        <span>$170.00</span>
+                                                        <p>Lorem ipsum dolor sit amet, mana consectetur adipisicing elit, sed do eiusmod tempor labore. </p>
+                                                    </div>
+                                                    <div class="product-list-cart-wishlist">
+                                                        <div class="product-list-cart">
+                                                            <a class="btn-hover list-btn-style" href="#">add to cart</a>
+                                                        </div>
+                                                        <div class="product-list-wishlist">
+                                                            <a class="btn-hover list-btn-wishlist" href="#">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-xl-6">
+                                            <div class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60">
+                                                <div class="product-img list-img-width">
+                                                    <a href="#">
+                                                        <img src="assets/img/product/fashion-colorful/1.jpg" alt="">
+                                                    </a>
+                                                    <div class="product-action-list-style">
+                                                        <a class="animate-right" title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-list">
+                                                    <div class="product-list-info">
+                                                        <h4><a href="#">Arifo Stylas Dress</a></h4>
+                                                        <span>$190.00</span>
+                                                        <p>Lorem ipsum dolor sit amet, mana consectetur adipisicing elit, sed do eiusmod tempor labore. </p>
+                                                    </div>
+                                                    <div class="product-list-cart-wishlist">
+                                                        <div class="product-list-cart">
+                                                            <a class="btn-hover list-btn-style" href="#">add to cart</a>
+                                                        </div>
+                                                        <div class="product-list-wishlist">
+                                                            <a class="btn-hover list-btn-wishlist" href="#">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="pagination-style mt-10 text-center">
+                    <div class="pagination-style mt-30 text-center">
                         <ul>
                             <li><a href="#"><i class="ti-angle-left"></i></a></li>
                             <li><a href="#">1</a></li>
@@ -245,308 +455,105 @@
             </div>
         </div>
     </div>
-</div>
-
-
-<style>
-    .main{
-        margin-top: 100px;
-       
-    }
-    .shop-page-wrapper {
-       
-        width: 100%;
-        background-color: #ffffff;
-      
-    }
-
-    .shop-sidebar {
-        background-color: #ffffff;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        border-radius: 5px;
-        width: 100%;
-    }
-
-    .sidebar-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 15px;
-        color: #333;
-    }
-
-    .sidebar-search form {
-        display: flex;
-    }
-
-    .sidebar-search input {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        margin-right: 5px;
-    }
-
-    .sidebar-search button {
-        background-color: #000000;
-        color: #fff;
-        border: none;
-        padding: 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .price_filter {
-        margin-top: 20px;
-    }
-
-    #slider-range {
-        width: 100%;
-    }
-
-    .price_slider_amount {
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-    .label-input {
-        margin-right: 10px;
-    }
-
-    .label-input label {
-        font-weight: 500;
-        color: #333;
-    }
-
-    .price_slider_amount input {
-        flex: 1;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .price_slider_amount button {
-        background-color: #0f0f10;
-        color: #fff;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .sidebar-categories ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .sidebar-categories li {
-        margin-bottom: 10px;
-    }
-
-    .sidebar-categories a {
-        text-decoration: none;
-        color: #333;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .sidebar-categories a span {
-        background-color: #2c2d2d;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: 500;
-        margin-left: 5px;
-    }
-
-    .shop-product-wrapper {
-        background-color: #ffffff;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        padding: 40px;
-        border-radius: 8px;
-        width: 100%;
-    }
-
-    .shop-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-    }
-
-    .shop-found-selector {
-        display: flex;
-        align-items: center;
-    }
-
-    .shop-found p {
-        font-size: 14px;
-        color: #333;
-        margin: 0;
-    }
-
-    .shop-selector label {
-        margin-right: 10px;
-        font-size: 14px;
-        color: #333;
-    }
-
-    .shop-selector select {
-        padding: 8px;
-        border: 2px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .shop-filter-tab .shop-tab a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        color: #333;
-        margin-right: 15px;
-        cursor: pointer;
-        transition: color 0.3s ease-in-out;
-    }
-
-    .shop-filter-tab .shop-tab a.active,
-    .shop-filter-tab .shop-tab a:hover {
-        color: #67615f;
-    }
-
-    .shop-product-content {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .pagination-style {
-        margin-top: 20px;
-    }
-
-    .pagination-style ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-    }
-
-    .pagination-style li {
-        margin: 0 5px;
-    }
-
-    .pagination-style a {
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 30px;
-        height: 30px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        color: #333;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    }
-
-    .pagination-style a.active,
-    .pagination-style a:hover {
-        background-color: #343638;
-        color: #fff;
-        border-color: #000000;
-    }
-
-    .product-wrapper {
-        width: 100%;
-        margin-bottom: 30px;
-    }
-
-    .product-img {
-        position: relative;
-        overflow: hidden;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .product-img a {
-        display: block;
-    }
-
-    .product-img img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .product-img:hover img {
-        transform: scale(1.05);
-    }
-
-    .product-action {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    .product-img:hover .product-action {
-        opacity: 1;
-    }
-
-    .product-action a {
-        display: block;
-        font-size: 18px;
-        color: #fff;
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 10px;
-        border-radius: 50%;
-        margin: 5px;
-        transition: background-color 0.3s ease-in-out;
-    }
-
-    .product-action a:hover {
-        background-color: #535354;
-    }
-
-    .product-content {
-        text-align: center;
-        padding: 15px;
-    }
-
-    .product-content h4 {
-        font-size: 18px;
-        margin: 0;
-        color: #333;
-        font-weight: 500;
-    }
-
-    .d-flex {
-        display: flex;
-    }
-
-    .justify-content-between {
-        justify-content: space-between;
-    }
-
-    .text-decoration-line-through {
-        text-decoration: line-through;
-    }
-
-    .text-secondary {
-        color: #6c757d;
-    }
-</style>
-
-
-<!-- <script src="assets/js/shop/cart.js"></script> -->
-
-<script>
-
+ 
+    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span class="pe-7s-close" aria-hidden="true"></span>
+        </button>
+        <div class="modal-dialog modal-quickview-width" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="qwick-view-left">
+                        <div class="quick-view-learg-img">
+                            <div class="quick-view-tab-content tab-content">
+                                <div class="tab-pane active show fade" id="modal1" role="tabpanel">
+                                    <img src="assets/img/quick-view/l1.jpg" alt="">
+                                </div>
+                                <div class="tab-pane fade" id="modal2" role="tabpanel">
+                                    <img src="assets/img/quick-view/l2.jpg" alt="">
+                                </div>
+                                <div class="tab-pane fade" id="modal3" role="tabpanel">
+                                    <img src="assets/img/quick-view/l3.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quick-view-list nav" role="tablist">
+                            <a class="active" href="#modal1" data-bs-toggle="tab" role="tab">
+                                <img src="assets/img/quick-view/s1.jpg" alt="">
+                            </a>
+                            <a href="#modal2" data-bs-toggle="tab" role="tab">
+                                <img src="assets/img/quick-view/s2.jpg" alt="">
+                            </a>
+                            <a href="#modal3" data-bs-toggle="tab" role="tab">
+                                <img src="assets/img/quick-view/s3.jpg" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="qwick-view-right">
+                        <div class="qwick-view-content">
+                            <h3>Handcrafted Supper Mug</h3>
+                            <div class="price">
+                                <span class="new">$90.00</span>
+                                <span class="old">$120.00  </span>
+                            </div>
+                            <div class="rating-number">
+                                <div class="quick-view-rating">
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                </div>
+                                <div class="quick-view-number">
+                                    <span>2 Ratting (S)</span>
+                                </div>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do tempor incididun ut labore et dolore magna aliqua. Ut enim ad mi , quis nostrud veniam exercitation .</p>
+                            <div class="quick-view-select">
+                                <div class="select-option-part">
+                                    <label>Size*</label>
+                                    <select class="select">
+                                        <option value="">- Please Select -</option>
+                                        <option value="">900</option>
+                                        <option value="">700</option>
+                                    </select>
+                                </div>
+                                <div class="select-option-part">
+                                    <label>Color*</label>
+                                    <select class="select">
+                                        <option value="">- Please Select -</option>
+                                        <option value="">orange</option>
+                                        <option value="">pink</option>
+                                        <option value="">yellow</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="quickview-plus-minus">
+                                <div class="cart-plus-minus">
+                                    <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
+                                </div>
+                                <div class="quickview-btn-cart">
+                                    <a class="btn-hover-black" href="#">add to cart</a>
+                                </div>
+                                <div class="quickview-btn-wishlist">
+                                    <a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- modal -->
+   
     
-</script>
+    
+
+</body>
+.fixed-size-image {
+    width: 100%; /* Set the width as needed */
+    height: auto; /* Maintain the aspect ratio */
+    /* Or, if you want a fixed height */
+    /* height: 200px; */
+}
