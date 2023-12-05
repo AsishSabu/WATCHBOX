@@ -66,32 +66,37 @@ const placeOrder = asynchandler(async (req, res) => {
       isWallet
     );
 
-    // console.log(req.user._id);
     if (payment_method === "online_payment") {
       console.log("in online payment ");
       const wallet = await Wallet.findOne({ user: userId });
       const user = await User.findById(req.user._id);
-      let totalAmount = 0;
-
+      let totalAmount = newOrder.totalPrice;
+    
       if (isWallet) {
-        totalAmount = newOrder.totalPrice;
         totalAmount -= wallet.balance;
         newOrder.paidAmount = totalAmount;
         newOrder.wallet = wallet.balance;
-        await newOrder.save();
+        // Create a new wallet transaction
         const walletTransaction = await WalletTransaction.create({
           wallet: wallet._id,
           event: "Order Placed",
           orderId: newOrder.orderId,
-          amount: wallet.balance,
+          amount: newOrder.wallet,
           type: "debit",
         });
-      } else if (!isWallet) {
-        totalAmount = newOrder.totalPrice;
+    
+        // Associate the wallet transaction with the wallet
+        wallet.transactions.push(walletTransaction._id);
+        await wallet.save();
+      } else {
+        // If not using wallet, update paid amount and save order
         newOrder.paidAmount = totalAmount;
-        await newOrder.save();
       }
-
+    
+      // Save the new order
+      await newOrder.save();
+    
+      // Create Razorpay order
       var instance = new Razorpay({
         key_id: process.env.RAZORPAY_ID_KEY,
         key_secret: process.env.RAZORPAY_SECRET_KEY,
@@ -106,7 +111,7 @@ const placeOrder = asynchandler(async (req, res) => {
           if (err) {
             res.status(500).json(err);
           }
-
+    
           res.status(200).json({
             message: "Order placed successfully",
             rzp_order,
@@ -117,37 +122,38 @@ const placeOrder = asynchandler(async (req, res) => {
           });
         }
       );
-    } else if (payment_method === "cash_on_delivery") {
-      console.log("in cash on delivery");
-      res.status(200).json({
-        message: "order placed successfully",
-        orderId: newOrder._id,
-      });
-    } else if (payment_method === "wallet_payment") {
-      console.log("hi am in walllet");
-      //  Wallet payment redirect
-      const wallet = await Wallet.findOne({ user: userId });
-      newOrder.wallet = newOrder.totalPrice;
-      console.log(newOrder.totalPrice);
-      wallet.balance -= newOrder.wallet;
-      wallet.save();
-      console.log("wallet", wallet);
+    }
+     else if (payment_method === "wallet_payment") {
+      try {
+        console.log("hi am in wallet");
+        const wallet = await Wallet.findOne({ user: userId });
+        // Create a new wallet transaction
+        const walletTransaction = await WalletTransaction.create({
+          wallet: wallet._id,
+          event: "Order Placed",
+          orderId: newOrder.orderId,
+          amount: newOrder.totalPrice,
+          type: "debit",
+        });
+        // Associate the wallet transaction with the wallet
+        wallet.transactions.push(walletTransaction._id);
+        await wallet.save();
+    
+        // Save the new order
+        newOrder.wallet=newOrder.totalPrice
+        await newOrder.save();
+        console.log("neworder", newOrder);
 
-      await newOrder.save();
-      console.log("neworder" + newOrder);
-
-      const walletTransaction = WalletTransaction.create({
-        wallet: wallet._id,
-        event: "Order Placed",
-        orderId: newOrder.orderId,
-        amount: newOrder.totalPrice,
-        type: "debit",
-      });
-      res.status(200).json({
-        message: "Order placed successfully",
-        orderId: newOrder._id,
-      });
-    } else {
+          res.status(200).json({
+          message: "Order placed successfully",
+          orderId: newOrder._id,
+        });
+      } catch (error) {
+        console.error("Error processing wallet payment:", error);
+        // Handle error appropriately
+      }
+    }
+     else {
       res.status(400).json({ message: "Invalid payment method" });
     }
   } catch (error) {
@@ -159,7 +165,6 @@ const placeOrder = asynchandler(async (req, res) => {
 
 const orderPlaced = asynchandler(async (req, res) => {
   try {
-
     console.log("in order placed");
     const orderId = req.params.id;
     const userId = req.user._id;
@@ -177,25 +182,26 @@ const orderPlaced = asynchandler(async (req, res) => {
         await item.save();
       }
     } else if (order.payment_method === "online_payment") {
-    
       for (const item of order.orderItems) {
-          item.isPaid = "paid";
-          await item.save();
+        item.isPaid = "paid";
+        await item.save();
       }
-     
-      const wallet = await Wallet.findOne({ user: req.user._id });
-   console.log(wallet);
-      wallet.balance -= order.wallet;
-      await wallet.save();
-  } else if (order.payment_method === "wallet_payment") {
-      for (const item of order.orderItems) {
-          item.isPaid = "paid";
-          await item.save();
-      }
+
       const wallet = await Wallet.findOne({ user: req.user._id });
       wallet.balance -= order.wallet;
       await wallet.save();
-  }
+      
+    } else if (order.payment_method === "wallet_payment") {
+      for (const item of order.orderItems) {
+        item.isPaid = "paid";
+        await item.save();
+      }
+   
+      const wallet = await Wallet.findOne({ user: req.user._id });
+   
+      wallet.balance -= order.wallet;
+      await wallet.save();
+    }
     if (cartItems) {
       for (const cartItem of cartItems.products) {
         const updateProduct = await Product.findById(cartItem.product._id);
@@ -224,6 +230,7 @@ const verifyPayment = asynchandler(async (req, res) => {
       walletAmount,
       userId,
     } = req.body;
+    console.log(req.body, "...............................");
     const result = await checkoutHelper.verifyPayment(
       razorpay_payment_id,
       razorpay_order_id,
@@ -260,7 +267,7 @@ const updatePage = asynchandler(async (req, res) => {
         userid,
         req.body.payWithWallet
       );
-      console.log( total, subtotal, usedFromWallet, walletBalance );
+    console.log(total, subtotal, usedFromWallet, walletBalance);
     res.json({ total, subtotal, usedFromWallet, walletBalance });
   } catch (error) {
     throw new Error(error);

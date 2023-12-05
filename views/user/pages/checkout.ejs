@@ -170,6 +170,7 @@
                   <th>Cart Subtotal</th>
                   <td><span class="amount">₹ <%= subtotal %></span></td>
                 </tr>
+                <%if(wallet.balance<total) {%>
                  <tr class="wallet-payment">
                                             <td colspan="2">
                                                 <div class="wallet-info d-flex justify-content-between align-items-center">
@@ -191,6 +192,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <% } %>
                 <tr class="order-total">
                   <th>Order Total</th>
                   <td>
@@ -226,6 +228,7 @@
                   >
                     Pay with Razorypay
                   </button>
+                <% if(wallet.balance>=total){ %>
                   <button
                     class="btn btn-success h-auto rounded-0 fw-bold"
                     style="padding: 12px"
@@ -235,6 +238,7 @@
                   >
                     Pay With Wallet
                   </button>
+                  <%}%>
                 </div>
               </div>
             </div>
