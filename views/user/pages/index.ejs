@@ -123,43 +123,41 @@
                         <h4>Anthologies</h4>
                     </a>
                 </div> -->
+
                 <div class="tab-content">
                     <div class="tab-pane active show fade" id="electro1" role="tabpanel">
-                        <div class="row row-cols-1 row-cols-md-4 g-4">
-                         <% topProduct.forEach(product=>{ %>   
-                            <div class="col">
-                                <div class="card product-wrapper  product-border mb-24 ">
-                                    <div class="product-img-5  k">
-                                        <a href="/viewProduct/<%= product?._id %>">
-                                            <img src="<%= product.images[0].thumbnailUrl %>"  class="card-img-top"  alt="">
+                        <div class="custom-row-2">
+                            <% topProduct.forEach(product=>{ %>  
+                            <div class="custom-col-style-2 custom-col-4">
+                                <div class="product-wrapper product-border mb-24">
+                                    <div class="product-img-3">
+                                        <a href="product-details.html">
+                                            <img src="<%= product.images[0].thumbnailUrl %>" alt="">
                                         </a>
                                         <div class="product-action-right">
-                            
                                             <a class="animate-right" href="/viewProduct/<%= product?._id %>" title="Quick View">
                                                 <i class="pe-7s-look"></i>
                                             </a>
-                                        <% if(!user) { %>
-                                            <a class="animate-top" title="Add To Cart" href="/login">
-                                                <i class="pe-7s-cart"></i>
-                                            </a>
-                                            <% }else{ %>
-
-                                            <a class="animate-top" title="Add To Cart"onclick="addToCart(`<%= product._id %>`)">
-                                                <i class="pe-7s-cart"></i>
-                                            </a>
-                                            <% } %>
                                             <% if(!user) { %>
-                                                <a class="animate-left" title="Wishlist" href="/login">
-                                                    <i class="pe-7s-like"></i>
+                                                <a class="animate-top" title="Add To Cart" href="/login">
+                                                    <i class="pe-7s-cart"></i>
                                                 </a>
                                                 <% }else{ %>
     
-                                                    <a class="animate-left" title="Wishlist" href="#">
+                                                <a class="animate-top" title="Add To Cart"onclick="addToCart(`<%= product._id %>`)">
+                                                    <i class="pe-7s-cart"></i>
+                                                </a>
+                                                <% } %>
+                                                <% if(!user) { %>
+                                                    <a class="animate-left" title="Wishlist" href="/login">
                                                         <i class="pe-7s-like"></i>
                                                     </a>
-                                                <% } %>
-
-                                        
+                                                    <% }else{ %>
+        
+                                                        <a class="animate-left" title="Wishlist" href="#">
+                                                            <i class="pe-7s-like"></i>
+                                                        </a>
+                                                    <% } %>
                                         </div>
                                     </div>
                                     <div class="product-content-4 text-center">
@@ -177,14 +175,10 @@
                                 </div>
                             </div>
                             <% }) %>
-    
                         </div>
-                    </div>
-     
+                    </div>     
                 </div>
-            </div>
-    
-    
+            </div>  
         </div>
     </div>
 
@@ -193,10 +187,7 @@
 
 
 <style>
-    .main{
-        background-color: rgb(179, 179, 179);
-    }
-
+    
 .k {
     width: 200px; /* Set the desired width for the product images */
     height: 200px; /* Set the desired height for the product images */
