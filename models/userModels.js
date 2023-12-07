@@ -27,6 +27,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     cart: [
       {
         product: {
@@ -36,7 +37,7 @@ const userSchema = new Schema(
         quantity: Number,
       },
     ],
-    wallet: { type: mongoose.Schema.Types.ObjectId, ref: 'Wallet' },
+    wallet: { type: mongoose.Schema.Types.ObjectId, ref: "Wallet" },
     addresses: [
       {
         type: mongoose.Schema.Types.ObjectId,
