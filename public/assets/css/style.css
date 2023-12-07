@@ -840,9 +840,9 @@ label{
     transition: all 0.3s ease 0s;
 }
 .product-action a {
-    background-color: #383838;
+    background-color: #f9f2f2;
     border-radius: 100%;
-    color: #f7f7f7;
+  
     display: inline-block;
     font-size: 24px;
     height: 45px;
@@ -851,11 +851,11 @@ label{
     width: 45px;
 }
 .product-action a:hover {
-    background-color: #050035;
+    background-color: rgb(31, 200, 115);
     color: #fff;
 }
 .product-img > span {
-    background-color: #666;
+    background-color: #3b3b3b;
     border-radius: 100%;
     color: #fff;
     display: inline-block;

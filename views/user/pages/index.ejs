@@ -133,6 +133,11 @@
                                     <div class="product-img-3">
                                         <a href="product-details.html">
                                             <img src="<%= product.images[0].thumbnailUrl %>" alt="">
+                                           <% if(product.quantity==0){%>
+                                             <div class="mask text-danger d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5)">
+                                               <h4 class="fw-bolder " style="color: red;" >Currently Unavailable</h4>
+                                            </div>
+                                       <% }%>
                                         </a>
                                         <div class="product-action-right">
                                             <a class="animate-right" href="/viewProduct/<%= product?._id %>" title="Quick View">
