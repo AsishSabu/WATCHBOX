@@ -65,3 +65,30 @@ async function handleReturnAmount(product,price,order) {
     //     await wallet.save();
     //     await createWalletTransaction(wallet, orderTotal, orders.orderId);
     }
+
+
+    //----------cancel orders---------------------------------------------------
+
+    
+exports.handleCancelledOrder = async (product) => {
+    console.log("......................",product);
+    console.log(product.status);
+    console.log(product.isPaid);
+    if (product.isPaid !== "paid") {
+        
+     
+   
+    }else{
+        console.log('.................');
+      const quantity=product.quantity
+      product.product.quantity+=quantity
+      product.product.sold-=quantity
+      product.status=status.cancelled
+      await product.save()
+      
+      
+      
+    }
+  
+    return product
+  };

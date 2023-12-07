@@ -2,7 +2,6 @@ const expressHandler = require("express-async-handler");
 const Order = require("../../models/orderModel");
 const orderHelpers = require("../../helpers/orderHelpers");
 const { status } = require("../../utils/status");
-const orderHelper = require("../../helpers/orderHelpers");
 const AdminOrderHelpers = require("../../helpers/adminOrderHelpers.js");
 
 const orderPage = expressHandler(async (req, res) => {
@@ -49,7 +48,7 @@ const orderDetails = expressHandler(async (req, res) => {
         path: "user",
         modal: "User",
       });
-    console.log(order);
+    console.log("order");
     res.render("admin/pages/orderDetails", { title: "WATCHBOX", order });
   } catch (error) {
     throw new Error(error);
@@ -82,6 +81,7 @@ const orderStatus = expressHandler(async (req, res) => {
     const productItem = order.orderItems.find(
       (item) => String(item._id) === productIdString
     );
+    
     if(req.body.status===status.shipped||req.body.status===status.delivered)
     { 
       console.log(productItem);
@@ -97,7 +97,7 @@ const orderStatus = expressHandler(async (req, res) => {
     
   else if (req.body.status === status.cancelled) {
 
-      await orderHelper.handleCancelledOrder(productItem);
+      await AdminOrderHelpers.handleCancelledOrder(productItem);
     }
 
     if (req.body.status === status.returnPending) {

@@ -4,6 +4,7 @@ const adminController = require("../controllers/admin/adminController");
 const categoryController = require("../controllers/admin/categoryController");
 const productController = require("../controllers/admin/productControllers");
 const orderCOntroller = require("../controllers/admin/orderController");
+const salesController=require("../controllers/admin/salesReportController")
 const { upload, handleError } = require("../config/upload");
 const {
   isAdminLoggedOut,
@@ -139,6 +140,12 @@ adminRoute.post(
   isAdminLoggedin,
   bannerController.unlistBanner
 );
+
+//-----------------------salesreports--------------------
+
+adminRoute.get("/sales-reports", isAdminLoggedin, salesController.salesReportpage)
+// adminRoute.get("/sales-data-weekly", salesController.getSalesData);
+adminRoute.get("/get/sales-report", salesController.generateSalesReport);
 
 // 404 notfound page--
 adminRoute.get('*',(req,res)=>{

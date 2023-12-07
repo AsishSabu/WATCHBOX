@@ -6,6 +6,7 @@ const asynchandler = require("express-async-handler");
 const Orders = require("../../models/orderModel");
 const orderHelpers = require("../../helpers/orderHelpers");
 const {status} = require("../../utils/status");
+const { Timestamp } = require("mongodb");
 
 const orderPage = asynchandler(async (req, res) => {
   try {
@@ -18,7 +19,8 @@ const orderPage = asynchandler(async (req, res) => {
         select: "title images",
         populate: { path: "images" },
       })
-      .select("orderId orderItems orderedDate shippingAddress town");
+      .select("orderId orderItems orderedDate shippingAddress town").sort({
+        orderedDate:-1});
 
     res.render("./user/pages/orders", { title: "WATCHBOX", orders, user });
   } catch (error) {

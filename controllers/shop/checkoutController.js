@@ -66,12 +66,17 @@ const placeOrder = asynchandler(async (req, res) => {
       isWallet
     );
 
-    if (payment_method === "online_payment") {
+    if (payment_method === "cash_on_delivery") {
+      res.status(200).json({
+        message: "Order placed successfully",
+        orderId: newOrder._id,
+      });
+    } else if (payment_method === "online_payment") {
       console.log("in online payment ");
       const wallet = await Wallet.findOne({ user: userId });
       const user = await User.findById(req.user._id);
       let totalAmount = newOrder.totalPrice;
-    
+
       if (isWallet) {
         totalAmount -= wallet.balance;
         newOrder.paidAmount = totalAmount;
@@ -84,7 +89,7 @@ const placeOrder = asynchandler(async (req, res) => {
           amount: newOrder.wallet,
           type: "debit",
         });
-    
+
         // Associate the wallet transaction with the wallet
         wallet.transactions.push(walletTransaction._id);
         await wallet.save();
@@ -92,10 +97,10 @@ const placeOrder = asynchandler(async (req, res) => {
         // If not using wallet, update paid amount and save order
         newOrder.paidAmount = totalAmount;
       }
-    
+
       // Save the new order
       await newOrder.save();
-    
+
       // Create Razorpay order
       var instance = new Razorpay({
         key_id: process.env.RAZORPAY_ID_KEY,
@@ -111,7 +116,7 @@ const placeOrder = asynchandler(async (req, res) => {
           if (err) {
             res.status(500).json(err);
           }
-    
+
           res.status(200).json({
             message: "Order placed successfully",
             rzp_order,
@@ -122,8 +127,7 @@ const placeOrder = asynchandler(async (req, res) => {
           });
         }
       );
-    }
-     else if (payment_method === "wallet_payment") {
+    } else if (payment_method === "wallet_payment") {
       try {
         console.log("hi am in wallet");
         const wallet = await Wallet.findOne({ user: userId });
@@ -138,13 +142,13 @@ const placeOrder = asynchandler(async (req, res) => {
         // Associate the wallet transaction with the wallet
         wallet.transactions.push(walletTransaction._id);
         await wallet.save();
-    
+
         // Save the new order
-        newOrder.wallet=newOrder.totalPrice
+        newOrder.wallet = newOrder.totalPrice;
         await newOrder.save();
         console.log("neworder", newOrder);
 
-          res.status(200).json({
+        res.status(200).json({
           message: "Order placed successfully",
           orderId: newOrder._id,
         });
@@ -152,8 +156,7 @@ const placeOrder = asynchandler(async (req, res) => {
         console.error("Error processing wallet payment:", error);
         // Handle error appropriately
       }
-    }
-     else {
+    } else {
       res.status(400).json({ message: "Invalid payment method" });
     }
   } catch (error) {
@@ -179,26 +182,32 @@ const orderPlaced = asynchandler(async (req, res) => {
     if (order.payment_method === "cash_on_delivery") {
       for (const item of order.orderItems) {
         item.isPaid = "cod";
-        await item.save();
+        await order.save();
+        console.log("After update:", item.isPaid);
       }
     } else if (order.payment_method === "online_payment") {
+      console.log("in order placed online payment");
       for (const item of order.orderItems) {
+        console.log(item);
         item.isPaid = "paid";
-        await item.save();
+        await order.save();
+        console.log("After update:", item.isPaid);
+        console.log(order);
       }
 
       const wallet = await Wallet.findOne({ user: req.user._id });
       wallet.balance -= order.wallet;
       await wallet.save();
-      
     } else if (order.payment_method === "wallet_payment") {
       for (const item of order.orderItems) {
         item.isPaid = "paid";
-        await item.save();
+        await order.save();
+        console.log("After update:", item.isPaid);
+        console.log(order);
       }
-   
+
       const wallet = await Wallet.findOne({ user: req.user._id });
-   
+
       wallet.balance -= order.wallet;
       await wallet.save();
     }
