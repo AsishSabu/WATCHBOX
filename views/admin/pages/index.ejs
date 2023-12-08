@@ -1,6 +1,6 @@
 
+        <div class="mt-0">
         <div class="container-fluid">
-
             <div class="row">
                 <div class="col-sm-6 col-xl-3">
                   <div class="card overflow-hidden rounded-2">
@@ -91,10 +91,9 @@
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Revenue</h6>
-                                <span>$13,456.5</span>
-                                <span class="text-sm">
-                                    Shipping fees are not included
+                                <h3 class="mb-1 card-title">Total Sold Count</h3>
+                                <span class="text-sm fw-bolder">
+                                   <%=soldCount %>
                                 </span>
                             </div>
                         </article>
@@ -105,9 +104,9 @@
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Orders</h6> <span>53.668</span>
-                                <span class="text-sm">
-                                    Excluding orders in transit
+                                <h6 class="mb-1 card-title">Orders</h6>
+                                 <span class="text-sm fw-bolder">
+                                   <%=totalOrders%>
                                 </span>
                             </div>
                         </article>
@@ -118,9 +117,9 @@
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Products</h6> <span>9.856</span>
+                                <h6 class="mb-1 card-title">Products</h6> 
                                 <span class="text-sm">
-                                    In 19 Categories
+                                    <%= totalQuantity%>
                                 </span>
                             </div>
                         </article>
@@ -131,9 +130,9 @@
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Monthly Earning</h6> <span>$6,982</span>
+                                <h6 class="mb-1 card-title">Total Users</h6>
                                 <span class="text-sm">
-                                    Based in your local time.
+                                    <%= totalUsers%>
                                 </span>
                             </div>
                         </article>
@@ -233,6 +232,9 @@
               </div>
             </div>
           </div>
+          </div>
+          </div>
+        
           <!-- <div class="row">
             <div class="col-lg-4 d-flex align-items-stretch">
               <div class="card w-100">

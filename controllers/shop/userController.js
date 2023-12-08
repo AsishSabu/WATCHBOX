@@ -480,6 +480,27 @@ const newPassword = asynchandler(async (req, res) => {
   }
 });
 
+//-----------------------changing password page --------------------
+
+const changePassword = asynchandler(async (req, res) => {
+  try {
+    const email = req.user.email;
+    const user = await User.findOne({ email: email });
+    const resetToken = await user.createResetPasswordToken();
+    await user.save();
+    console.log(user);
+    const name = user.userName;
+    const sendToken = await otpSetup.sendToken(email, resetToken, name);
+
+    // Sending a response back to the client
+    res.status(200).json({ message: "Password change initiated successfully" });
+  } catch (error) {
+    // Handle errors and send an error response
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 //------------------------exported modules------------------------
 module.exports = {
   loadIndex,
@@ -505,4 +526,5 @@ module.exports = {
   resetPassword,
   loadnewPassword,
   newPassword,
+  changePassword
 };

@@ -70,8 +70,11 @@
                 
               <h4 class="text-uppercase"> <span style="color: red;">NAME: </span> <span style="color: green;">----<%=user.userName %>-----</span> </h4>
               <p> <span style="color: red;">EMAIL: </span> <span style="color: green;">----<%=user.email %>-----</span> </p>
-              <button type="button" class="btn btn-dark " data-mdb-toggle="modal" data-mdb-target="#exampleModal">
+              <button type="button" class="btn btn-dark" data-mdb-toggle="modal" data-mdb-target="#exampleModal">
                 Edit
+              </button>
+              <button type="button" class="btn btn-link" id="change">
+                Change Password
               </button>
             </div>
             
@@ -189,3 +192,61 @@
     margin-top: 15%;
   }
 </style>
+<script>
+  document.getElementById("change").addEventListener("click", ()=>{
+    Swal.fire({
+  title: "Are you sure? to change password",
+  // text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes",
+  cancelButtonText: "No"
+}).then((result) => {
+  if (result.isConfirmed) {
+    // window.location.href = "/changePassword"
+     fetch("/changePassword", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error("Failed");
+      }
+    })
+    .then((responseData) => {
+      if (responseData) {
+      let timerInterval;
+Swal.fire({
+  title: "Reset Password Link Send To",
+  html: "<%=user.email%>",
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading();
+    const timer = Swal.getPopup().querySelector("b");
+    timerInterval = setInterval(() => {
+      timer.textContent = `${Swal.getTimerLeft()}`;
+    }, 200);
+  },
+  willClose: () => {
+    clearInterval(timerInterval);
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log("I was closed by the timer");
+  }
+});
+        
+      }
+    })
+    .catch((error) => {
+      console.error("An error occurred:", error);
+    });
+  }
+});
+  })
+</script>

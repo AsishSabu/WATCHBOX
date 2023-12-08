@@ -71,6 +71,7 @@ userRoute.post("/forgotPassword", usercontroller.forgotPassword);
 userRoute.post("/resetPassword/:id", usercontroller.resetPassword);
 userRoute.get("/newPassword", usercontroller.loadnewPassword);
 userRoute.post("/newPassword", usercontroller.newPassword);
+userRoute.get("/changePassword",ensureAuthenticated,usercontroller.changePassword)
 
 //-------------------------whislist
 userRoute.get("/whishlist", ensureAuthenticated, shopController.loadWhishlist);
