@@ -11,7 +11,8 @@ function toggleWishlist(productId) {
   $.ajax({
     type: "GET",
     url: `/addTo-wishlist/${productId}`,
-    success: function (response) {
+      success: function (response) {
+         location.reload();
       if (response.success) {
         fixedDiv.style.display = "block";
         fixedDiv.style.color = "red";
@@ -22,7 +23,8 @@ function toggleWishlist(productId) {
         // setTimeout(function () {
         //   hide();
         //   wishlistAnimate.classList.remove("added");
-        // }, 3000);
+          // }, 3000);
+       
       } else {
         fixedDiv.style.color = "";
         fixedDiv.style.display = "block";
@@ -30,7 +32,8 @@ function toggleWishlist(productId) {
         wishlistMessage.innerText = response.message;
          wishlist.style.backgroundColor = "white";;
         setTimeout(hide, 3000);
-      }
+        }
+       
     },
     error: function (textStatus, errorThrown) {
       console.log(
