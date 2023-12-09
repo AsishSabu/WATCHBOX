@@ -23,7 +23,7 @@ const cartPage = asynchandler(async (req, res) => {
       console.log(cartItems.products);
       const { subtotal, total } = calculateCartTotals(cartItems.products);
       res.render("./user/pages/checkout", {
-        title: "WATCHBOX",
+        title: "WATCHBOX/CHECKOUT",
         address: user.addresses,
         product: cartItems.products,
         total,

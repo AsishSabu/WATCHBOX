@@ -59,6 +59,7 @@
         <thead>
             <tr>
                 <th>Date</th>
+                <th>Order Id</th>
                 <th>Event</th>
                 <th>Type</th>
                 <th>Amount</th>
@@ -70,10 +71,14 @@
                 <td><%= (transaction.timestamp).toLocaleDateString('en-IN', { year: 'numeric' , month: 'long' ,
                     day: 'numeric' ,hour:'numeric',minute:'numeric' }) %></td>
 
-                <td><span><%transaction.event%></span>
+                <td>
                     <% if (transaction.orderId) { %>
                     <small class="text-secondary"><%= transaction.orderId %> <% } %></small>
                     </td>
+                    <td>
+                       <% if(transaction.event=="returned"){%>
+                        <span class="text-danger"><%=transaction.event%></span> <% }else if(transaction.event=="Order Placed"){%>   <span class="text-success"><%=transaction.event%></span> <% }else{%><span class="text-warning"><%=transaction.event%></span> <% } %></td>
+                    
                     <% if (transaction.type === "credit") { %>
                 <td class="text-success"><%= transaction.type %></td>
                 <% } else { %>

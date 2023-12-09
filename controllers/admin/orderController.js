@@ -60,6 +60,7 @@ const orderDetails = expressHandler(async (req, res) => {
 const orderStatus = expressHandler(async (req, res) => {
   const productId = req.params.id;
   const orderId = req.body.orderId;
+ 
   const newStatus = req.body.status;
   console.log(newStatus);
 
@@ -96,11 +97,13 @@ const orderStatus = expressHandler(async (req, res) => {
 
     
   else if (req.body.status === status.cancelled) {
+    
 
-      await AdminOrderHelpers.handleCancelledOrder(productItem);
+      await AdminOrderHelpers.handleCancelledOrder(productItem,order);
     }
 
     if (req.body.status === status.returnPending) {
+      console.log("going to handle return order");
       await AdminOrderHelpers.handleReturnedOrder(productItem,order);
     }
     await order.save();

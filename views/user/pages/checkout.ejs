@@ -153,7 +153,7 @@
                     <% } else { %> <small> <%= item.product.title %> </small> <%
                     } %>
                     <strong class="product-quantity">
-                      × <%=item.quantity %></strong
+                      <%=item.quantity %></strong
                     >
                   </td>
                   <td class="product-total">
@@ -170,7 +170,7 @@
                   <th>Cart Subtotal</th>
                   <td><span class="amount">₹ <%= subtotal %></span></td>
                 </tr>
-                <%if(wallet.balance<total) {%>
+               
                  <tr class="wallet-payment">
                                             <td colspan="2">
                                                 <div class="wallet-info d-flex justify-content-between align-items-center">
@@ -192,7 +192,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <% } %>
+                                    
                 <tr class="order-total">
                   <th>Order Total</th>
                   <td>
@@ -228,7 +228,7 @@
                   >
                     Pay with Razorypay
                   </button>
-                <% if(wallet.balance>=total){ %>
+        
                   <button
                     class="btn btn-success h-auto rounded-0 fw-bold"
                     style="padding: 12px"
@@ -238,7 +238,7 @@
                   >
                     Pay With Wallet
                   </button>
-                  <%}%>
+             
                 </div>
               </div>
             </div>
@@ -508,10 +508,12 @@
 
 
     function handleWalletPayment() {
+      const wallet = document.getElementById("wallet");
       const wltBtn = document.getElementById("wlt-button");
       const availableBalance = document.getElementById("available-balance");
-       if(availableBalance.innerText<0){
-        wallet.disabled
+      if(wallet){
+   if(availableBalance&&availableBalance.innerText<=0){
+        wallet.disabled=true
         wltBtn.style.display = "none";
        }
 
@@ -519,14 +521,17 @@
             wallet.addEventListener("change", handlePaymentChange);
          
         }
+      }
+    
 
         function handlePaymentChange() {
+          const wallet = document.getElementById("wallet");
             const totalAmount = document.getElementById("total");
             const walletAmount = document.getElementById("wallet-amount");
             const codBtn = document.getElementById("cod-button");
 
             const rzpBtn = document.getElementById("rzp-button");
-            const payWithWallet = this.checked ? true : false;
+             const payWithWallet = wallet.checked;
     
             if (payWithWallet) {
                 codBtn.classList.add("d-none");
@@ -543,10 +548,11 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
-                  console.log(data);
+                  console.log("..........................");
+                  console.log(data,"data");
+                  
                     totalAmount.innerText = data.total.toFixed(2);
                     walletAmount.innerText = data.usedFromWallet.toFixed(2);
-                    availableBalance.innerText = data.walletBalance.toFixed(2);
                     if (data.total === 0) {
                         wltBtn.style.display = "grid";
                         rzpBtn.style.display = "none";
@@ -554,6 +560,7 @@
                         wltBtn.style.display = "none";
                         rzpBtn.style.display = "grid";
                     }
+                   
                 })
                 .catch((error) => {
                     console.error("Error updating checkout page:", error);
