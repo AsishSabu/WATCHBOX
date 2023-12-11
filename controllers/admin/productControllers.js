@@ -98,6 +98,7 @@ const insertProduct = asynchandler(async (req, res) => {
   }
 });
 
+
 //------------------------------------list products--------------------------------
 const listProduct = asynchandler(async (req, res) => {
   const id = req.params.id;

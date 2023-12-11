@@ -157,7 +157,10 @@
                       </select>
                     </div>
                   </div>
-                  <div id="chart"></div>
+                 <div>
+  <canvas id="myChart"></canvas>
+</div>
+ 
                 </div>
               </div>
             </div>
@@ -233,6 +236,8 @@
             </div>
           </div>
           </div>
+
+            
           </div>
         
           <!-- <div class="row">
@@ -404,6 +409,52 @@
               </div>
             </div>
           </div> -->
+           <input type="hidden" id="salesData" value="<%= JSON.stringify(salesData) %>">
+              <input type="hidden" id="usersData" value="<%= JSON.stringify(usersData) %>">
+                    <input type="hidden" id="productSold" value="<%= JSON.stringify(productSold) %>">
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script>
+  const ctx = document.getElementById('myChart');
+
+(async function() {
+  const data = [
+    { year: 2010, count: 10 },
+    { year: 2011, count: 20 },
+    { year: 2012, count: 15 },
+    { year: 2013, count: 25 },
+    { year: 2014, count: 22 },
+    { year: 2015, count: 30 },
+    { year: 2016, count: 28 },
+  ];
+
+  new Chart(
+    document.getElementById('myChart'),
+       {
+      type: 'bar',
+      options: {
+        animation: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: false
+          }
+        }
+      },
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+  );
+})();
+</script> -->
 
 
 

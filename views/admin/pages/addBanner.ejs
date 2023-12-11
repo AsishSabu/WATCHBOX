@@ -47,40 +47,23 @@
       </select>
     </div>
 
-    <div class="mb-3">
-      <label for="product-images" class="form-label">Product Images</label>
-      <input
-        type="file"
-        class="form-control"
-        id="product-images"
-        name="bannerImage"
-      
-        accept="image/*"
-        multiple
-        style="display: none"
-      />
-      <div id="image-preview" class="d-flex flex-wrap gap-3"></div>
- 
-      <button
-        type="button"
-        class="btn btn-sm btn-primary mt-2"
-        onclick="document.getElementById('product-images').click()"
-      >
-        Select Images
-      </button>
-      <div id="imageerr" class="text-danger text-center"></div>
-    </div>
-    <div id="cropper-container" style="display: none;"></div>
-    <input
-    type="hidden"
-    class="form-control"
-    id="product-images"
-     name="bannerImages" 
-    accept="image/*"
-    multiple
-    style="display: none"
-  />
+    <!-- Add this inside the form, after the mainImage input -->
+<div class="card mb-1">
+  <div class="input-upload">
+    <label for="mainImage">Main Product Image:</label>
+    <input id="mainImage" name="mainImage" class="form-control" type="file" accept=".jpg, .jpeg, .png">
+    <span class="error-message" id="mainImage-error"></span>
 
+    <!-- Image cropping section -->
+    <div id="cropContainer" style="display: none;width: 300px;height: 250px;">
+      <label>Crop Image:</label>
+      <div>
+        <img id="cropImage" src="" alt="Crop Preview" style="max-width: 40%;">
+      </div>
+      <button type="button" style="background-color: #007BFF; margin-top:10px white;border: none;border-radius: 10px;width: 100px;height: 50px;font-size: medium;" id="applyCrop">Apply Crop</button>
+    </div>
+  </div>
+</div>
 
     <button type="submit" class="btn btn-primary">Add Banner</button>
   </form>
@@ -139,7 +122,7 @@
     </style>
   </div>
 </div>
-<script>
+<!-- <script>
   document.getElementById("product-images").addEventListener("change", function () {
     const previewContainer = document.getElementById("image-preview");
     const cropperContainer = document.getElementById("cropper-container");
@@ -258,7 +241,70 @@
 
   // Append the Cropper.js container to the form
   document.getElementById("cropper-container").appendChild(cropperContainer);
-</script>
+</script> -->
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('mainImage');
+  const image = document.getElementById('cropImage');
+  const container = document.getElementById('cropContainer');
+  const applyCropBtn = document.getElementById('applyCrop');
+  let cropper;
+
+  input.addEventListener('change', function () {
+    const file = this.files[0];
+
+    if (file) {
+      // Destroy the existing Cropper instance if it exists
+      if (cropper) {
+        cropper.destroy();
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        image.src = e.target.result;
+        container.style.display = 'block';
+
+        // Initialize Cropper.js
+        cropper = new Cropper(image, {
+          aspectRatio: 1, // Set your desired aspect ratio
+          viewMode: 2,    // Set your desired view mode
+        });
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+
+  applyCropBtn.addEventListener('click', function () {
+    if (cropper) {
+      // Get the cropped data (base64 format)
+      const croppedData = cropper.getCroppedCanvas().toDataURL();
+
+      // Clear previous hidden input
+      const previousHiddenInput = document.getElementById('croppedImage');
+      if (previousHiddenInput) {
+        previousHiddenInput.remove();
+      }
+
+      // Add a new hidden input with the cropped data
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.id = 'croppedImage';
+      hiddenInput.name = 'croppedImage';
+      hiddenInput.value = croppedData;
+      document.getElementById('cropContainer').appendChild(hiddenInput);
+
+      // You can also update the mainImage input value if needed
+      // document.getElementById('mainImage').value = croppedData;
+
+      // Hide the crop container
+      container.style.display = 'none';
+    }
+  });
+});
+
+    </script>
 
 
 

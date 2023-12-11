@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (dec === "") {
       decerr.textContent = "Field is required";
     } else if (dec.length < 10) {
-      decerr.textContent = "Name must be at least 10 characters";
+      decerr.textContent = "Description must be at least 10 characters";
     } else {
       decerr.textContent = "";
     }
@@ -239,30 +239,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
   descriptionInput.addEventListener("blur", validateDec);
 
-  function validateProductPrice() {
-    const price = productPriceInput.value.trim();
-    if (price === "") {
-      productPriceErr.textContent = "Field is required";
-    } else if (price <= 0) {
-      productPriceErr.textContent = "Price should be a positive number";
-    } else {
-      productPriceErr.textContent = "";
-    }
+function validateProductPrice() {
+  const price = parseFloat(productPriceInput.value.trim());
+
+  if (isNaN(price)) {
+    productPriceErr.textContent = "Please enter a valid number for the product price";
+  } else if (price <= 0) {
+    productPriceErr.textContent = "Price should be a positive number";
+  } else {
+    productPriceErr.textContent = "";
   }
+}
+
 
   productPriceInput.addEventListener("blur", validateProductPrice);
 
-  function validateSalePrice() {
-    const price = salePrice.value.trim();
-    if (price === "") {
-      saleerr.textContent = "Field is required";
-    } else if (price <= 0) {
-      saleerr.textContent = "Price should be a positive number";
-    } else {
-      saleerr.textContent = "";
-    }
-  }
+ function validateSalePrice() {
+  const price = parseFloat(salePrice.value.trim());
 
+  if (isNaN(price)) {
+    saleerr.textContent = "Please enter a valid number";
+  } else if (price <= 0) {
+    saleerr.textContent = "Price should be a positive number";
+  } else {
+    saleerr.textContent = "";
+  }
+}
   salePrice.addEventListener("blur", validateSalePrice);
 
   function validateBrandName() {
@@ -277,16 +279,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   brand.addEventListener("blur", validateBrandName);
 
-  function validatequantity() {
-    const quantity = Quantity.value.trim();
-    if (quantity === "") {
-      Qerr.textContent = "Field is required";
-    } else if (quantity <= 0) {
-      Qerr.textContent = "Quantity should be a positive number";
-    } else {
-      Qerr.textContent = "";
-    }
+  function validateQuantity() {
+  const quantity = parseFloat(Quantity.value.trim());
+
+  if (isNaN(quantity)) {
+    Qerr.textContent = "Please enter a valid number for quantity";
+  } else if (quantity <= 0) {
+    Qerr.textContent = "Quantity should be a positive number";
+  } else {
+    Qerr.textContent = "";
   }
+}
 
   Quantity.addEventListener("blur", validatequantity);
 
@@ -312,8 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
       imageerr.textContent = "";
     }
   }
-
-  image.addEventListener("change", validateImage);
+image.addEventListener("change", validateImage);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -323,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
     validateName();
     validateProductPrice();
     validateSalePrice();
-    validatequantity();
+    validateQuantity();
     validateImage();
 
     const allErrors = [
@@ -336,11 +338,14 @@ document.addEventListener("DOMContentLoaded", function () {
       imageerr,
     ];
 
-    if (allErrors.every((error) => error.textContent === "")) {
+    // Check if there are any errors and if the number of files is within the limit
+    const isFormValid = allErrors.every((error) => error.textContent === "") && image.files.length > 0 && image.files.length <= 4;
+
+    if (isFormValid) {
       formerr.textContent = "";
       productForm.submit();
     } else {
-      alert("please provide appropriate date")
+      alert("Please provide appropriate data");
     }
   }
 
