@@ -3,6 +3,7 @@ const User = require("../../models/userModels");
 const asynchandler = require("express-async-handler");
 const Product = require("../../models/productModel");
 const Orders = require("../../models/orderModel");
+const graphHelpers=require("../../helpers/graphHelper")
 require("dotenv").config();
 
 // -------------------load Login------------------------
@@ -87,12 +88,23 @@ const loadIndex = asynchandler(async (req, res) => {
     console.log("Total quantity of all products:", totalQuantity);
     console.log("Total number of users:", totalUsers);
 
+
+    //-------------graph deatails----------------------------
+
+    const salesData = await graphHelpers.calculateSalesData(); 
+     const usersData = await graphHelpers.countUsers();
+     const productSold = await graphHelpers.calculateProductSold();
+    console.log("------------------------------------------------------------");
+    console.log(productSold);
+
     res.render("./admin/pages/index", {
       title: "WATCHBOX/INDEX",
       soldCount,
       totalOrders,
       totalQuantity,
       totalUsers,
+      salesData, usersData
+      ,productSold
     });
   } catch (error) {
     console.error("Error:", error);

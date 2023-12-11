@@ -1,37 +1,143 @@
 const asynchandler = require("express-async-handler");
 const product = require("../../models/productModel");
-const category = require("../../models/categoryModel");
+const Category = require("../../models/categoryModel");
 const User = require("../../models/userModels");
 
 //----------------------load shop page ---------------------------------------
 exports.loadShop = asynchandler(async (req, res) => {
-  try {
-    const user = req.user;
-    const categories = await category.find({ isListed: true });
-    const listedCategoryIds = categories.map((category) => category._id);
-    const products = await product
-      .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
-      .populate("images")
-      .limit(12);
+  // try {
+  //   const user = req.user;
+  //   const categories = await category.find({ isListed: true });
+  //   const listedCategoryIds = categories.map((category) => category._id);
+  //   const products = await product
+  //     .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
+  //     .populate("images")
+  //     .limit(12);
 
-    let userWishlist;
-    if (user) {
-      if (user.wishlist) {
-        userWishlist = user.wishlist;
+  //   let userWishlist;
+  //   if (user) {
+  //     if (user.wishlist) {
+  //       userWishlist = user.wishlist;
+  //     }
+  //   } else {
+  //     userWishlist = false;
+  //   }
+
+  //   res.render("./user/pages/shop", {
+  //     title: "WATCHBOX",
+  //     products,
+  //     categories,
+  //     userWishlist,
+  //   });
+  // } catch (error) {
+  //   throw new Error(error);
+  // }
+
+
+    try {
+      const user = req.user;
+      const page = req.query.p || 1;
+      const limit = 6;
+
+      const listedCategories = await Category.find({ isListed: true });
+      const categoryMapping = {};
+
+      listedCategories.forEach((category) => {
+        categoryMapping[category.categoryName] = category._id;
+      });
+      const filter = { isListed: true };
+     
+      if (req.query.category) {
+        // Check if the category name exists in the mapping
+        if (categoryMapping.hasOwnProperty(req.query.category)) {
+          filter.categoryName = categoryMapping[req.query.category];
+        } else {
+          filter.categoryName = cat;
+        }
       }
-    } else {
-      userWishlist = false;
-    }
 
-    res.render("./user/pages/shop", {
-      title: "WATCHBOX",
-      products,
-      categories,
-      userWishlist,
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
+      // Check if a search query is provided
+      if (req.query.search) {
+        filter.$or = [{ title: { $regex: req.query.search, $options: "i" } }];
+        // if search and category both included in the query parameters
+        if (req.query.search && req.query.category) {
+          console.log(req.query.category);
+          if (categoryMapping.hasOwnProperty(req.query.category)) {
+            filter.categoryName = categoryMapping[req.query.category];
+          } else {
+            filter.categoryName = cat;
+          }
+        }
+      }
+
+      let sortCriteria = {};
+
+      // Check for price sorting
+      if (req.query.sort === "lowtoHigh") {
+        sortCriteria.salePrice = 1;
+      } else if (req.query.sort === "highToLow") {
+        sortCriteria.salePrice = -1;
+      }
+      //filter by both category and price
+      if (req.query.category && req.query.sort) {
+        if (categoryMapping.hasOwnProperty(req.query.category)) {
+          filter.categoryName = categoryMapping[req.query.category];
+        } else {
+          filter.categoryName = cat;
+        }
+
+        if (req.query.sort) {
+          sortCriteria.salePrice = 1;
+        }
+        if (req.query.sort === "highToLow") {
+          sortCriteria.salePrice = -1;
+        }
+      }
+
+      const findProducts = await product.find(filter)
+        .populate("images")
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort(sortCriteria);
+
+      let userWishlist;
+      let cartProductIds;
+      if (user) {
+        if (user.cart || user.wishlist) {
+          cartProductIds = user.cart.map((cartItem) =>
+            cartItem.product.toString()
+          );
+          userWishlist = user.wishlist;
+        }
+      } else {
+        cartProductIds = null;
+        userWishlist = false;
+      }
+
+      const count = await product.find(filter)
+        // { categoryName: { $in: listedCategoryIds }, isListed: true })
+        .countDocuments();
+      let selectedCategory = [];
+      if (filter.categoryName) {
+        selectedCategory.push(filter.categoryName);
+      }
+      console.log("selected cat", selectedCategory);
+
+      res.render("./user/pages/shop", {
+          title: "WATCHBOX",
+        products: findProducts,
+        category: listedCategories,
+        cartProductIds,
+        user,
+        userWishlist,
+        currentPage: page,
+        totalPages: Math.ceil(count / limit), // Calculating total pages
+        selectedCategory,
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  
 });
 
 //--------------------------load product details-------------------------------

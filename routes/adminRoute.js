@@ -127,7 +127,7 @@ adminRoute.get("/addBanner", isAdminLoggedin, bannerController.loadAddBanner);
 adminRoute.post(
   "/addBanner",
   isAdminLoggedin,
-  upload.single("bannerImage"),
+  upload.single("mainImage"),
   bannerController.createBanner
 );
 adminRoute.post(

@@ -5,43 +5,43 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  orderItems: [{
-    quantity: {
-      type: Number,
-      required: true,
+  orderItems: [
+    {
+      quantity: {
+        type: Number,
+        required: true,
+      },
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
+      status: {
+        type: String,
+
+        default: "Pending",
+        required: true,
+      },
+      isPaid: {
+        type: String,
+        enum: ["paid", "cod", "pending"],
+        default: "pending",
+        required: true,
+      },
+      shippedDate: {
+        type: Date,
+      },
+      deliveryDate: {
+        type: Date,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now(),
+      },
     },
-    product: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-    },
-    price: {
-      type: String,
-      required: true,
-    },
-    status: {
-      type: String,
-     
-      default: "Pending",
-      required:true,
-      
-    },
-    isPaid: {
-      type: String,
-      enum: ["paid", "cod", "pending"],
-      default: "pending",
-      required: true,
-  },
-    shippedDate: {
-      type: Date,
-    },
-    deliveryDate: {
-      type: Date,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
-   }
   ],
   shippingAddress: {
     name: {
@@ -88,12 +88,12 @@ const orderSchema = new mongoose.Schema({
   },
   wallet: {
     type: Number,
-    default: 0
-},
- 
+    default: 0,
+  },
+
   paidAmount: {
-      type: Number,
-      default: 0,
+    type: Number,
+    default: 0,
   },
 });
 
