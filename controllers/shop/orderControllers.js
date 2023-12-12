@@ -67,7 +67,7 @@ const cancelOrder = asynchandler(async (req, res) => {
   try {
     const orderId = req.params.id;
     console.log(orderId);
-    const order = await Orders.findByIdAndRemove(orderId)
+    
     res.redirect("back")
    
   } catch (error) {

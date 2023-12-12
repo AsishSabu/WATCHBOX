@@ -4,7 +4,7 @@ const adminController = require("../controllers/admin/adminController");
 const categoryController = require("../controllers/admin/categoryController");
 const productController = require("../controllers/admin/productControllers");
 const orderCOntroller = require("../controllers/admin/orderController");
-const salesController=require("../controllers/admin/salesReportController")
+const salesController = require("../controllers/admin/salesReportController");
 const { upload, handleError } = require("../config/upload");
 const {
   isAdminLoggedOut,
@@ -143,18 +143,24 @@ adminRoute.post(
 
 //-----------------------salesreports--------------------
 
-adminRoute.get("/sales-reports", isAdminLoggedin, salesController.salesReportpage)
+adminRoute.get(
+  "/sales-reports",
+  isAdminLoggedin,
+  salesController.salesReportpage
+);
 // adminRoute.get("/sales-data-weekly", salesController.getSalesData);
 adminRoute.get("/get/sales-report", salesController.generateSalesReport);
+adminRoute.get("/sales-data", salesController.getSalesData);
+adminRoute.get("/sales-data/weekly", salesController.getSalesDataWeekly);
+adminRoute.get("/sales-data/yearly", salesController.getSalesDataYearly);
 
-// 404 notfound page--
-adminRoute.get('*',(req,res)=>{
+// // 404 notfound page--
+adminRoute.get("*", (req, res) => {
   try {
-    res.render('./admin/pages/404',{title:'Error..',})
+    res.render("./admin/pages/404", { title: "Error.." });
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
- })
-
+});
 
 module.exports = adminRoute;
