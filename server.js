@@ -49,10 +49,12 @@ app.use(flash());
 app.use(nocache());
 
 const userRoute = require('./routes/userRoutes');
+
+const adminRoute = require("./routes/adminRoute");
+app.use("/admin", adminRoute);
 app.use('/', userRoute);
 
-const adminRoute = require('./routes/adminRoute');
-app.use('/admin', adminRoute);
+
 
 app.use(errorHandler);
 

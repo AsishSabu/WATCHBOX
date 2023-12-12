@@ -214,12 +214,6 @@ userRoute.get("/test", (req, res) => {
 });
 
 // 404 notfound page--
-// userRoute.get('*',(req,res)=>{
-//   try {
-//     res.render('./user/pages/404',{title:'Error..',})
-//   } catch (error) {
-//     throw new Error(error)
-//   }
-//  })
+userRoute.get("*", (req, res) => {res.render("./user/pages/404", { title: "Error.." })});
 
 module.exports = userRoute;
