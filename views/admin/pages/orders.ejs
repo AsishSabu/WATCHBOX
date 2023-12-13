@@ -5,6 +5,7 @@
         <th>S.No</th>
         <th>Order ID</th>
         <th>Shipping Details</th>
+        <th>Payment</th>
         <th>Date</th>
         <th>Price</th>
         <th>Actions</th>
@@ -19,6 +20,7 @@
           <p><%= order.shippingAddress.name %>,</p>
           <p><%= order.shippingAddress.address %></p>
         </td>
+         <td><%=order.payment_method%></td>
         <td>
           <%= new Date(order.orderedDate).toLocaleDateString('en-US', { year:
           'numeric', month: 'long', day: 'numeric' }) %>

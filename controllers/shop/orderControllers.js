@@ -65,14 +65,22 @@ const viewOrder = asynchandler(async (req, res) => {
 
 const cancelOrder = asynchandler(async (req, res) => {
   try {
-    console.log("haiiiii");
-    const orderId = req.params.id;
+     const orderId = req.params.id;
     const productId = req.body.productId;
-    
-    console.log(productId);
-    
-    res.redirect("back")
+    const order = await orderHelpers.getSingleOrder(orderId);
+    const productIdString = String(productId); //finding matching productId from orderDb
+    const productItem = order.orderItems.find(
+      (item) => String(item.product._id) === productIdString
+    );
+    if (!productItem) {
+      console.log("no product find to cancel");
+    } else {
+      productItem.status = status.cancelPending;
    
+      await order.save();
+  
+      return res.redirect(`/order`);
+    }
   } catch (error) {
     throw new Error(error);
   }

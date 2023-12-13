@@ -67,12 +67,14 @@
                         <% } else if (item.status === "Shipped") { %>
                         <p><strong class="bg-primary text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
                         <% } else if (item.status === "Delivered") { %>
-                        <p><strong class="bg-success text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <p><strong class="bg-success text-whitepx-3 py-2 rounded-pill"><%= item.status %></strong></p>
                         <% } else if (item.status === "Cancel Requested") { %>
-                        <p><strong class="bg-danger text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <p><strong class="bg-danger text-white  d-flex  px-3 py-2 rounded-pill"><%= item.status %></strong></p>
                         <% } else if (item.status === "Returned") { %>
                         <p><strong class="bg-info text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
-                        <% } %>
+                         <% } else if (item.status === "Return Requested") { %>
+                        <p><strong class="bg-info text-white d-flex px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% }%>
                     </div>
                     <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
                         <p><strong>Quantity:</strong> <%= item.quantity %></p>
@@ -140,7 +142,7 @@
                     <div class="col-md-2 d-flex flex-column justify-content-center">
                         <img
                             style="width: 100px; height: 100px"
-                            src="/admin/assets/imgs/icons/refunded.svg"
+                             src="/admin/images/signs/return_icon.png"
                             alt="Cancelled"
                             class="icon"
                         />

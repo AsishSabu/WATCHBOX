@@ -18,7 +18,9 @@ const orderPage = expressHandler(async (req, res) => {
           },
         },
       })
-      .select("orderId orderedDate shippingAddress city zip totalPrice")
+      .select(
+        "orderId orderedDate shippingAddress city zip totalPrice payment_method"
+      )
       .sort({ _id: -1 });
    
     res.render("admin/pages/orders", { title: "WATCHBOX", orders });
