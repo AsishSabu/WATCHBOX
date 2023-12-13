@@ -91,7 +91,7 @@ const loadIndex = asynchandler(async (req, res) => {
 
     //-------------graph deatails----------------------------
 
-    const salesData = await graphHelpers.calculateSalesData(); 
+  
      const usersData = await graphHelpers.countUsers();
      const productSold = await graphHelpers.calculateProductSold();
     console.log("------------------------------------------------------------");
@@ -103,7 +103,7 @@ const loadIndex = asynchandler(async (req, res) => {
       totalOrders,
       totalQuantity,
       totalUsers,
-      salesData, usersData
+       usersData
       ,productSold
     });
   } catch (error) {

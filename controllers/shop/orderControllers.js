@@ -19,8 +19,8 @@ const orderPage = asynchandler(async (req, res) => {
         select: "title images",
         populate: { path: "images" },
       })
-      .select("orderId orderItems orderedDate shippingAddress town").sort({
-        orderedDate:-1});
+      .select("orderId orderItems orderedDate shippingAddress town createdAt").sort({ _id: -1 });
+     console.log(orders);
 
     res.render("./user/pages/orders", { title: "WATCHBOX", orders, user });
   } catch (error) {
@@ -65,8 +65,11 @@ const viewOrder = asynchandler(async (req, res) => {
 
 const cancelOrder = asynchandler(async (req, res) => {
   try {
+    console.log("haiiiii");
     const orderId = req.params.id;
-    console.log(orderId);
+    const productId = req.body.productId;
+    
+    console.log(productId);
     
     res.redirect("back")
    
