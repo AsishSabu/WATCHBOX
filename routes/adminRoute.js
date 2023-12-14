@@ -4,18 +4,16 @@ const adminController = require("../controllers/admin/adminController");
 const categoryController = require("../controllers/admin/categoryController");
 const productController = require("../controllers/admin/productControllers");
 const orderCOntroller = require("../controllers/admin/orderController");
-const salesController = require("../controllers/admin/salesReportController");
-const { upload, handleError } = require("../config/upload");
-const {
-  isAdminLoggedOut,
-  isAdminLoggedin,
-} = require("../middleware/adminAuth");
 const bannerController = require("../controllers/admin/bannerControl");
+const salesController = require("../controllers/admin/salesReportController");
+const couponController = require("../controllers/admin/couponController")
 
-adminRoute.use((req, res, next) => {
-  req.app.set("layout", "admin/layout/admin");
-  next();
-});
+
+const { upload, handleError } = require("../config/upload");
+const {isAdminLoggedOut,isAdminLoggedin,} = require("../middleware/adminAuth");
+
+
+adminRoute.use((req, res, next) => {req.app.set("layout", "admin/layout/admin");next();});
 
 //-------------------admin login ------------------------
 
@@ -29,66 +27,26 @@ adminRoute.get("/index", isAdminLoggedin, adminController.loadIndex);
 adminRoute.get("/userlist", isAdminLoggedin, adminController.userManagement);
 adminRoute.post("/search", isAdminLoggedin, adminController.searchUser);
 adminRoute.post("/blockUser/:id", isAdminLoggedin, adminController.blockUser);
-adminRoute.post(
-  "/unblockUser/:id",
-  isAdminLoggedin,
-  adminController.unblockUser
-);
+adminRoute.post( "/unblockUser/:id",isAdminLoggedin,adminController.unblockUser);
 
 //-----------------------admin product management ----------------------------------------------------------------
 
 adminRoute.get("/products", isAdminLoggedin, productController.loadProduct);
 adminRoute.get("/addProduct", isAdminLoggedin, productController.addProduct);
-adminRoute.post(
-  "/addProduct",
-  upload.fields([{ name: "images", maxCount: 4 }]),
-  productController.insertProduct
-);
-adminRoute.post(
-  "/product/list/:id",
-  isAdminLoggedin,
-  productController.listProduct
-);
-adminRoute.post(
-  "/product/unlist/:id",
-  isAdminLoggedin,
-  productController.unListProduct
-);
-adminRoute.get(
-  "/product/editProduct/:id",
-  isAdminLoggedin,
-  productController.editProduct
-);
-adminRoute.post(
-  "/product/editProduct/:id",
-  isAdminLoggedin,
-  productController.updateProduct
-);
-adminRoute.put(
-  "/product/editImage/:id",
-  isAdminLoggedin,
-  upload.single("images"),
-  productController.editImage
-);
-adminRoute.put(
-  "/product/editImage/upload/:id",
-  upload.fields([{ name: "images", maxCount: 4 }]),
-  isAdminLoggedin,
-  productController.addNewImages
-);
-adminRoute.delete(
-  "/product/deleteImage/:id",
-  isAdminLoggedin,
-  productController.deleteImage
-);
+adminRoute.post("/addProduct",upload.fields([{ name: "images", maxCount: 4 }]),productController.insertProduct);
+adminRoute.post("/product/list/:id",isAdminLoggedin,productController.listProduct);
+adminRoute.post("/product/unlist/:id",isAdminLoggedin,productController.unListProduct);
+adminRoute.get("/product/editProduct/:id",isAdminLoggedin,productController.editProduct);
+adminRoute.post("/product/editProduct/:id",isAdminLoggedin,productController.updateProduct);
+adminRoute.put("/product/editImage/:id",isAdminLoggedin,upload.single("images"),productController.editImage);
+adminRoute.put("/product/editImage/upload/:id",upload.fields([{ name: "images", maxCount: 4 }]),isAdminLoggedin,productController.addNewImages);
+adminRoute.delete("/product/deleteImage/:id",isAdminLoggedin,productController.deleteImage);
 // adminRoute.post('/product/editProduct/editImage/:id',uploadSingle,isAdminLoggedin,productController.editProductImages)
 // adminRoute.post("/editproduct/images/upload/new/:id", uploadMultiple, productController.addNewImages);
 
 //---------------------admin category management ----------------------------------------------------------------
 
-adminRoute.get(
-  "/category",
-  isAdminLoggedin,
+adminRoute.get("/category",isAdminLoggedin,
   categoryController.categoryManagement
 );
 adminRoute.get("/addCategory", isAdminLoggedin, categoryController.addCategory);
@@ -149,10 +107,17 @@ adminRoute.get(
   salesController.salesReportpage
 );
 // adminRoute.get("/sales-data-weekly", salesController.getSalesData);
-adminRoute.get("/get/sales-report", salesController.generateSalesReport);
-adminRoute.get("/sales-data", salesController.getSalesData);
-adminRoute.get("/sales-data/weekly", salesController.getSalesDataWeekly);
-adminRoute.get("/sales-data/yearly", salesController.getSalesDataYearly);
+adminRoute.get("/get/sales-report", isAdminLoggedin,salesController.generateSalesReport);
+adminRoute.get("/sales-data", isAdminLoggedin, salesController.getSalesData);
+adminRoute.get("/sales-data/weekly", isAdminLoggedin, salesController.getSalesDataWeekly);
+adminRoute.get("/sales-data/yearly", isAdminLoggedin, salesController.getSalesDataYearly);
+
+
+//-------------------------------coupon routes-------------------------------
+
+
+adminRoute.get("/addCoupon", isAdminLoggedin,couponController.loadAddCoupon)
+
 
 // // 404 notfound page--
 adminRoute.get("*", (req, res) => {

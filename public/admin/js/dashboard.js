@@ -276,7 +276,7 @@
             data: chartDataUsers.counts,
           },
           {
-            label: "Products",
+            label: "Products Sold",
             tension: 0.3,
             fill: true,
             backgroundColor: "rgba(380, 200, 230, 0.2)",

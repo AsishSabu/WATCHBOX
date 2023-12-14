@@ -4,5 +4,8 @@
   "editor.formatOnType": true,
   "editor.formatOnPaste": true,
   "editor.defaultFoldingRangeProvider": "ms-vscode.cpptools",
-  "editor.fontFamily": " MonoLisa"
+  "editor.fontFamily": " MonoLisa",
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

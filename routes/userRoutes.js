@@ -71,7 +71,11 @@ userRoute.post("/forgotPassword", usercontroller.forgotPassword);
 userRoute.post("/resetPassword/:id", usercontroller.resetPassword);
 userRoute.get("/newPassword", usercontroller.loadnewPassword);
 userRoute.post("/newPassword", usercontroller.newPassword);
-userRoute.get("/changePassword",ensureAuthenticated,usercontroller.changePassword)
+userRoute.get(
+  "/changePassword",
+  ensureAuthenticated,
+  usercontroller.changePassword
+);
 
 //-------------------------whislist
 userRoute.get("/whishlist", ensureAuthenticated, shopController.loadWhishlist);
@@ -214,6 +218,8 @@ userRoute.get("/test", (req, res) => {
 });
 
 // 404 notfound page--
-userRoute.get("*", (req, res) => {res.render("./user/pages/404", { title: "Error.." })});
+userRoute.get("*", (req, res) => {
+  res.render("./user/pages/404", { title: "Error.." });
+});
 
 module.exports = userRoute;
