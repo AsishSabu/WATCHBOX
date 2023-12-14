@@ -2,38 +2,7 @@ const Order = require("../models/orderModel")
 const User = require("../models/userModels")
 const Product=require("../models/productModel")
 
-async function calculateSalesData() {
-     const sale = await Order.aggregate([
-       {
-         $unwind: "$orderItems", // Deconstruct the items array
-       },
-       {
-         $match: {
-           "orderItems.status": "Delivered",
-         },
-       },
-       {
-         $group: {
-           _id: {
-             year: { $year: "$orderedDate" },
-             month: { $month: "$orderedDate" },
-           },
-           count: {
-             $sum: "$orderItems.price",
-           },
-         },
-       },
-       {
-         $project: {
-           _id: 0,
-           year: "$_id.year",
-           month: "$_id.month",
-           count: 1,
-         },
-       },
-     ]);
-     return sale;
-}
+
 
 
 async function countUsers() {
@@ -98,7 +67,7 @@ async function calculateProductSold() {
 
 
 module.exports = {
-  calculateSalesData,
+ 
     countUsers,
   calculateProductSold
 };

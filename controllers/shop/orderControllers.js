@@ -19,8 +19,8 @@ const orderPage = asynchandler(async (req, res) => {
         select: "title images",
         populate: { path: "images" },
       })
-      .select("orderId orderItems orderedDate shippingAddress town").sort({
-        orderedDate:-1});
+      .select("orderId orderItems orderedDate shippingAddress town createdAt").sort({ _id: -1 });
+     console.log(orders);
 
     res.render("./user/pages/orders", { title: "WATCHBOX", orders, user });
   } catch (error) {
@@ -65,11 +65,22 @@ const viewOrder = asynchandler(async (req, res) => {
 
 const cancelOrder = asynchandler(async (req, res) => {
   try {
-    const orderId = req.params.id;
-    console.log(orderId);
-    
-    res.redirect("back")
+     const orderId = req.params.id;
+    const productId = req.body.productId;
+    const order = await orderHelpers.getSingleOrder(orderId);
+    const productIdString = String(productId); //finding matching productId from orderDb
+    const productItem = order.orderItems.find(
+      (item) => String(item.product._id) === productIdString
+    );
+    if (!productItem) {
+      console.log("no product find to cancel");
+    } else {
+      productItem.status = status.cancelPending;
    
+      await order.save();
+  
+      return res.redirect(`/order`);
+    }
   } catch (error) {
     throw new Error(error);
   }

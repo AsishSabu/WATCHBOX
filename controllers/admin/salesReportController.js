@@ -40,6 +40,11 @@ exports.getSalesData = async (req, res) => {
   try {
     const pipeline = [
       {
+        $match: {
+          "orderItems.status": "Delivered",
+        },
+      },
+      {
         $project: {
           year: { $year: "$orderedDate" },
           month: { $month: "$orderedDate" },
@@ -90,6 +95,12 @@ exports. getSalesDataYearly = async (req, res) => {
   try {
     const yearlyPipeline = [
       {
+        $match: {
+          "orderItems.status": "Delivered",
+        },
+      },
+
+      {
         $project: {
           year: { $year: "$orderedDate" },
           totalPrice: 1,
@@ -126,6 +137,11 @@ exports. getSalesDataYearly = async (req, res) => {
 exports.getSalesDataWeekly = async (req, res) => {
   try {
     const weeklySalesPipeline = [
+      {
+        $match: {
+          "orderItems.status": "Delivered",
+        },
+      },
       {
         $project: {
           week: { $week: "$orderedDate" },
