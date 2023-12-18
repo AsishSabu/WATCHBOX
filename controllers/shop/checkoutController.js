@@ -13,22 +13,29 @@ const WalletTransaction = require("../../models/transactionModel");
 const Coupon = require("../../models/couponModel")
 const moment =require("moment");
 
-const cartPage = asynchandler(async (req, res) => {
+const checkoutPage = asynchandler(async (req, res) => {
   try {
     const userid = req.user._id;
     const user = await User.findById(userid).populate("addresses");
     const cartItems = await checkoutHelper.getCartItems(userid);
     const cartData = await Cart.findOne({ user: userid });
     const wallet = await Wallet.findOne({ user: userid });
-    const availableCoupons = await Coupon.find({ expiryDate: { $gt: Date.now() } })
-      .select({ code: 1, _id: 0 })
-      .limit(4);
+
+    
+    const availableCoupons = await Coupon.aggregate([
+      { $match:{ usedBy: []} },
+      { $project: { code: 1 } }
+    ]);
+
+    console.log("........................................",availableCoupons);
     const coupons = availableCoupons.map((coupon) => coupon.code).join(" | ");
-   const couponMessage = { status: "text-info", message: "Try these coupons --" + coupons };
+    const couponMessage= { status: "text-info", message: "Try these coupons --" + coupons };
+   
+    
+    
 
 
     if (cartItems) {
-      console.log(cartItems.products);
       const { subtotal, total } = calculateCartTotals(cartItems.products);
       res.render("./user/pages/checkout", {
         title: "WATCHBOX/CHECKOUT",
@@ -39,6 +46,7 @@ const cartPage = asynchandler(async (req, res) => {
         cartData,
         wallet,
         couponMessage,
+        availableCoupons
       });
     }
   } catch (error) {
@@ -363,7 +371,7 @@ const updateCoupon = asynchandler(async (req, res) => {
       } else if (subtotal > coupon.maxAmount) {
         res.status(200).json({
           status: "danger",
-          message: `this coupon is only applicable for maximum Amount ${coupon.minAmount} .`,
+          message: `this coupon is only applicable for maximum Amount ${coupon.maxAmount} .`,
         });
       } else {
         req.session.coupon = coupon;
@@ -382,13 +390,19 @@ const updateCoupon = asynchandler(async (req, res) => {
   }
 });
 
+const removeAppliedCoupon = asynchandler(async (req, res) => {
+  req.session.coupon = null;
+  res.status(200).json("Ok");
+});
+
 
 module.exports = {
-  cartPage,
+  checkoutPage,
   getCartData,
   placeOrder,
   orderPlaced,
   verifyPayment,
   updatePage,
-  updateCoupon
+  updateCoupon,
+  removeAppliedCoupon
 };
