@@ -187,6 +187,7 @@ userRoute.post(
   checkoutController.verifyPayment
 );
 userRoute.post("/update", ensureAuthenticated, checkoutController.updatePage);
+userRoute.post("/coupon",ensureAuthenticated,checkoutController.updateCoupon)
 
 //-------------------order controller------------------------------
 userRoute.get("/order", ensureAuthenticated, orderController.orderPage);

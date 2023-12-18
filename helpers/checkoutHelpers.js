@@ -20,7 +20,7 @@ exports.getCartItems=asyncHandler(async(userId)=>{
 
 //----------------------place an order-------------------------
 
-exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet)=>{
+exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet,coupon)=>{
     const cartItems= await exports.getCartItems(userId);
   
    
@@ -42,7 +42,28 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet)=>
         }
         orders.push(orderItems);
 //         console.log(orders);      
-}
+    }
+    
+
+
+    let discount;
+
+    if (coupon) {
+        if (coupon.type === "percentage") {
+            discount = ((total * coupon.value) / 100).toFixed(2);
+            if (discount > coupon.maxAmount) {
+                discount = coupon.maxAmount;
+                total -= discount;
+            } else {
+                total -= discount;
+            }
+        } else if (coupon.type === "fixedAmount") {
+            discount = coupon.value;
+            total -= discount;
+        }
+    }
+
+
     const address=await Address.findById(addressId);
     const existingOrdersIds= await Order.find().select("orderId");
     const newOrder = await Order.create({
@@ -55,13 +76,16 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet)=>
         phone: address.mobile,
         totalPrice: total.toFixed(2), // Ensure that totalPrice is of the correct data type
         user: userId,
+        discount: discount,
+        coupon: coupon ?? coupon,
         payment_method: paymentMethod,
-      });
+    });
+    
     return newOrder;
 });
 
 
-exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWallet) => {
+exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWallet,coupon) => {
 
     console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,",payWithWallet);
     const wallet = await Wallet.findOne({ user: userid });
@@ -73,7 +97,22 @@ exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWall
     let total;
     let usedFromWallet = 0;
     if (wallet && payWithWallet) {
+        let discount = 0;
         total = subtotal;
+        if (coupon) {
+            if (coupon.type === "percentage") {
+                discount = ((total * coupon.value) / 100).toFixed(2);
+                if (discount > coupon.maxAmount) {
+                    discount = coupon.maxAmount;
+                    total -= discount;
+                } else {
+                    total -= discount;
+                }
+            } else if (coupon.type === "fixedAmount") {
+                discount = coupon.value;
+                total -= discount;
+            }
+        }
 
         if (total <= wallet.balance) {
             usedFromWallet = total;
@@ -84,15 +123,31 @@ exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWall
             total = subtotal - wallet.balance ;
             wallet.balance = 0;
         }
-        return { subtotal, total, usedFromWallet, walletBalance: wallet.balance,  };
+        return { subtotal, total, usedFromWallet, walletBalance: wallet.balance, discount: discount ? discount : 0 };
     } else {
         total = subtotal;
+        let discount = 0;
+        if (coupon) {
+            if (coupon.type === "percentage") {
+                discount = ((total * coupon.value) / 100).toFixed(2);
+                if (discount > coupon.maxAmount) {
+                    discount = coupon.maxAmount;
+                    total -= discount;
+                } else {
+                    total -= discount;
+                }
+            } else if (coupon.type === "fixedAmount") {
+                discount = coupon.value;
+                total -= discount;
+            }
+        }
        
         return {
             subtotal,
             total,
             usedFromWallet,
             walletBalance: wallet ? wallet.balance : 0,
+            discount: discount ? discount : 0,
         };
     }
 });

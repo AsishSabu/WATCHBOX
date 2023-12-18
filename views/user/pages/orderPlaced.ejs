@@ -10,7 +10,7 @@
           <p><strong>Shipping Address:</strong> <%= order.address %>, <%= order.town %>, <%= order.state %></p>
           <p><strong>Phone:</strong> <%= order.phone %></p>
           <p><strong>Total Price:</strong> <%= order.totalPrice %></p>
-          <p><strong>Ordered Date:</strong> <%= new Date(order.orderedDate).toUTCString() %></p>
+          <p><strong>Ordered Date:</strong> <%=  moment(order.orderedDate).local().format('MMMM Do YYYY, h:mm a') %></p>
           <hr>
           <p class="lead"><strong>PRODUCTS</strong></p>
           <% order.orderItems.forEach(product => { %>

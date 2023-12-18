@@ -28,7 +28,7 @@ exports.addCoupon = asyncHandler(async (req, res) => {
                 minAmount: parseInt(req.body.minAmount),
                 maxAmount: parseInt(req.body.maxAmount) || 0,
             });
-            res.redirect("/admin/coupon");
+            res.redirect("/admin/coupons");
         }
         req.flash("warning", "Coupon exists with same code");
         res.redirect("/addCoupon")

@@ -73,7 +73,7 @@ const orderStatus = expressHandler(async (req, res) => {
       model: "Product",
       populate: { path: "images" },
     })
-    .select("orderId orderItems orderedDate shippingAddress town createdAt") .populate({
+    .select("orderId orderItems orderedDate shippingAddress town createdAt coupon discount totalPrice paidAmount") .populate({
       path: "user",
       modal: "User",
     });
