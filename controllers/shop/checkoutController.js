@@ -10,8 +10,10 @@ const Razorpay = require("razorpay");
 const { generateRazorPay } = require("../../config/razorpay");
 const Wallet = require("../../models/walletModel");
 const WalletTransaction = require("../../models/transactionModel");
+const Coupon = require("../../models/couponModel")
+const moment =require("moment");
 
-const cartPage = asynchandler(async (req, res) => {
+const checkoutPage = asynchandler(async (req, res) => {
   try {
     const userid = req.user._id;
     const user = await User.findById(userid).populate("addresses");
@@ -19,8 +21,21 @@ const cartPage = asynchandler(async (req, res) => {
     const cartData = await Cart.findOne({ user: userid });
     const wallet = await Wallet.findOne({ user: userid });
 
+    
+    const availableCoupons = await Coupon.aggregate([
+      { $match:{ usedBy: []} },
+      { $project: { code: 1 } }
+    ]);
+
+    console.log("........................................",availableCoupons);
+    const coupons = availableCoupons.map((coupon) => coupon.code).join(" | ");
+    const couponMessage= { status: "text-info", message: "Try these coupons --" + coupons };
+   
+    
+    
+
+
     if (cartItems) {
-      console.log(cartItems.products);
       const { subtotal, total } = calculateCartTotals(cartItems.products);
       res.render("./user/pages/checkout", {
         title: "WATCHBOX/CHECKOUT",
@@ -30,6 +45,8 @@ const cartPage = asynchandler(async (req, res) => {
         subtotal,
         cartData,
         wallet,
+        couponMessage,
+        availableCoupons
       });
     }
   } catch (error) {
@@ -59,12 +76,16 @@ const placeOrder = asynchandler(async (req, res) => {
     const userId = req.user._id;
     const { addressId, payment_method, isWallet } = req.body;
     console.log(req.body);
+    const coupon = (await Coupon.findOne({ code: req?.session?.coupon?.code, expiryDate: { $gt: Date.now() } })) || null;
     const newOrder = await checkoutHelper.placeOrder(
       userId,
       addressId,
       payment_method,
-      isWallet
+      isWallet,
+      coupon
     );
+
+    console.log("newOrder",newOrder);
 
     if (payment_method === "cash_on_delivery") {
       res.status(200).json({
@@ -171,6 +192,7 @@ const orderPlaced = asynchandler(async (req, res) => {
     console.log("in order placed");
     const orderId = req.params.id;
     const userId = req.user._id;
+    const coupon = (await Coupon.findOne({ code: req?.session?.coupon?.code })) || null;
     const order = await Order.findById(orderId).populate({
       path: "orderItems",
       populate: {
@@ -184,6 +206,10 @@ const orderPlaced = asynchandler(async (req, res) => {
         item.isPaid = "cod";
         await order.save();
         console.log("After update:", item.isPaid);
+        if (coupon) {
+          coupon.usedBy.push(userId);
+          await coupon.save();
+        }
       }
     } else if (order.payment_method === "online_payment") {
       console.log("in order placed online payment");
@@ -193,6 +219,10 @@ const orderPlaced = asynchandler(async (req, res) => {
         await order.save();
         console.log("After update:", item.isPaid);
         console.log(order);
+      }
+      if (coupon) {
+        coupon.usedBy.push(userId);
+        await coupon.save();
       }
 
       const wallet = await Wallet.findOne({ user: req.user._id });
@@ -205,7 +235,10 @@ const orderPlaced = asynchandler(async (req, res) => {
         console.log("After update:", item.isPaid);
         console.log(order);
       }
-
+      if (coupon) {
+        coupon.usedBy.push(userId);
+        await coupon.save();
+      }
       const wallet = await Wallet.findOne({ user: req.user._id });
 
       wallet.balance -= order.wallet;
@@ -220,8 +253,9 @@ const orderPlaced = asynchandler(async (req, res) => {
         await Cart.findOneAndDelete({ user: req.user._id });
       }
     }
+    req.session.coupon = null;
 
-    res.render("./user/pages/orderPlaced", { title: "WATCHBOX", order });
+    res.render("./user/pages/orderPlaced", { title: "WATCHBOX", order,  moment});
   } catch (error) {
     throw new Error(error);
   }
@@ -266,28 +300,109 @@ const updatePage = asynchandler(async (req, res) => {
   try {
     const userid = req.user._id;
     console.log(userid);
+    const coupon = (await Coupon.findOne({ code: req.body.code, expiryDate: { $gt: Date.now() } })) || null;
     const user = await User.findById(userid).populate("addresses");
     const cartItems = await checkoutHelper.getCartItems(userid);
 
     console.log("cartItems", cartItems);
-    const { subtotal, total, usedFromWallet, walletBalance } =
+    console.log(coupon);
+    const { subtotal, total, usedFromWallet, walletBalance,discount } =
       await checkoutHelper.calculateTotalPrice(
         cartItems,
         userid,
-        req.body.payWithWallet
+        req.body.payWithWallet,
+        coupon
       );
-    console.log(total, subtotal, usedFromWallet, walletBalance);
-    res.json({ total, subtotal, usedFromWallet, walletBalance });
+    console.log(".............",total, subtotal, usedFromWallet, walletBalance,discount);
+    res.json({ total, subtotal, usedFromWallet, walletBalance,discount });
   } catch (error) {
     throw new Error(error);
   }
 });
 
+
+const updateCoupon = asynchandler(async (req, res) => {
+  try {
+    const userid = req.user._id;
+    const coupon = await Coupon.findOne({
+      code: req.body.code,
+      expiryDate: { $gt: Date.now() },
+    });
+
+    const cartItems = await checkoutHelper.getCartItems(userid);
+    const availableCoupons = await Coupon.find({
+      expiryDate: { $gt: Date.now() },
+      usedBy: { $nin: [userid] },
+    })
+      .select({ code: 1, _id: 0 })
+      .limit(4);
+    const { subtotal, total, discount } = await checkoutHelper.calculateTotalPrice(cartItems, userid, false, coupon);
+
+    if (!coupon) {
+      if (req.body.data === "onLoad" || req.body.data === "onUpdate") {
+        const coupons = availableCoupons.map((coupon) => coupon.code).join(" | ");
+        res.status(202).json({
+          status: "info",
+          message: "Try " + coupons,
+          subtotal,
+          total,
+          discount,
+        });
+      } else {
+        res.status(202).json({
+          status: "danger",
+          message: "The coupon is invalid or expired.",
+          subtotal,
+          total,
+          discount,
+        });
+      }
+    } else {
+      if (coupon.usedBy.includes(userid)) {
+        res.status(202).json({
+          status: "danger",
+          message: "The coupon is already used",
+        });
+      } else if (subtotal < coupon.minAmount) {
+        res.status(200).json({
+          status: "danger",
+          message: `You need to spend at least ${coupon.minAmount} to get this offer.`,
+        });
+      } else if (subtotal > coupon.maxAmount) {
+        res.status(200).json({
+          status: "danger",
+          message: `this coupon is only applicable for maximum Amount ${coupon.maxAmount} .`,
+        });
+      } else {
+        req.session.coupon = coupon;
+        res.status(200).json({
+          status: "success",
+          message: `${coupon.code} applied`,
+          coupon: coupon,
+          subtotal,
+          total,
+          discount,
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  }
+});
+
+const removeAppliedCoupon = asynchandler(async (req, res) => {
+  req.session.coupon = null;
+  res.status(200).json("Ok");
+});
+
+
 module.exports = {
-  cartPage,
+  checkoutPage,
   getCartData,
   placeOrder,
   orderPlaced,
   verifyPayment,
   updatePage,
+  updateCoupon,
+  removeAppliedCoupon
 };

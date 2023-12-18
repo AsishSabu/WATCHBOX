@@ -118,6 +118,8 @@ adminRoute.get("/sales-data/yearly", isAdminLoggedin, salesController.getSalesDa
 
 adminRoute.get("/addCoupon", isAdminLoggedin, couponController.loadAddCoupon)
 adminRoute.post("/addCoupon", isAdminLoggedin, couponController.addCoupon)
+adminRoute.get("/coupons", isAdminLoggedin, couponController.loadCoupon)
+
 
 
 // // 404 notfound page--

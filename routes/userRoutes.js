@@ -169,7 +169,7 @@ userRoute.post(
 
 //------------------------userr checkout mangement------------------------
 
-userRoute.post("/checkout", ensureAuthenticated, checkoutController.cartPage);
+userRoute.post("/checkout", ensureAuthenticated, checkoutController.checkoutPage);
 userRoute.get(
   "/checkout/get",
   ensureAuthenticated,
@@ -187,6 +187,8 @@ userRoute.post(
   checkoutController.verifyPayment
 );
 userRoute.post("/update", ensureAuthenticated, checkoutController.updatePage);
+userRoute.post("/coupon", ensureAuthenticated, checkoutController.updateCoupon);
+userRoute.post("/coupon/remove", ensureAuthenticated, checkoutController.removeAppliedCoupon)
 
 //-------------------order controller------------------------------
 userRoute.get("/order", ensureAuthenticated, orderController.orderPage);
