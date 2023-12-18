@@ -87,7 +87,7 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet,co
 
 exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWallet,coupon) => {
 
-    console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,",payWithWallet);
+    console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,",payWithWallet  );
     const wallet = await Wallet.findOne({ user: userid });
     let subtotal = 0;
     for (const product of cartItems.products) {
@@ -120,7 +120,7 @@ exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWall
             total = 0;
         } else {
             usedFromWallet = wallet.balance;
-            total = subtotal - wallet.balance ;
+            total = subtotal - wallet.balance-discount;
             wallet.balance = 0;
         }
         return { subtotal, total, usedFromWallet, walletBalance: wallet.balance, discount: discount ? discount : 0 };

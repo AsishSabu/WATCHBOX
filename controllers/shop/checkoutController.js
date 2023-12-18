@@ -198,6 +198,10 @@ const orderPlaced = asynchandler(async (req, res) => {
         item.isPaid = "cod";
         await order.save();
         console.log("After update:", item.isPaid);
+        if (coupon) {
+          coupon.usedBy.push(userId);
+          await coupon.save();
+        }
       }
     } else if (order.payment_method === "online_payment") {
       console.log("in order placed online payment");
@@ -293,7 +297,7 @@ const updatePage = asynchandler(async (req, res) => {
     const cartItems = await checkoutHelper.getCartItems(userid);
 
     console.log("cartItems", cartItems);
-    
+    console.log(coupon);
     const { subtotal, total, usedFromWallet, walletBalance,discount } =
       await checkoutHelper.calculateTotalPrice(
         cartItems,
@@ -301,7 +305,7 @@ const updatePage = asynchandler(async (req, res) => {
         req.body.payWithWallet,
         coupon
       );
-    console.log(total, subtotal, usedFromWallet, walletBalance,discount);
+    console.log(".............",total, subtotal, usedFromWallet, walletBalance,discount);
     res.json({ total, subtotal, usedFromWallet, walletBalance,discount });
   } catch (error) {
     throw new Error(error);

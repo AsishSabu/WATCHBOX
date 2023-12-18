@@ -49,7 +49,7 @@ async function handleWltButtonClick(event) {
 async function handleCodButtonClick(event) {
     event.preventDefault();
 
-    if (await checkCartData()) {
+    if ((await checkCartData()) && (await checkCoupon())) {
         const data = {
             addressId: selectedAddressId,
             payment_method: "cash_on_delivery",
@@ -360,6 +360,21 @@ async function checkCoupon() {
     }
 }
 
+function showCouponAlert(data) {
+    Swal.fire({
+        title: "Coupon Alert",
+        text: data.message,
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Remove Coupon",
+        cancelButtonText: "Close",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            handleRemoveCouponBtnClick();
+        }
+    });
+}
+
 function handleCouponBtnClick(data) {
     const couponCode = document.getElementById("coupon_code");
     const sanitizedValue = couponCode.value
@@ -409,7 +424,7 @@ function handleCouponBtnClick(data) {
                 couponError.classList.add("text-success");
                 total.textContent = data.total;
                 discount.textContent = data.discount;
-                codBtn.classList.add("d-none");
+                
             }
         })
         .catch((error) => {
