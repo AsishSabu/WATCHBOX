@@ -90,7 +90,9 @@
       <div class="col-md-12 col-lg-5 col-12 ">
         <div class="product-details-content ">
           <h3><%= Product.title %></h3>
-          <div class="rating-number">
+           <p class="text-danger mb-0 fw-bold"><%= Product.categoryName.categoryName%></p>
+           <p class=" fw-bold"><%= Product.description %></p>
+          <!-- <div class="rating-number">
             <div class="quick-view-rating">
               <i class="pe-7s-star red-star"></i>
               <i class="pe-7s-star red-star"></i>
@@ -100,34 +102,27 @@
             </div>
             <div class="quick-view-number">
               <span>2 Ratting (S)</span>
-            </div>
-          </div>
-
+            </div>-->
+          </div> 
+           <% if(Product.productPrice!==Product.salePrice){  %>
+            <h5 class="text-success fw-bold"><%=Product.categoryName.description %></h5>
+             <% } %> 
           <div class="details-price gap-3 d-flex align-items-baseline">
             <div class="">
               <span class="h3 fw-bold">₹ <%= Product.salePrice %></span>
             </div>
+           <% if(Product.productPrice!==Product.salePrice){  %>
             <div class="">
               <span class="text-muted text-decoration-line-through"
-                >₹ <%= Product.productPrice %></span
-              >
+                >₹ <%= Product.productPrice %></span>
             </div>
-            <div class=" mb-3 text-warning">
-              <% if (Product.quantity < 5 && Product.quantity>1) { %>
-                  <span>
-                      Hurry Only <%= Product.quantity%> left!
-                  </span>
-                  <% }%>
+            <h5 class="fw-bolder text-danger"><%=Product.categoryName.offer %>% off </h5>
+          
+         <% } %> 
           </div>
-            <div class="">
-              <span class="h3 text-success"
-                ></span
-              >
-            </div>
-          </div>
-          <p><%= Product.description %></p>
+         
           <% if (Product.quantity === 0) { %>
-          <smal class="text-danger h4">Out Of Stock!</smal>
+          <smal class="text-danger h4 fw-bold">Out Of Stock!</smal>
           <% } else if (Product.quantity < 5) { %>
           <smal class="text-warning h5"
             >Hurry, Only <%=Product.quantity %> more left!</smal

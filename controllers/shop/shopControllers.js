@@ -95,7 +95,7 @@ exports.loadShop = asynchandler(async (req, res) => {
       }
 
       const findProducts = await product.find(filter)
-        .populate("images")
+        .populate("images").populate("categoryName")
         .skip((page - 1) * limit)
         .limit(limit)
         .sort(sortCriteria);

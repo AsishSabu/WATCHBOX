@@ -9,7 +9,9 @@ const category = require("../../models/categoryModel");
 const crypto = require("crypto");
 const Banner=require("../../models/bannerModel")
 const Wallet=require("../../models/walletModel")
-const Orders=require('../../models/orderModel')
+const Orders = require('../../models/orderModel')
+const { generateReferralCode, creditforRefferedUser, creditforNewUser }=require("../../helpers/referHelpers");
+const { log } = require("util");
 
 //-------------------------loadlanding page---------------------
 const loadIndex = asynchandler(async (req, res) => {
@@ -58,7 +60,12 @@ const insertUser = asynchandler(async (req, res) => {
       password: req.body.password,
       passwordChangedAt: Date.now(),
     });
-    
+    if (req.body.referalCode !== "") {
+      userData.referralCode = req.body.referalCode
+    } else {
+      userData.referralCode = "no referral code"
+    }
+    console.log(userData,".......................................");
     
     try {
       const existingEmail = await User.findOne({ email: req.body.email });
@@ -72,7 +79,9 @@ const insertUser = asynchandler(async (req, res) => {
             accessing the details of the user
                */
     const userSave = await userData.save(); //-------------------user save to database-------------------
-    req.session.userData = userData; //-------------------userdata take to the  session----------------
+        req.session.userData = userData; //-------------------userdata take to the  session----------------
+      
+
 
     const userWallet= await Wallet.create({user:userData._id})
     console.log(userWallet);
@@ -134,6 +143,21 @@ const verifyOtp = async (req, res) => {
         { email: otpRecord.email },
         { $set: { isVerified: true } }
       );
+      const user = await User.findOne({ email: otpRecord.email })
+      let userFound = null;
+      if (user.referralCode && user.referralCode !== 'no referral code') {
+        const referralCode = user.referralCode.trim()
+        userFound = await creditforRefferedUser(referralCode,otpRecord.email)
+        console.log(userFound, ".......userFound");
+        const creditNewUser = await creditforNewUser(user)
+        user.referralCode = null;
+        const newUser = await user.save()
+      }
+      const referalCode = await generateReferralCode(8);
+      console.log(referalCode);
+      user.referralCode = referalCode
+      const newUser = await user.save()
+
       req.flash("success", "succesfully registered");
       res.redirect("/login");
     } else {
@@ -173,32 +197,6 @@ const userLogin = asynchandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     console.log(user.isVerified);
-    //---------------checking email already registered-----------------------
-
-    // if (!user) {
-    //   req.flash("danger", "User not found. Please check your email");
-    //   res.redirect("/login");
-    // } else {
-    //   const passwordValid = await bcrypt.compare(password, user.password); //----------------compare enterd password and registered passwoerd-------
-
-    //   if (!passwordValid) {
-    //     req.flash("danger", "invalid password");
-    //     res.redirect("/login");
-    //   } else {
-    //     if (user.isBlock) {
-    //       //---------------------------checking user i s blocked --------------------
-    //       req.flash("danger", "your permission declined");
-    //       res.redirect("/login");
-    //     } else if (!user.isVerified) {
-    //       req.flash("danger", "please verify your account");
-    //       res.redirect("/login");
-    //     } else {
-    //       req.session.user_id = user._id;
-
-    //       res.redirect("/");
-    //     }
-    //   }
-    // }
   } catch (error) {
     throw new Error(error);
   }
@@ -388,8 +386,8 @@ const forgotPassword = asynchandler(async (req, res) => {
     } else {
       //generate a random reset token-------------------
       const resetToken = await user.createResetPasswordToken();
+      console.log("reset token", resetToken,"......");
       await user.save();
-      console.log(user);
       const name = user.userName;
       const sendToken = await otpSetup.sendToken(email, resetToken, name);
       req.flash('success',"verify link send to the email address")
