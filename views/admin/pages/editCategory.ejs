@@ -1,54 +1,123 @@
 <div class="container">
-  <div class="row">
+  <div class="row mt-5">
     <div class="col-md-6 offset-md-3 center-content">
       <h1>Edit Category</h1>
       <form action="" method="post">
-        <div class="input-group mb-3">
-          <input type="text"  name="text"  class="form-control" value=<%=value.categoryName%> >
-          <button class="btn btn-submit" type="submit" name="btn">Update</button>
+        <div class="form-group text-center">
+          <label for="categoryName" class="mt-2">Name:</label>
+          <div class="col-md-6 mx-auto">
+            <input
+              type="text"
+               name="updatedName" id="categoryName"
+              class="form-control"
+              value="<%= value.categoryName %>"
+            />
+          </div>
         </div>
+
+        <div class="form-group text-center">
+          <label for="categoryName" class="mt-2">Offer Percentage:</label>
+          <div class="col-md-6 mx-auto">
+            <div class="input-group">
+              <input
+                type="number"
+                class="form-control"
+                id="Offer"
+                name="offer"
+                value="<%= value.offer ? value.offer : '' %>"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group text-center">
+          <label for="startDate" class="mt-2">Start Date:</label>
+          <div class="col-md-6 mx-auto">
+            <input
+              type="date"
+              class="form-control"
+              id="startDate"
+              name="startDate"
+              value="<%= value.startDate ? value.startDate.toISOString().split('T')[0] : '' %>"
+            />
+          </div>
+        </div>
+
+        <div class="form-group text-center">
+          <label for="endDate" class="mt-2">End Date:</label>
+          <div class="col-md-6 mx-auto">
+            <input
+              type="date"
+              class="form-control"
+              id="endDate"
+              name="endDate"
+              value="<%= value.endDate ? value.endDate.toISOString().split('T')[0] : '' %>"
+            />
+          </div>
+        </div>
+
+        <div class="form-group text-center">
+          <label for="description" class="mt-2">Description:</label>
+          <div class="col-md-6 mx-auto">
+            <textarea
+              class="form-control"
+              id="description"
+              rows="1"
+              name="description"
+            ><%= value.description ? value.description : '' %></textarea>
+          </div>
+        </div>
+
+        <button class="btn btn-submit" type="submit" >Update</button>
       </form>
     </div>
   </div>
 </div>
-<%-include('../partials/flashMessage.ejs')  %>
+
+<%- include('../partials/flashMessage.ejs') %>
 
 <script>
-const message = document.getElementById('message');
+  const message = document.getElementById("message");
 
-const hide = () => {
-  message.style.display = 'none';
-}
+  const hide = () => {
+    message.style.display = "none";
+  };
 
-setTimeout(hide, 3000);
-
+  setTimeout(hide, 3000);
 </script>
 
 <style>
   /* Style to add spacing from the top navbar */
- 
+
   /* Center the content */
-  h1{
-      color: #fff;
-  }   
+  h1 {
+    color: #fff;
+  }
 
   .center-content {
     text-align: center;
-    margin-top: 250px; 
-    background-color: rgb(0, 0, 0);
-    height: 200px;
-    padding-top: 40px;
+    margin-top: 50px; /* Adjust the margin-top as needed */
+    padding-top: 20px; /* Adjust the padding-top as needed */
+    background-color: rgb(27, 27, 26);
     color: #fff;
   }
 
   /* Style for the input and button */
-  .input-group {
-    margin: 0 auto;
-    max-width: 300px;
+  .form-group {
+    margin-bottom: 10px; /* Adjust the margin-bottom as needed */
   }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+  }
+
   .input-group input::placeholder {
-  color: #f7f7f7; /* Replace with your desired color */
-}
+    color: #ffffff;
+  }
 
   /* Style for the button */
   .btn-submit {

@@ -27,6 +27,11 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    referralCode: {
+      type: String,
+      unique: true,
+      default: 'ReferralCode'
+    },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     cart: [
       {
