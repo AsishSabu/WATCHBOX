@@ -108,20 +108,25 @@ const editCategory = expressHandler(async (req, res) => {
 const updateCategory = expressHandler(async (req, res) => {
   try {
     const id = req.params.id;
-    const updatedName = req.body.text;
+    const { updatedName, offer, description, startDate, endDate, } = req.body
+    console.log(req.body);
     const existedCategory = await category.findOne({
       categoryName: updatedName,
     });
+
     if (existedCategory) {
       req.flash("danger", `${updatedName} already exists, try new one`);
       res.redirect("back");
     } else {
-        const cat = await category.findById(id)
-        console.log(cat);
-        cat.categoryName = updatedName;
-       
-        const saved = await cat.save()
-        res.redirect('/admin/category')
+      const cat = await category.findById(id)
+      cat.categoryName = updatedName;
+      cat.offer = offer;
+      cat.description = description;
+      cat.startDate = startDate;
+      cat.endDate = endDate
+
+      const saved = await cat.save()
+      res.redirect('/admin/category')
     }
   } catch (error) {
     throw new Error(error);
