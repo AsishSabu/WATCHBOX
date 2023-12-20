@@ -51,7 +51,7 @@ const orderDetails = expressHandler(async (req, res) => {
         path: "user",
         modal: "User",
       });
-    console.log("order");
+    console.log(order,"order");
     res.render("admin/pages/orderDetails", { title: "WATCHBOX", order });
   } catch (error) {
     throw new Error(error);
@@ -78,26 +78,26 @@ const orderStatus = expressHandler(async (req, res) => {
       modal: "User",
     });
   if (!order) {
-    console.log("no orders");
+    console.log("No order found");
+    return res.status(404).send("Order not found");
   } else {
-    const productIdString = String(productId);
-    //finding matching productId from orderDb
-    const productItem = order.orderItems.find(
-      (item) => String(item._id) === productIdString
-    );
+    
+
+    const productItem = order.orderItems.id(productId);
     
     if(req.body.status===status.shipped||req.body.status===status.delivered)
     { 
-      console.log(productItem);
-      productItem.status = newStatus;
+      console.log(productItem, "productItem");
       if (req.body.status === status.shipped) {
-        order.shippedDate = Date.now();
+        productItem.status = newStatus;
+        productItem.shippedDate = Date.now();
       } else if (req.body.status === status.delivered) {
-        order.orderItems.deliveryDate= Date.now();
+        productItem.status = newStatus;
+        productItem.deliveryDate = Date.now();
       }
-    }
-    
+      await order.save();
 
+    }
     
   else if (req.body.status === status.cancelled) {
     

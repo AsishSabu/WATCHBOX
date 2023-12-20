@@ -7,6 +7,9 @@ const Orders = require("../../models/orderModel");
 const orderHelpers = require("../../helpers/orderHelpers");
 const {status} = require("../../utils/status");
 const { Timestamp } = require("mongodb");
+const pdfMake = require("pdfmake/build/pdfmake");
+const vfsFonts = require("pdfmake/build/vfs_fonts");
+
 
 const orderPage = asynchandler(async (req, res) => {
   try {
@@ -41,8 +44,9 @@ const viewOrder = asynchandler(async (req, res) => {
     const productItem = order.orderItems.find(
       (item) => String(item.product._id) === productIdString
     );
-
+   
     if (productItem) {
+      console.log(productItem,"productItem:............. ");
       const product = productItem.product;
       const quantity = productItem.quantity;
       const price = productItem.price;
@@ -54,6 +58,7 @@ const viewOrder = asynchandler(async (req, res) => {
         quantity,
         price,
         status,
+        productItem
       });
     } else {
       res.send("error in view order");
@@ -112,9 +117,42 @@ const ReturnOrder = asynchandler(async (req, res) => {
   }
 });
 
+
+
+/**
+ * Download Invoice
+ * Method GET
+ */
+const  donwloadInvoice = asynchandler(async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const productId = req.params.productId;
+    console.log(orderId, "orderId...................");
+    console.log(productId,"productid........................");
+
+    const data = await orderHelpers.generateInvoice(orderId, productId);
+  
+    pdfMake.vfs = vfsFonts.pdfMake.vfs;
+
+    // Create a PDF document
+    const pdfDoc = pdfMake.createPdf(data);
+
+    // Generate the PDF and send it as a response
+    pdfDoc.getBuffer((buffer) => {
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename=invoices.pdf`);
+
+      res.end(buffer);
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 module.exports = {
   orderPage,
   viewOrder,
   cancelOrder,
   ReturnOrder,
+  donwloadInvoice
 };
