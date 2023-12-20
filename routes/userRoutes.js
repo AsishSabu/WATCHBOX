@@ -206,6 +206,7 @@ userRoute.put(
   orderController.cancelOrder
 );
 userRoute.post("/orders/return/:id", validateID, orderController.ReturnOrder);
+userRoute.get("/orders/download/:id/:productId", orderController.donwloadInvoice);
 
 //-------------------------wallet History------------------------------------
 

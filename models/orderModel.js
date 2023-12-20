@@ -76,12 +76,7 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  shippedDate: {
-    type: Date,
-  },
-  deliveredDate: {
-    type: Date,
-  },
+  
   payment_method: {
     type: String,
     required: true,
