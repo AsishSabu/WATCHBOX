@@ -29,7 +29,11 @@
   <!-- Include DataTables JavaScript -->
   <script>
     $(document).ready(function () {
-        $('#adminsTable').DataTable();
+        $('#adminsTable').dataTable( {
+     
+        "dom": 'ftip',
+        "info":     false
+  } );
     });
   </script>
   <script
