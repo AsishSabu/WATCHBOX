@@ -1,7 +1,12 @@
 <div class="container">
-    <h1 class="card-title fw-semibold mb-4">Manage Category</h1>
-
-  <% if(category.length){ %>
+    
+   <h1>Manage Category</h1>
+    <br />
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="table-responsive">
+  <% if(category.length){ %>  
   <table id="adminsTable" class="table table-bordered">
     <thead>
       <tr>
@@ -41,16 +46,17 @@
   <h1 class="fw-bolder">No categories found</h1>
   <% } %>
 </div>
-<script>
-  $(document).ready(function () {
-      $("#categoryTable").DataTable();
-  });
-</script>
+</div>
+</div>
+</div>
+</div>
+
 
 <style>
   .container {
-    position: absolute;
-    margin-top: 100px;
+ 
+    margin-top: 5%;
+  
     text-align: center;
   }
 </style>

@@ -110,11 +110,14 @@ const updateCategory = expressHandler(async (req, res) => {
     const id = req.params.id;
     const { updatedName, offer, description, startDate, endDate, } = req.body
     console.log(req.body);
-    const existedCategory = await category.findOne({
+    const existedCategory = await category.find({
       categoryName: updatedName,
+      _id: { $ne: id }
     });
+    console.log(id);
+console.log(existedCategory);
 
-    if (existedCategory) {
+    if (existedCategory&& existedCategory.length!=0) {
       req.flash("danger", `${updatedName} already exists, try new one`);
       res.redirect("back");
     } else {
