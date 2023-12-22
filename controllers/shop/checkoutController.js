@@ -75,6 +75,9 @@ const placeOrder = asynchandler(async (req, res) => {
     console.log("reached in place order");
     const userId = req.user._id;
     const { addressId, payment_method, isWallet } = req.body;
+
+    const userWithCart = await User.findById(userId).populate('cart.product');
+    console.log(userWithCart,"userwithcart......................................");
     console.log(req.body);
     const coupon = (await Coupon.findOne({ code: req?.session?.coupon?.code, expiryDate: { $gt: Date.now() } })) || null;
     const newOrder = await checkoutHelper.placeOrder(

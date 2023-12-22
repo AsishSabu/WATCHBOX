@@ -81,30 +81,7 @@
         <div class="col-lg-9 order-1 order-lg-2">
           <div class="shop-product-wrapper res-xl res-xl-btn">
             <div class="shop-bar-area">
-              <div class="shop-bar pb-60">
-                <div class="shop-found-selector"></div>
-                <div class="shop-filter-tab">
-                  <div class="shop-tab nav" role="tablist">
-                    <a
-                      class="active"
-                      href="#grid-sidebar1"
-                      data-bs-toggle="tab"
-                      role="tab"
-                      aria-selected="false"
-                    >
-                      <i class="ti-layout-grid4-alt"></i>
-                    </a>
-                    <a
-                      href="#grid-sidebar2"
-                      data-bs-toggle="tab"
-                      role="tab"
-                      aria-selected="true"
-                    >
-                      <i class="ti-menu"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
+              
               <div class="shop-product-content tab-content">
                 <div id="grid-sidebar1" class="tab-pane fade active show">
                   <div class="row">
@@ -112,12 +89,17 @@
                     <div class="col-lg-6 col-md-6 col-xl-3">
                       <div class="product-wrapper mb-30">
                         <div class="product-img">
-                          <a href="#">
+                          <a href="/viewProduct/<%= product?._id %>">
                             <img
                               src="<%= product.images[0].thumbnailUrl%>"
                               alt="<%= product.title %>"
                             />
                           </a>
+                           <% if(product.quantity<=0){%>
+                                           <div class="unavailable-container">
+                                               <p class="unavailable ">Currently Unavailable</p>
+                                            </div>
+                                       <% }%>
                           <span>hot</span>
                           <div class="product-action">
                             <% if (userWishlist) { %> <% if
@@ -224,72 +206,7 @@
                     <% }) %>
                   </div>
                 </div>
-                <div id="grid-sidebar2" class="tab-pane fade">
-                  <div class="row">
-                    <% products.forEach(product=> { %>
-                    <div class="col-lg-12 col-xl-6">
-                      <div
-                        class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60"
-                      >
-                        <div class="product-img list-img-width">
-                          <a href="#">
-                            <img
-                              src="<%= product.images[0].thumbnailUrl%>"
-                              alt="<%= product.title %>"
-                            />
-                          </a>
-                          <span>hot</span>
-                          <div class="product-action-list-style">
-                            <a
-                              class="animate-right"
-                              title="Quick View"
-                              data-bs-toggle="modal"
-                              data-bs-target="#exampleModal"
-                              href="#"
-                            >
-                              <i class="pe-7s-look"></i>
-                            </a>
-                          </div>
-                        </div>
-                        <div class="product-content-list">
-                          <div class="product-list-info">
-                            <h4><a href="#"> <%= product.title%> </a></h4>
-                            <span
-                              class="text-decoration-line-through text-secondary"
-                            >
-                              ₹ <%= product.productPrice %>
-                            </span>
-                            <span>₹ <%= product.salePrice %></span>
-                            <p><%= product.description%></p>
-                          </div>
-                          <div class="product-list-cart-wishlist">
-                            <% if(!user) {%>
-                            <div class="product-list-cart">
-                              <a class="btn-hover list-btn-style" href="/login"
-                                >add to cart</a
-                              >
-                            </div>
-                            <% }else{ %>
-                            <div class="product-list-cart">
-                              <a
-                                class="btn-hover list-btn-style"
-                                onclick="addToCart('<%= product._id %>')"
-                                >add to cart</a
-                              >
-                            </div>
-                            <%}%>
-                            <div class="product-list-wishlist">
-                              <a class="btn-hover list-btn-wishlist" href="#">
-                                <i class="pe-7s-like"></i>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <% }) %>
-                  </div>
-                </div>
+             
               </div>
             </div>
           </div>
@@ -430,4 +347,17 @@ Maintain the aspect ratio */ /* Or, if you want a fixed height */ /* height:
     width: fit-content;
     z-index: 9999;
   }
+  .unavailable-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+ 
+}
+
+.unavailable {
+  position: absolute;
+  color: red;
+  font-size: large;
+}
 </style>

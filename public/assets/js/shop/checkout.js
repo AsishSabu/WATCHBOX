@@ -63,6 +63,7 @@ async function handleCodButtonClick(event) {
 //----------------------razorpay payament --------------------
 async function handleRzpButtonClick() {
     if ((await checkCartData()) && (await checkCoupon())) {
+
         console.log("in razorpay payment");
         const data = {
             addressId: selectedAddressId,
@@ -154,7 +155,7 @@ function handleRzpPayment(responseData) {
         currency: "INR",
         name: "WATCHBOX",
         description: "Test Transaction",
-        image: "https://example.com/your_logo.png",
+        image: "https://img.freepik.com/free-vector/illustration-new-year-decoration_53876-37431.jpg?w=1060&t=st=1703126106~exp=1703126706~hmac=238a43367aba999f0272042de7206fea648f6ed3124bcdbe74c6e9b0630efa8a",
         order_id: responseData.order.id,
         handler: function (response) {
             handleSuccessPayment(response, responseData);

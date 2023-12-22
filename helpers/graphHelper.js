@@ -59,6 +59,7 @@ async function calculateProductSold() {
         year: "$_id.year",
         month: "$_id.month",
         count: 1,
+      
       },
     },
   ]);

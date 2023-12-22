@@ -208,9 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const Qerr = document.getElementById("qerr");
   const brand = document.getElementById("brand");
   const branderr = document.getElementById("branderr");
-  const image = document.getElementById("product-images");
   const imageerr = document.getElementById("imageerr");
   const formerr = document.getElementById("formerr");
+    const previewContainer = document.getElementById("image-preview");
 
   function validateName() {
     const name = productInput.value.trim();
@@ -307,7 +307,7 @@ function validateProductPrice() {
   brand.addEventListener("blur", validateBrandName);
 
   function validateImage() {
-    const files = image.files;
+    const files =document.getElementById("product-images").files;
     if (files.length === 0) {
       imageerr.textContent = "Please select at least one image";
     } else if (files.length > 4) {
@@ -319,36 +319,35 @@ function validateProductPrice() {
 image.addEventListener("change", validateImage);
 
   function handleSubmit(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    validateBrandName();
-    validateDec();
-    validateName();
-    validateProductPrice();
-    validateSalePrice();
-    validateQuantity();
-    validateImage();
+  validateBrandName();
+  validateDec();
+  validateName();
+  validateProductPrice();
+  validateSalePrice();
+  validateQuantity();
+  validateImage();
 
-    const allErrors = [
-      nameerr,
-      decerr,
-      productPriceErr,
-      saleerr,
-      Qerr,
-      branderr,
-      imageerr,
-    ];
+  const allErrors = [
+    nameerr,
+    decerr,
+    productPriceErr,
+    saleerr,
+    Qerr,
+    branderr,
+    imageerr,
+  ];
 
-    // Check if there are any errors and if the number of files is within the limit
-    const isFormValid = allErrors.every((error) => error.textContent === "") && image.files.length > 0 && image.files.length <= 4;
-
-    if (isFormValid) {
-      formerr.textContent = "";
-      productForm.submit();
-    } else {
-      alert("Please provide appropriate data");
-    }
+  // Check if there are any errors and if the number of files is within the limit
+  if (allErrors.every((error) => error.textContent === "")) {
+    formerr.textContent = "";
+    productForm.submit();
+  } else {
+    alert("Please provide appropriate data");
   }
+}
++
 
   productForm.addEventListener("submit", handleSubmit);
 });
@@ -356,42 +355,58 @@ image.addEventListener("change", validateImage);
 </script>
 
 <script>
-  document
-    .getElementById("product-images")
-    .addEventListener("change", function () {
-      const previewContainer = document.getElementById("image-preview");
-      previewContainer.innerHTML = ""; // Clear previous previews
-      const files = this.files;
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          img.classList.add("img-thumbnail");
-          img.style.maxWidth = "150px";
-          img.style.maxHeight = "150px"; // Limit image height for a consistent layout
+  document.getElementById("product-images").addEventListener("change", function () {
+  const previewContainer = document.getElementById("image-preview");
+  const files = this.files;
 
-          const closeButton = document.createElement("button");
-          closeButton.innerHTML = "&times;"; // Unicode character for 'times' (close) symbol
-          closeButton.classList.add(
-            "btn",
-            "btn-sm",
-            "btn-danger",
-            "close-button"
-          );
-          closeButton.addEventListener("click", function () {
-            previewContainer.removeChild(imageDiv);
-          });
+  if (files.length === 0) {
+    // If no files are selected, show an error message
+    imageerr.textContent = "Please select at least one image";
+  } else if (files.length > 4) {
+    // If more than 4 files are selected, show an error message
+    imageerr.textContent = "Maximum of 4 images allowed";
+  } else {
+    // If the number of files is within the limit, clear the error message
+    imageerr.textContent = "";
+  }
 
-          const imageDiv = document.createElement("div");
-          imageDiv.classList.add("image-container");
-          imageDiv.appendChild(img);
-          imageDiv.appendChild(closeButton);
+  // Clear previous previews
+  previewContainer.innerHTML = "";
 
-          previewContainer.appendChild(imageDiv);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+  // Display previews for selected images
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.classList.add("img-thumbnail");
+      img.style.maxWidth = "150px";
+      img.style.maxHeight = "150px"; // Limit image height for a consistent layout
+
+      const closeButton = document.createElement("button");
+      closeButton.innerHTML = "&times;"; // Unicode character for 'times' (close) symbol
+      closeButton.classList.add("btn", "btn-sm", "btn-danger", "close-button");
+      closeButton.addEventListener("click", function () {
+        previewContainer.removeChild(imageDiv);
+      });
+
+      const imageDiv = document.createElement("div");
+      imageDiv.classList.add("image-container");
+      imageDiv.appendChild(img);
+      imageDiv.appendChild(closeButton);
+
+      previewContainer.appendChild(imageDiv);
+    };
+
+    reader.readAsDataURL(file);
+  }
+});
+
+</script>
+
+
+<script>
+  
 </script>

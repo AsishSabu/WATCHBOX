@@ -275,14 +275,14 @@
             borderColor: "rgb(4, 209, 130)",
             data: chartDataUsers.counts,
           },
-          {
-            label: "Products Sold",
-            tension: 0.3,
-            fill: true,
-            backgroundColor: "rgba(380, 200, 230, 0.2)",
-            borderColor: "rgb(380, 200, 230)",
-            data: chartDataProductsold.counts,
-          },
+          // {
+          //   label: "Products Sold",
+          //   tension: 0.3,
+          //   fill: true,
+          //   backgroundColor: "rgba(380, 200, 230, 0.2)",
+          //   borderColor: "rgb(380, 200, 230)",
+          //   data: chartDataProductsold.counts,
+          // },
         ],
       },
       options: {

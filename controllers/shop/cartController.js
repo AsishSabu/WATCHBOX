@@ -43,10 +43,11 @@ const addToCart = asynchandler(async (req, res) => {
           return res.status(404).json({ message: "Product not found",count:1});
       }
 
-      if (product.quantity ==0) {
+      if (product.quantity <=0){
         return res.json({message:"out of stock",status:"danger",count:1});
       }
 
+      
       let cart = await Cart.findOne({ user: userId });
 
       if (!cart) {

@@ -1,5 +1,8 @@
 let data;
 
+
+
+
 async function currentCartData() {
   try {
     const response = await fetch('/getCartCount', { method: 'GET' });

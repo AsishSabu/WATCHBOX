@@ -134,7 +134,7 @@
                                         <a href="product-details.html">
                                             <img src="<%= product.images[0].thumbnailUrl %>" alt="">
                                         </a>
-                                      <% if(product.quantity==0){%>
+                                      <% if(product.quantity<=0){%>
                                            <div class="unavailable-container">
                                                <p class="unavailable ">Currently Unavailable</p>
                                             </div>

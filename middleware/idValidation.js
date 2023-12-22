@@ -1,16 +1,34 @@
-const { validationResult, param } = require('express-validator');
 
+const { validationResult, param } = require('express-validator');
+const mongoose = require('mongoose')
 const validateID = [
+ 
+  param('id')
+    .isMongoId() // Check if it's a valid MongoDB ObjectID
+    .withMessage('Invalid ID format'),
+  (req, res, next) => {
+    console.log("in validate id....................")
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('./user/pages/404', { title: "Error.." });
+    }
+    next();
+  },
+];
+
+
+const adminValidateID = [
   param('id')
     .isMongoId() // Check if it's a valid MongoDB ObjectID
     .withMessage('Invalid ID format'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render('./user/pages/404');
+      return res.render('./admin/pages/404', { title: "Error.." });
     }
     next();
   },
 ];
 
-module.exports = validateID;
+
+module.exports = { validateID, adminValidateID };

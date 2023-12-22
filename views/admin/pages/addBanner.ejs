@@ -242,69 +242,58 @@
   // Append the Cropper.js container to the form
   document.getElementById("cropper-container").appendChild(cropperContainer);
 </script> -->
-  <script>
-      document.addEventListener('DOMContentLoaded', function () {
-  const input = document.getElementById('mainImage');
-  const image = document.getElementById('cropImage');
-  const container = document.getElementById('cropContainer');
-  const applyCropBtn = document.getElementById('applyCrop');
-  let cropper;
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const image = document.getElementById("image-preview");
+          const cropButton = document.getElementById("crop-button");
+          const cropButtonModal = document.getElementById("crop-button-modal");
+          const croppedImageInput = document.getElementById("cropped-image");
+          const imageCroppingModal = new bootstrap.Modal(document.getElementById("imageCroppingModal"));
+  
+          const croppieContainer = document.getElementById("croppie-container");
+  
+          const scaleFactor = 0.4;
 
-  input.addEventListener('change', function () {
-    const file = this.files[0];
+          // Calculate the reduced dimensions based on the scale factor
+          const reducedWidth = 1920 * scaleFactor;
+          const reducedHeight = 800 * scaleFactor;
 
-    if (file) {
-      // Destroy the existing Cropper instance if it exists
-      if (cropper) {
-        cropper.destroy();
-      }
-
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        image.src = e.target.result;
-        container.style.display = 'block';
-
-        // Initialize Cropper.js
-        cropper = new Cropper(image, {
-          aspectRatio: 1, // Set your desired aspect ratio
-          viewMode: 2,    // Set your desired view mode
-        });
-      };
-
-      reader.readAsDataURL(file);
-    }
-  });
-
-  applyCropBtn.addEventListener('click', function () {
-    if (cropper) {
-      // Get the cropped data (base64 format)
-      const croppedData = cropper.getCroppedCanvas().toDataURL();
-
-      // Clear previous hidden input
-      const previousHiddenInput = document.getElementById('croppedImage');
-      if (previousHiddenInput) {
-        previousHiddenInput.remove();
-      }
-
-      // Add a new hidden input with the cropped data
-      const hiddenInput = document.createElement('input');
-      hiddenInput.type = 'hidden';
-      hiddenInput.id = 'croppedImage';
-      hiddenInput.name = 'croppedImage';
-      hiddenInput.value = croppedData;
-      document.getElementById('cropContainer').appendChild(hiddenInput);
-
-      // You can also update the mainImage input value if needed
-      // document.getElementById('mainImage').value = croppedData;
-
-      // Hide the crop container
-      container.style.display = 'none';
-    }
-  });
-});
-
-    </script>
+          const croppie = new Croppie(croppieContainer, {
+              enableZoom: true,
+              viewport: { width: reducedWidth, height: reducedHeight }, // Reduced width and height
+              boundary: { width: reducedWidth, height: reducedHeight }, // Reduced width and height
+          });
+  
+          // Handle the file input change event
+          document.getElementById("image").addEventListener("change", function (e) {
+              const file = e.target.files[0];
+              if (file) {
+                  const reader = new FileReader();
+                  reader.onload = function (e) {
+                      croppie.bind({
+                          url: e.target.result,
+                      });
+                  };
+                  reader.readAsDataURL(file);
+                  imageCroppingModal.show(); // Show the modal when an image is selected
+              }
+          });
+  
+          // Handle the crop button click event
+          cropButton.addEventListener("click", function () {
+              imageCroppingModal.show(); // Show the modal when the "Crop Image" button is clicked
+          });
+  
+          // Handle the crop button in the modal
+          cropButtonModal.addEventListener("click", function () {
+              croppie.result("base64").then(function (base64) {
+                  image.src = base64; // Update the image preview
+                  croppedImageInput.value = base64; // Set the base64 data in the hidden input
+                  imageCroppingModal.hide(); // Hide the modal after cropping
+              });
+          });
+      });
+  </script>
 
 
 

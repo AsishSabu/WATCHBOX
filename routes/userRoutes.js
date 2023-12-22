@@ -11,7 +11,7 @@ const {
 const checkoutController = require("../controllers/shop/checkoutController");
 const addressController = require("../controllers/shop/addressControl");
 const orderController = require("../controllers/shop/orderControllers");
-const validateID = require("../middleware/idValidation");
+const { validateID }=require("../middleware/idValidation")
 const walletController = require("../controllers/shop/walletController");
 
 userRoute.use((req, res, next) => {
