@@ -15,7 +15,8 @@
         <th>Description</th>
         <th>Sales Price</th>
         <th>Product Price</th>
-        <th>Quantity</th>
+        <th>Stock</th>
+        <th>Sold</th>
         <th>Images</th>
         <th>Actions</th>
       </tr>
@@ -38,6 +39,7 @@
 
         <td>$<%= product.productPrice %></td>
         <td><%= product.quantity %></td>
+          <td><%= product.sold %></td>
         <td class="align-middle">
           <% if(product&&product.images&&product.images[0]&&product.images[0].thumbnailUrl){ %>
           <img

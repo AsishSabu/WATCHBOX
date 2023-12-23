@@ -48,3 +48,29 @@ exports.loadCoupon = asyncHandler(async (req, res) => {
     }
 })
 
+exports.listUnlist = asyncHandler(async (req, res) => {
+    try {
+        const couponId = req.params.id
+        const coupon = await Coupon.findById(couponId)
+        console.log(coupon.isListed);
+        if (coupon.isListed) {
+            coupon.isListed = false;
+            coupon.save();
+            return res.json({
+                success: false,
+                message: "coupon Unlisted",
+            });
+        } else {
+            coupon.isListed = true;
+            coupon.save();
+            return res.json({
+                success: true,
+                message: "coupon Listed",
+            });
+        }
+       
+
+    } catch (error) {
+        throw new Error(error)
+    }
+})

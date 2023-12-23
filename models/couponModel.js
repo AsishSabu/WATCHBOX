@@ -16,6 +16,10 @@ const couponSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  isListed: {
+    type: Boolean,
+    default: true
+  },
   usedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   expiryDate: Date,
   minAmount: Number,

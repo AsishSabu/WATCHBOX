@@ -41,8 +41,23 @@ const handleError = (err, req, res, next) => {
 };
 
 
+
+// Custom validation function to check the number of files
+const fileUploadValidation = (req, res, next) => {
+  // Check if the number of files exceeds the limit
+  if (!req.files || Object.keys(req.files).length > 4) {
+    req.flash("danger", "You can upload a maximum of 4 files.")
+   res.redirect("back")
+  }
+  // If the number of files is within the limit, proceed to the next middleware
+  next();
+};
+
+
+
 module.exports = {
     upload,
-    handleError
+  handleError,
+  fileUploadValidation
    
 };

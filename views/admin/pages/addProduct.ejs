@@ -1,5 +1,6 @@
 <div class="container">
   <h1 class="card-title  fw-semibold mb-4">Add Product</h1>
+    
   <form action="" method="post" id="addProduct" enctype="multipart/form-data">
     <div class="form-group">
       <label for="productName">Product Name</label>
@@ -96,6 +97,7 @@
         accept="image/*"
         multiple
         style="display: none"
+        required
       />
       <div id="image-preview" class="d-flex flex-wrap gap-3"></div>
       <button
@@ -106,6 +108,7 @@
         Select Images
       </button>
       <div id="imageerr" class="text-danger text-center"></div>
+      <%-include("../partials/flashMessage.ejs")  %>
     </div>
     <button type="submit" class="btn btn-primary">Add Product</button>
 
@@ -404,9 +407,4 @@ image.addEventListener("change", validateImage);
   }
 });
 
-</script>
-
-
-<script>
-  
 </script>

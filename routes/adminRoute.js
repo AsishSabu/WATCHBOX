@@ -9,7 +9,7 @@ const salesController = require("../controllers/admin/salesReportController");
 const couponController = require("../controllers/admin/couponController")
 
 
-const { upload, handleError } = require("../config/upload");
+const { upload, handleError, fileUploadValidation } = require("../config/upload");
 const {isAdminLoggedOut,isAdminLoggedin,} = require("../middleware/adminAuth");
 
 
@@ -33,7 +33,7 @@ adminRoute.post( "/unblockUser/:id",isAdminLoggedin,adminController.unblockUser)
 
 adminRoute.get("/products", isAdminLoggedin, productController.loadProduct);
 adminRoute.get("/addProduct", isAdminLoggedin, productController.addProduct);
-adminRoute.post("/addProduct",upload.fields([{ name: "images", maxCount: 4 }]),productController.insertProduct);
+adminRoute.post("/addProduct",fileUploadValidation,upload.fields([{ name: "images", maxCount: 4 }]),productController.insertProduct);
 adminRoute.post("/product/list/:id",isAdminLoggedin,productController.listProduct);
 adminRoute.post("/product/unlist/:id",isAdminLoggedin,productController.unListProduct);
 adminRoute.get("/product/editProduct/:id",isAdminLoggedin,productController.editProduct);
@@ -119,6 +119,7 @@ adminRoute.get("/sales-data/yearly", isAdminLoggedin, salesController.getSalesDa
 adminRoute.get("/addCoupon", isAdminLoggedin, couponController.loadAddCoupon)
 adminRoute.post("/addCoupon", isAdminLoggedin, couponController.addCoupon)
 adminRoute.get("/coupons", isAdminLoggedin, couponController.loadCoupon)
+adminRoute.post("/coupon/listUnlist/:id",isAdminLoggedin, couponController.listUnlist)
 
 
 

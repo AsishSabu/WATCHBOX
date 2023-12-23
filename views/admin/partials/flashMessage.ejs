@@ -2,18 +2,16 @@
 <div class="flash-messages">
   <% Object.keys(messages).forEach((key) => { %> <%
   messages[key].forEach((message) => { %>
-  <div
-    class="alert alert-<%= key !== `error` ? key : `danger` %> fade show"
-    id="flash-message"
-    role="alert"
-  >
+  <div class="alert alert-<%= key !== `error` ? key : `danger` %> fade show" id="flash-message"  role="alert"  >
     <strong><%= key === "danger" ? "Error" : key %>!</strong> <%= message %>.
   </div>
   <% }) %> <% }) %>
 </div>
 <% } %>
 <style>
-
+  .flash-messages {
+    margin-bottom: 10px;
+  }
 
   .alert {
     margin-bottom: 10px;
@@ -39,4 +37,16 @@
     background-color: #87c689;
     color: white;
   }
+
+  /* Additional styles for other message types */
+  .alert-info {
+    background-color: #3498db;
+    color: white;
+  }
+
+  .alert-warning {
+    background-color: #f39c12;
+    color: white;
+  }
 </style>
+
