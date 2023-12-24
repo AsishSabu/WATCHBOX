@@ -74,3 +74,28 @@ exports.listUnlist = asyncHandler(async (req, res) => {
         throw new Error(error)
     }
 })
+exports.editCoupon = asyncHandler(async (req, res) => {
+    try {
+        const coupons = await Coupon.findById(req.params.id);
+        console.log(coupons);
+        const messages=req.flash()
+        res.render("./admin/pages/editCoupon",{title:"watchbox/editCoupon",data:coupons,messages})
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+exports.uploadCoupon = asyncHandler(async (req, res) => {
+    try {
+        const existingCoupon = await Coupon.findOne({ code: req.body.code, _id: { $ne: req.params.id } });
+        if (existingCoupon) {
+            req.flash("danger", "Coupon code already exists");
+            return res.redirect("back");
+        } else {
+            const updatedCoupon = await Coupon.findByIdAndUpdate(req.params.id, req.body);
+            return res.redirect("/admin/coupons");
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+});

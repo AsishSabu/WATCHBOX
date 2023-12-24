@@ -119,7 +119,9 @@ adminRoute.get("/sales-data/yearly", isAdminLoggedin, salesController.getSalesDa
 adminRoute.get("/addCoupon", isAdminLoggedin, couponController.loadAddCoupon)
 adminRoute.post("/addCoupon", isAdminLoggedin, couponController.addCoupon)
 adminRoute.get("/coupons", isAdminLoggedin, couponController.loadCoupon)
-adminRoute.post("/coupon/listUnlist/:id",isAdminLoggedin, couponController.listUnlist)
+adminRoute.post("/coupon/listUnlist/:id", isAdminLoggedin, couponController.listUnlist)
+adminRoute.get("/coupon/editCoupon/:id", isAdminLoggedin, couponController.editCoupon)
+adminRoute.post("/coupon/editCoupon/:id", isAdminLoggedin, couponController.uploadCoupon)
 
 
 

@@ -30,12 +30,7 @@
               <h3 class="sidebar-title">Search Products</h3>
               <div class="sidebar-search">
                 <form>
-                  <input
-                    placeholder="Search Products..."
-                    type="text"
-                    id="search"
-                    name="search"
-                  />
+                  <input placeholder="Search Products..." type="text" id="search" name="search" />
                   <button><i class="ti-search"></i></button>
                 </form>
               </div>
@@ -56,23 +51,23 @@
                 <ul>
                   <% if (category.length>0) { %> <% if(category.length> 1) { %>
                   <li><a href="/shop">All Categories</a></li>
-                  <% } %> <% category.forEach(element=> { %>
-                  <li>
-                    <a
-                      href="/shop?p=<%= currentPage %>&category=<%= element.categoryName %>"
-                      <%
-                      if
-                      (selectedCategory
-                      &&
-                      selectedCategory.length
-                      >0) { %> class="<%= selectedCategory.includes(element._id)
-                      ? 'text-dark' : '' %>" <% } %>> <%= element.categoryName   
-                      %> <%if(element.offer){%><span class="text-danger"><%=element.offer%>% off</span><%}%>
-                    </a>
-                  </li>
-                  <% }); %> <% } else { %>
-                  <h3>NO CATEGORIES</h3>
                   <% } %>
+                  <% category.forEach(element=> { %>
+                  <li>
+                    <a href="/shop?p=<%= currentPage %>&category=<%= element.categoryName %>" <% if
+                              (selectedCategory && selectedCategory.length>0) { %> class="<%=
+                                selectedCategory.includes(element._id) ? 'text-dark' : '' %>" <% } %>> <%=
+                                    element.categoryName %>
+                      <%if(element.offer){%><span class="text-danger">
+                        <%=element.offer%>% off
+                      </span>
+                      <%}%>
+                            </a>
+                          </li>
+                          <% }); %>
+                      <% } else { %>
+                      <h3>NO CATEGORIES</h3>
+                      <% } %>
                 </ul>
               </div>
             </div>
@@ -81,7 +76,7 @@
         <div class="col-lg-9 order-1 order-lg-2">
           <div class="shop-product-wrapper res-xl res-xl-btn">
             <div class="shop-bar-area">
-              
+
               <div class="shop-product-content tab-content">
                 <div id="grid-sidebar1" class="tab-pane fade active show">
                   <div class="row">
@@ -90,79 +85,55 @@
                       <div class="product-wrapper mb-30">
                         <div class="product-img">
                           <a href="/viewProduct/<%= product?._id %>">
-                            <img
-                              src="<%= product.images[0].thumbnailUrl%>"
-                              alt="<%= product.title %>"
-                            />
+                            <img src="<%= product.images[0].thumbnailUrl%>" alt="<%= product.title %>" />
                           </a>
-                           <% if(product.quantity<=0){%>
-                                           <div class="unavailable-container">
-                                               <p class="unavailable ">Currently Unavailable</p>
-                                            </div>
-                                       <% }%>
-                          <span>hot</span>
-                          <div class="product-action">
-                            <% if (userWishlist) { %> <% if
-                            (userWishlist.includes(product._id)) { %>
-                            <a
-                              class="animate-right"
-                              id="wishlist"
-                              title="Wishlist"
-                              onclick="toggleWishlist(`<%= product._id %>`)"
-                              style="background-color: red"
-                            >
-                              <i class="pe-7s-like" id="wishlist"></i>
-                            </a>
-                            <% } else { %>
-                            <a
-                              class="animate-right"
-                              id="wishlist"
-                              title="Wishlist"
-                              onclick="toggleWishlist(`<%= product._id %>`)"
-                            >
-                              <i class="pe-7s-like" id="wishlist"></i>
-                            </a>
+                          <% if(product.quantity<=0){%>
+                          <div class="unavailable-container">
+                            <p class="unavailable ">Currently Unavailable</p>
+                          </div>
+                          <% }%>
+                          
+                          
 
-                            <% } %> <% } else { %>
-                            <a
-                              class="animate-right"
-                              id="wishlist"
-                              title="Wishlist"
-                              href="/login"
-                            >
-                              <i class="pe-7s-like"></i
-                            ></a>
-                            <% } %> <% if(!user) {%>
-                            <a
-                              class="animate-top"
-                              title="Add To Cart"
-                              href="/login"
-                            >
+                          <div class="product-action">
+
+
+
+
+                            <% if(!user) {%>
+                            <a class="animate-top" title="Add To Cart" href="/login">
                               <i class="pe-7s-cart"></i>
                             </a>
 
                             <% }else{ %>
-                            <a
-                              class="animate-top"
-                              title="Add To Cart"
-                              onclick="addToCart('<%= product._id %>')"
-                            >
+                            <a class="animate-top" title="Add To Cart" onclick="addToCart('<%= product._id %>')">
                               <i class="pe-7s-cart"></i>
                             </a>
 
                             <% } %>
-                            <a
-                              class="animate-right"
-                              title="Quick View"
-                              href="/viewProduct/<%= product?._id %>"
-                            >
+                            <a class="animate-right" title="Quick View" href="/viewProduct/<%= product?._id %>">
                               <i class="pe-7s-look"></i>
                             </a>
                           </div>
                         </div>
 
                         <div class="product-content">
-                          <h4><a href="#"> <%= product.title%> </a></h4>
+                          <h4 class="d-flex justify-content-between"><a href="#">
+                              <%= product.title%>
+                            </a>
+                              <span title="Wishlist" <% if (userWishlist) { %> <% if (userWishlist.includes(product._id)) { %> 
+                              onclick="toggleWishlist(`<%= product._id %>`)" class="bg-danger rounded-circle p-2 " id="wishlist-<%= product._id %>">
+                              <i class="pe-7s-like" id="wishlist"></i>
+                              <% } else { %>
+                              class="bg-white rounded-circle p-2"     onclick="toggleWishlist(`<%= product._id %>`)" id="wishlist-<%= product._id %>">
+                              <i class="pe-7s-like" id="wishlist"></i>
+                              <% } %>
+                              <% } else { %>
+                                class="rounded-circle p-2"
+                              href="/login">
+                              <i class="pe-7s-like"></i>
+                            </span>
+                            <% } %></h4>
                         </div>
                         <p class="text-success">
                           <%=product.categoryName.categoryName%>
@@ -170,81 +141,69 @@
                         <%if(product.productPrice!==product.salePrice){%>
                         <div class="d-flex justify-content-between">
                           <div>
-                            <span
-                              class="text-decoration-line-through text-secondary"
-                            >
+                            <span class="text-decoration-line-through text-secondary">
                               ₹ <%= product.productPrice %>
                             </span>
                             <span class="m-2 text-danger fw-bold">
                               <%= product.categoryName.offer%>% off
                             </span>
                           </div>
-                          <span class="fw-bolder"
-                            >₹ <%= product.salePrice %></span
-                          >
+                          <span class="fw-bolder">₹ <%= product.salePrice %></span>
                         </div>
                         <%}else{%>
                         <div class="d-flex justify-content-between">
-                          <span class="fw-bolder"
-                            >₹ <%= product.salePrice %></span
-                          >
+                          <span class="fw-bolder">₹ <%= product.salePrice %></span>
                         </div>
                         <%}%>
+                        </div>
+                      </div>
+
+                      <div id="fixed-div" class="mt-2 fixed-div" style="display: none">
+                        <p id="wishlist-message" class="mb-0 text-light text-center"></p>
+                      </div>
+                      <% }) %>
                       </div>
                     </div>
 
-                    <div
-                      id="fixed-div"
-                      class="mt-2 fixed-div"
-                      style="display: none"
-                    >
-                      <p
-                        id="wishlist-message"
-                        class="mb-0 text-light text-center"
-                      ></p>
-                    </div>
-                    <% }) %>
                   </div>
                 </div>
-             
+              </div>
+              <div class="pagination-style mt-30 text-center">
+                <ul>
+                  <% if (currentPage> 1) { %>
+                  <li>
+                    <a href="?p=<%= parseInt(currentPage) - 1 %>"><i class="ti-angle-left"></i></a>
+                  </li>
+                  <% } else { %>
+                  <li class="disabled">
+                    <span><i class="ti-angle-left"></i></span>
+                  </li>
+                  <% } %>
+                  <% for (let i=1; i <=totalPages; i++) { %>
+                  <li class="<%= i === currentPage ? 'active' : '' %>">
+                    <a href="?p=<%= i %>">
+                      <%= i %>
+                    </a>
+                  </li>
+                  <% } %>
+                  <% if (currentPage < totalPages) { %>
+                  <li>
+                    <a href="?p=<%= parseInt(currentPage) + 1 %>">
+                      <i class="ti-angle-right"></i></a>
+                  </li>
+                  <% } else { %>
+                  <li class="disabled">
+                    <span><i class="ti-angle-right"></i></span>
+                  </li>
+                  <% } %>
+                </ul>
               </div>
             </div>
           </div>
-          <div class="pagination-style mt-30 text-center">
-            <ul>
-              <% if (currentPage> 1) { %>
-              <li>
-                <a href="?p=<%= parseInt(currentPage) - 1 %>"
-                  ><i class="ti-angle-left"></i
-                ></a>
-              </li>
-              <% } else { %>
-              <li class="disabled">
-                <span><i class="ti-angle-left"></i></span>
-              </li>
-              <% } %> <% for (let i=1; i <=totalPages; i++) { %>
-              <li class="<%= i === currentPage ? 'active' : '' %>">
-                <a href="?p=<%= i %>"> <%= i %> </a>
-              </li>
-              <% } %> <% if (currentPage < totalPages) { %>
-              <li>
-                <a href="?p=<%= parseInt(currentPage) + 1 %>">
-                  <i class="ti-angle-right"></i
-                ></a>
-              </li>
-              <% } else { %>
-              <li class="disabled">
-                <span><i class="ti-angle-right"></i></span>
-              </li>
-              <% } %>
-            </ul>
-          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
             <span class="pe-7s-close" aria-hidden="true"></span>
         </button>
@@ -333,7 +292,7 @@
             </div>
         </div>
     </div> -->
-  <!-- modal -->
+      <!-- modal -->
 </body>
 .fixed-size-image { width: 100%; /* Set the width as needed */ height: auto; /*
 Maintain the aspect ratio */ /* Or, if you want a fixed height */ /* height:
@@ -347,17 +306,18 @@ Maintain the aspect ratio */ /* Or, if you want a fixed height */ /* height:
     width: fit-content;
     z-index: 9999;
   }
-  .unavailable-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
- 
- 
-}
 
-.unavailable {
-  position: absolute;
-  color: red;
-  font-size: large;
-}
+  .unavailable-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+  }
+
+  .unavailable {
+    position: absolute;
+    color: red;
+    font-size: large;
+  }
 </style>
