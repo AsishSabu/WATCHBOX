@@ -76,7 +76,7 @@ const insertProduct = asynchandler(async (req, res) => {
 
       const newProduct = await product.create({
         title: req.body.productName,
-        description: req.body.description,
+        description:req.body.description,
         categoryName: req.body.categoryName,
         quantity: req.body.quantity,
         productPrice: req.body.productPrice,

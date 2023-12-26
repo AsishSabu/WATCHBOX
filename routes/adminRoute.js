@@ -33,7 +33,7 @@ adminRoute.post( "/unblockUser/:id",isAdminLoggedin,adminController.unblockUser)
 
 adminRoute.get("/products", isAdminLoggedin, productController.loadProduct);
 adminRoute.get("/addProduct", isAdminLoggedin, productController.addProduct);
-adminRoute.post("/addProduct",fileUploadValidation,upload.fields([{ name: "images", maxCount: 4 }]),productController.insertProduct);
+adminRoute.post("/addProduct",upload.fields([{ name: "images", maxCount: 4 }]),productController.insertProduct);
 adminRoute.post("/product/list/:id",isAdminLoggedin,productController.listProduct);
 adminRoute.post("/product/unlist/:id",isAdminLoggedin,productController.unListProduct);
 adminRoute.get("/product/editProduct/:id",isAdminLoggedin,productController.editProduct);

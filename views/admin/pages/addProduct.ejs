@@ -1,7 +1,7 @@
 <div class="container">
   <h1 class="card-title  fw-semibold mb-4">Add Product</h1>
     
-  <form action="" method="post" id="addProduct" enctype="multipart/form-data">
+  <form action="" method="post" id="addProduct" enctype="multipart/form-data" onsubmit="return validateProductForm()">
     <div class="form-group">
       <label for="productName">Product Name</label>
       <input
@@ -40,29 +40,29 @@
     <div class="form-group">
       <label for="productPrice">Product Price</label>
       <input
-        type="text"
+        type="number"
         class="form-control"
         id="productPrice"
         name="productPrice"
-        required
+        
       />
       <div id="productPriceErr" class="text-danger text-center"></div>
     </div>
     <div class="form-group">
       <label for="salePrice">Sale Price</label>
       <input
-        type="text"
+        type="number"
         class="form-control"
         id="salePrice"
         name="salePrice"
-        required
+      
       />
       <div id="saleerr" class="text-danger text-center"></div>
     </div>
     <div class="form-group">
       <label for="quantity">Quantity</label>
       <input
-        type="text"
+        type="number"
         class="form-control"
         id="quantity"
         name="quantity"
@@ -97,7 +97,7 @@
         accept="image/*"
         multiple
         style="display: none"
-        required
+       
       />
       <div id="image-preview" class="d-flex flex-wrap gap-3"></div>
       <button
@@ -196,215 +196,4 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   }
 </style>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const productForm = document.getElementById("addProduct");
-  const productInput = document.getElementById("productName");
-  const nameerr = document.getElementById("nameerr");
-  const descriptionInput = document.getElementById("description");
-  const decerr = document.getElementById("decerr");
-  const productPriceInput = document.getElementById("productPrice");
-  const productPriceErr = document.getElementById("productPriceErr");
-  const salePrice = document.getElementById("salePrice");
-  const saleerr = document.getElementById("saleerr");
-  const Quantity = document.getElementById("quantity");
-  const Qerr = document.getElementById("qerr");
-  const brand = document.getElementById("brand");
-  const branderr = document.getElementById("branderr");
-  const imageerr = document.getElementById("imageerr");
-  const formerr = document.getElementById("formerr");
-    const previewContainer = document.getElementById("image-preview");
-
-  function validateName() {
-    const name = productInput.value.trim();
-
-    if (name === "") {
-      nameerr.textContent = "Field is required";
-    } else if (name.length < 4) {
-      nameerr.textContent = "Name must be at least 4 characters";
-    } else {
-      nameerr.textContent = "";
-    }
-  }
-
-  productInput.addEventListener("blur", validateName);
-
-  function validateDec() {
-    const dec = descriptionInput.value.trim();
-
-    if (dec === "") {
-      decerr.textContent = "Field is required";
-    } else if (dec.length < 10) {
-      decerr.textContent = "Description must be at least 10 characters";
-    } else {
-      decerr.textContent = "";
-    }
-  }
-
-  descriptionInput.addEventListener("blur", validateDec);
-
-function validateProductPrice() {
-  const price = parseFloat(productPriceInput.value.trim());
-
-  if (isNaN(price)) {
-    productPriceErr.textContent = "Please enter a valid number for the product price";
-  } else if (price <= 0) {
-    productPriceErr.textContent = "Price should be a positive number";
-  } else {
-    productPriceErr.textContent = "";
-  }
-}
-
-
-  productPriceInput.addEventListener("blur", validateProductPrice);
-
- function validateSalePrice() {
-  const price = parseFloat(salePrice.value.trim());
-
-  if (isNaN(price)) {
-    saleerr.textContent = "Please enter a valid number";
-  } else if (price <= 0) {
-    saleerr.textContent = "Price should be a positive number";
-  } else {
-    saleerr.textContent = "";
-  }
-}
-  salePrice.addEventListener("blur", validateSalePrice);
-
-  function validateBrandName() {
-    const name = brand.value.trim();
-
-    if (name === "") {
-      branderr.textContent = "Field is required";
-    } else {
-      branderr.textContent = "";
-    }
-  }
-
-  brand.addEventListener("blur", validateBrandName);
-
-  function validateQuantity() {
-  const quantity = parseFloat(Quantity.value.trim());
-
-  if (isNaN(quantity)) {
-    Qerr.textContent = "Please enter a valid number for quantity";
-  } else if (quantity <= 0) {
-    Qerr.textContent = "Quantity should be a positive number";
-  } else {
-    Qerr.textContent = "";
-  }
-}
-
-  Quantity.addEventListener("blur", validatequantity);
-
-  function validateBrandName() {
-    const name = brand.value.trim();
-
-    if (name === "") {
-      branderr.textContent = "Field is required";
-    } else {
-      branderr.textContent = "";
-    }
-  }
-
-  brand.addEventListener("blur", validateBrandName);
-
-  function validateImage() {
-    const files =document.getElementById("product-images").files;
-    if (files.length === 0) {
-      imageerr.textContent = "Please select at least one image";
-    } else if (files.length > 4) {
-      imageerr.textContent = "Maximum of 4 images allowed";
-    } else {
-      imageerr.textContent = "";
-    }
-  }
-image.addEventListener("change", validateImage);
-
-  function handleSubmit(event) {
-  event.preventDefault();
-
-  validateBrandName();
-  validateDec();
-  validateName();
-  validateProductPrice();
-  validateSalePrice();
-  validateQuantity();
-  validateImage();
-
-  const allErrors = [
-    nameerr,
-    decerr,
-    productPriceErr,
-    saleerr,
-    Qerr,
-    branderr,
-    imageerr,
-  ];
-
-  // Check if there are any errors and if the number of files is within the limit
-  if (allErrors.every((error) => error.textContent === "")) {
-    formerr.textContent = "";
-    productForm.submit();
-  } else {
-    alert("Please provide appropriate data");
-  }
-}
-+
-
-  productForm.addEventListener("submit", handleSubmit);
-});
-
-</script>
-
-<script>
-  document.getElementById("product-images").addEventListener("change", function () {
-  const previewContainer = document.getElementById("image-preview");
-  const files = this.files;
-
-  if (files.length === 0) {
-    // If no files are selected, show an error message
-    imageerr.textContent = "Please select at least one image";
-  } else if (files.length > 4) {
-    // If more than 4 files are selected, show an error message
-    imageerr.textContent = "Maximum of 4 images allowed";
-  } else {
-    // If the number of files is within the limit, clear the error message
-    imageerr.textContent = "";
-  }
-
-  // Clear previous previews
-  previewContainer.innerHTML = "";
-
-  // Display previews for selected images
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-      const img = document.createElement("img");
-      img.src = e.target.result;
-      img.classList.add("img-thumbnail");
-      img.style.maxWidth = "150px";
-      img.style.maxHeight = "150px"; // Limit image height for a consistent layout
-
-      const closeButton = document.createElement("button");
-      closeButton.innerHTML = "&times;"; // Unicode character for 'times' (close) symbol
-      closeButton.classList.add("btn", "btn-sm", "btn-danger", "close-button");
-      closeButton.addEventListener("click", function () {
-        previewContainer.removeChild(imageDiv);
-      });
-
-      const imageDiv = document.createElement("div");
-      imageDiv.classList.add("image-container");
-      imageDiv.appendChild(img);
-      imageDiv.appendChild(closeButton);
-
-      previewContainer.appendChild(imageDiv);
-    };
-
-    reader.readAsDataURL(file);
-  }
-});
-
-</script>
+<script src="/admin/js/productValidation.js"></script>
