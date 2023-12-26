@@ -1,69 +1,65 @@
-<link
-  href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-  rel="stylesheet"
-  id="bootstrap-css"
-/>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<div class="cart-wrap">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="main-heading mb-10">My wishlist</div>
-        <% if (wishlist.length> 0) { %>
-        <div class="table-wishlist">
-          <table cellpadding="0" cellspacing="0" border="0" width="100%">
-            <thead>
-              <tr>
-                <th width="45%">Product Name</th>
-                <th width="15%">Product Price</th>
-                <th width="15%">Stock Status</th>
-                <th width="15%"></th>
-                <th width="10%"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <% wishlist.forEach(item=> { %>
-              <tr>
-                <td width="45%">
-                  <div class="display-flex align-center">
-                    <div class="img-product">
-						<a href="/viewProduct/<%= item?._id %>"> <img
-                        src="<%= item.images[0].thumbnailUrl %>"
-                        alt=""
-                        class="mCS_img_loaded"
-                      /></a>
-                     
+<body>
+  <div class="cart-wrap">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="main-heading mb-10 fw-bolder">My wishlist</div>
+          <% if (wishlist.length > 0) { %>
+          <div class="table-wishlist">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+              <thead class="text-center">
+                <tr >
+                  <th class="fw-bolder">Remove</th>
+                  <th class="fw-bolder">Product Image</th>
+                  <th class="fw-bolder">Product Name</th>
+                  <th class="fw-bolder">Product Price</th>
+                  <th class="fw-bolder">Add to Cart</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <% wishlist.forEach(item => { %>
+                <tr>
+                  <td  class="text-center">
+                    <a href="/removeWishlist/<%= item._id %>" class="trash-icon">
+                      <i class="far fa-trash-alt"></i>
+                    </a>
+                  </td>
+                  <td >
+                    <div class="d-flex justify-content-center">
+                      <div class="img-product">
+                        <a href="/viewProduct/<%= item?._id %>">
+                          <img src="<%= item.images[0].thumbnailUrl %>" alt="" class="mCS_img_loaded">
+                        </a>
+                      </div>
                     </div>
-                    <div class="name-product"> <%= item.title %></div>
-                  </div>
-                </td>
-                <td width="15%" class="price">₹<%= item.salePrice %></td>
-                <td width="15%">  <% if(item.quantity>0){ %> <span class="in-stock-box">In Stock</span><% }else{ %><span class="out-stock-box">Out of Stock</span><% } %></td>
-                <td width="15%">
-                  <button class="round-black-btn small-btn" onclick="addToCart(`<%= item._id %>`)">Add to Cart</button>
-                </td>
-                <td width="10%" class="text-center">
-                  <a href="/removeWishlist/<%= item._id %>" class="trash-icon"
-                    ><i class="far fa-trash-alt"></i
-                  ></a>
-                </td>
-              </tr>
-              <% }); %>
-            </tbody>
-          </table>
+                  </td>
+                  <td  class="price"> 
+                        <a href="/viewProduct/<%= item?._id %>">
+                         <%= item.title %>
+                        </a>
+                      </td>
+                  <td  class="price">₹<%= item.salePrice %></td>
+                  <% if(item.quantity > 0) { %>
+                    <td >
+                      <button type="button" class="btn btn-dark btn-rounded" onclick="addToCart('<%= item._id %>')">Add to Cart</button>
+                    </td>
+                  <% } else { %>
+                    <td >
+                    <p class="text-danger fw-bold">Out Of Stock</p>
+                    </td>
+                  <% } %>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <% } else { %>
+          <p>No Items in Wishlist</p>
+          <% } %>
         </div>
-        <% }else { %>
-        <tr>
-          <td>No Items in Wishlist</td>
-        </tr>
-        <% } %>
       </div>
     </div>
   </div>
-</div>
 
 <style>
   .cart-wrap {
