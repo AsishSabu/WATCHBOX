@@ -21,15 +21,19 @@ const checkoutPage = asynchandler(async (req, res) => {
     const cartData = await Cart.findOne({ user: userid });
     const wallet = await Wallet.findOne({ user: userid });
 
-    
     const availableCoupons = await Coupon.aggregate([
-      { $match:{ usedBy: []} },
-      { $project: { code: 1 } }
+      {
+        $match: {
+          usedBy: [],
+          isListed: true,
+          expiryDate: { $gte: new Date() } // Use new Date() instead of Date.now
+        }
+      }
     ]);
 
     console.log("........................................",availableCoupons);
     const coupons = availableCoupons.map((coupon) => coupon.code).join(" | ");
-    const couponMessage= { status: "text-info", message: "Try these coupons --" + coupons };
+    const couponMessage= { status: "text-info", message: ""  };
    
     
     

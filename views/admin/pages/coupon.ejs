@@ -53,7 +53,7 @@
                     </a>
 
 
-                    <div  id="btn-<%= coupon._id %>" onclick="toggle(`<%=coupon._id %>`)" <% if(coupon.isListed){ %>
+                    <div  id="btn-<%= coupon._id %>" onclick="toggle(`<%=coupon._id %>`)" <% if(!coupon.isListed){ %>
                       class="btn btn-sm btn-success">
                       <i class="bx bxs-message-square-check"></i>
                       <% }else{ %>
@@ -91,13 +91,13 @@
       url: `/admin/coupon/listUnlist/${couponId}`,
       success: function (response) {
       if (response.success) {
-        button.classList.remove("btn-danger"); // Remove the btn-danger class
-        button.classList.add("btn-success"); // Add the btn-success class
-        button.innerHTML = '<i class="bx bxs-message-square-check"></i>'; // Update the button content
-      } else {
-        button.classList.remove("btn-success"); // Remove the btn-success class
+          button.classList.remove("btn-success"); // Remove the btn-success class
         button.classList.add("btn-danger"); // Add the btn-danger class
         button.innerHTML = '<i class="bx bxs-message-square-x"></i>'; // Update the button content
+      } else {
+       button.classList.remove("btn-danger"); // Remove the btn-danger class
+        button.classList.add("btn-success"); // Add the btn-success class
+        button.innerHTML = '<i class="bx bxs-message-square-check"></i>'; // Update the button content
       }
     },
       error: function (textStatus, errorThrown) {

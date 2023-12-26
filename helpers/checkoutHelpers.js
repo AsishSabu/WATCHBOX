@@ -87,7 +87,7 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet,co
 
 exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWallet,coupon) => {
 
-    console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,",payWithWallet  );
+  
     const wallet = await Wallet.findOne({ user: userid });
     let subtotal = 0;
     for (const product of cartItems.products) {

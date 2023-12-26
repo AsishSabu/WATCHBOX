@@ -21,23 +21,91 @@
     <div class="row">
       <div class="col-md-12">
         <div class="coupon-accordion">
-
           <h3 class="bg-dark">
             Have a coupon?
             <span id="showcoupon">Click here to enter your code</span>
           </h3>
-          <div id="checkout_coupon" class="coupon-checkout-content col-lg-6">
+          <div id="checkout_coupon" class="coupon-checkout-content col-lg-12">
             <div class="coupon-info d-flex">
               <button id="rmCoupon" type="button" class="btn btn-sm">
                 <i class="ti ti-close text-danger fw-bolder"></i>
               </button>
-              <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();" />
-              <input class="button" name="apply_coupon" id="couponBtn" type="button" value="Apply coupon" />
+              <input
+                id="coupon_code"
+                class="input-text"
+                name="coupon_code"
+                value=""
+                placeholder="Coupon code"
+                type="text"
+                oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();"
+              />
+              <input
+                class="button"
+                name="apply_coupon"
+                id="couponBtn"
+                type="button"
+                value="Apply coupon"
+              />
             </div>
-            <% if (availableCoupons && availableCoupons.length > 0) { %>
             <h6 class="mt-2 text-success" id="couponError">
               <%= couponMessage?.message %>
             </h6>
+            <% if (availableCoupons && availableCoupons.length > 0) { %>
+            <!-- ... (other HTML code) ... -->
+
+            <div class="container mt-3">
+              <div class="row">
+                <% availableCoupons.forEach(item => { %>
+                <div class="col-md-3">
+                  <div class="coupon p-2 ">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col-md-4">
+                        <div class="d-flex flex-column align-items-center">
+                            <input type="hidden" id="min" value="<%=item.minAmount %>">
+                            <input type="hidden" id="max" value="<%=item.maxAmount %>">
+                            <span class="fw-bolder text-danger"><%=item.description %></span>
+                          <span class="d-block "><%=item.value%>
+                            <% if(item.type=="percentage"){ %>
+                              %
+
+                              <% }else{ %>
+                                 -/
+                                <% } %>
+                           off</span>
+                        
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div
+                          class="flex-row justify-content-between align-items-center off px-3 p-2"
+                        >
+                          <span>Promo code:</span>
+                          <% if(total>=item.minAmount&&total<=item.maxAmount) {%>
+                            <span
+                            class="border border-success px-3 rounded code promoCode"
+                            ><%= item.code %></span
+                          >
+                      <%   }else{ %>
+                         <span
+                            class="border border-success px-3 rounded code "
+                            ><%= item.code %></span
+                          >
+                          <p class="text-danger">not applicable</p>
+                        <% } %>
+                         
+                          
+                          <div class="copyMessage text-danger"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+              </div>
+            </div>
+
+            <!-- ... (other HTML code) ... -->
+
             <% } else { %>
             <h6 class="mt-2 text-danger" id="couponError">
               No coupons available
@@ -58,7 +126,11 @@
                 <div class="checkbox-form">
                   <div class="d-flex">
                     <h3>Select Address</h3>
-                    <a href="/addAddress" class="btn bg-white text-danger rounded btn-outline-white">Add</a>
+                    <a
+                      href="/addAddress"
+                      class="btn bg-white text-danger rounded btn-outline-white"
+                      >Add</a
+                    >
                   </div>
                   <div class="different-address">
                     <div id="" class="row">
@@ -68,9 +140,14 @@
                         <div class="card">
                           <div class="card-body">
                             <div class="form-check">
-                              <input class="form-check-input" type="radio" name="addressId" id="address<%= index %>" value="<%= item._id %>" required <%= index === 0 ?
+                              <input class="form-check-input" type="radio"
+                              name="addressId" id="address<%= index %>"
+                              value="<%= item._id %>" required <%= index === 0 ?
                               "checked" : "" %> />
-                              <label class="form-check-label" for="address<%= index %>">
+                              <label
+                                class="form-check-label"
+                                for="address<%= index %>"
+                              >
                                 <h5 class="card-title"><%= item.name %></h5>
                                 <p class="card-text">
                                   <%= item.address %>, <%= item.town %>, <%=
@@ -101,7 +178,12 @@
       <div class="col-lg-6 col-md-12 col-12">
         <div class="your-order">
           <h3>Your order</h3>
-          <input type="hidden" id="originalCartData" name="currentCartData" value="<%= JSON.stringify(cartData) %>" />
+          <input
+            type="hidden"
+            id="originalCartData"
+            name="currentCartData"
+            value="<%= JSON.stringify(cartData) %>"
+          />
           <div class="your-order-table table-responsive">
             <table>
               <thead>
@@ -122,10 +204,13 @@
                     <% } else { %> <small> <%= item.product.title %> </small> <%
                     } %>
                     <strong class="product-quantity">
-                      <%=item.quantity %></strong>
+                      <%=item.quantity %></strong
+                    >
                   </td>
                   <td class="product-total">
-                    <span class="amount"><%=item.product.salePrice*item.quantity %></span>
+                    <span class="amount"
+                      ><%=item.product.salePrice*item.quantity %></span
+                    >
                   </td>
                 </tr>
 
@@ -143,18 +228,29 @@
 
                 <tr class="wallet-payment">
                   <td colspan="2">
-                    <div class="wallet-info d-flex justify-content-between align-items-center">
+                    <div
+                      class="wallet-info d-flex justify-content-between align-items-center"
+                    >
                       <div class="d-flex flex-column ml-10">
                         <div class="d-flex align-items-center">
-                          <input type="checkbox" id="wallet" name="wallet" value="wallet" style="width: 20px; height: 20px;
+                          <input type="checkbox" id="wallet" name="wallet"
+                          value="wallet" style="width: 20px; height: 20px;
                           margin-right: 10px" <%= wallet.balance === 0 ?
                           "disabled" : "" %> />
                           <label for="wallet">Pay with Wallet:</label>
                         </div>
-                        <small>Available Balance: ₹
-                          <span id="available-balance"><%= wallet?.balance ?? "0" %></span></small>
+                        <small
+                          >Available Balance: ₹
+                          <span id="available-balance"
+                            ><%= wallet?.balance ?? "0" %></span
+                          ></small
+                        >
                       </div>
-                      <span>- ₹<span id="wallet-amount" class="mr-90">0</span></span>
+                      <span
+                        >- ₹<span id="wallet-amount" class="mr-90"
+                          >0</span
+                        ></span
+                      >
                     </div>
                   </td>
                 </tr>
@@ -162,8 +258,11 @@
                 <tr class="order-total">
                   <th>Order Total</th>
                   <td>
-                    <strong><span id="total" class="amount">
-                        ₹ <%= total.toFixed(2) %></span></strong>
+                    <strong
+                      ><span id="total" class="amount">
+                        ₹ <%= total.toFixed(2) %></span
+                      ></strong
+                    >
                   </td>
                 </tr>
               </tfoot>
@@ -174,14 +273,31 @@
             <div class="payment-accordion">
               <div class="order-button-payment">
                 <div class="order-button-payment d-flex flex-column gap-2">
-                  <button type="button" class="btn btn-dark h-auto rounded-0 fw-bold" style="padding: 12px" id="cod-button">
+                  <button
+                    type="button"
+                    class="btn btn-dark h-auto rounded-0 fw-bold"
+                    style="padding: 12px"
+                    id="cod-button"
+                  >
                     CASH ON DELIVERY
                   </button>
-                  <button class="btn btn-primary h-auto rounded-0 fw-bold" style="padding: 12px" type="button" id="rzp-button" value="submit">
+                  <button
+                    class="btn btn-primary h-auto rounded-0 fw-bold"
+                    style="padding: 12px"
+                    type="button"
+                    id="rzp-button"
+                    value="submit"
+                  >
                     Pay with Razorypay
                   </button>
 
-                  <button class="btn btn-success h-auto rounded-0 fw-bold" style="padding: 12px" type="button" id="wlt-button" value="submit">
+                  <button
+                    class="btn btn-success h-auto rounded-0 fw-bold"
+                    style="padding: 12px"
+                    type="button"
+                    id="wlt-button"
+                    value="submit"
+                  >
                     Pay With Wallet
                   </button>
                 </div>
@@ -200,9 +316,79 @@
   <!-- checkout-area end -->
   <style>
     body {
-      background-color: black;
+      background-color: rgb(255, 255, 255);
     }
+
+    /* ... (other CSS code) ... */
+
+    .coupon {
+      border-radius: 12px;
+      background-color: rgb(255, 244, 230);
+      box-shadow: 5px 8px 10px #00000033;
+      margin-bottom: 10px; /* Add margin bottom to create space between coupons */
+    }
+
+    .coupon:hover {
+      box-shadow: 5px 8px 10px #00000055; /* Change box shadow on hover for a slight effect */
+    }
+
+    .coupon img {
+      max-width: 100%; /* Make sure the image doesn't overflow its container */
+    }
+
+    .code {
+      background-color: #f8f9fa; /* Add a background color to make the code stand out */
+      cursor: pointer;
+    }
+
+    .code:hover {
+      background-color: #e9ecef; /* Change background color on hover */
+    }
+
+    .copy-message {
+      display: none;
+      color: #28a745; /* Green color for success */
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    /* ... (other CSS code) ... */
   </style>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+   // Find all promo code elements
+const promoCodeElements = document.querySelectorAll(".promoCode");
 
+// Add a click event listener to each promo code element
+promoCodeElements.forEach(promoCodeElement => {
+  promoCodeElement.addEventListener("click", () => {
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = promoCodeElement.innerText;
+    document.body.appendChild(tempInput);
+
+    // Select the value of the input
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the selected text
+    document.execCommand("copy");
+
+    // Remove the temporary input
+    document.body.removeChild(tempInput);
+
+    // Show the copy message
+    const copyMessageElement = promoCodeElement.nextElementSibling;
+    copyMessageElement.textContent = "Copied!";
+    copyMessageElement.style.display = "block";
+
+    // Hide the copy message after a short delay
+    setTimeout(() => {
+      copyMessageElement.textContent = "";
+      copyMessageElement.style.display = "none";
+    }, 1000);
+  });
+});
+
+  </script>
 </div>

@@ -40,7 +40,7 @@ exports.addCoupon = asyncHandler(async (req, res) => {
 
 exports.loadCoupon = asyncHandler(async (req, res) => {
     try {
-        const coupons = await Coupon.find()
+        const coupons = await Coupon.find().sort({ _id: -1 });
         console.log(coupons);
         res.render("./admin/pages/coupon",{title:"coupons",coupons})
     } catch (error) {
