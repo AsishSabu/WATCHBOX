@@ -2,11 +2,12 @@
   <div class="row">
     <div class="col-md-6 offset-md-3 center-content border border-3 border-dark">
       <h1 class="mb-4">Add Category</h1>
-      <form action="" method="post">
+      <form action="" method="post" onsubmit="return categoryValidation()">
         <div class="input-group m-auto">
-          <input type="text" class="form-control" placeholder="Category Name" name="text">
+          <input type="text" class="form-control" id="name" placeholder="Category Name" name="text" required>
           <button class="btn btn-submit" type="submit" name="btn">Submit</button>
         </div>
+        <div id="nameerr" class="text-danger fw-bolder"></div>
       </form>
     </div>
   </div>
@@ -66,4 +67,6 @@ setTimeout(hide, 3000);
     color: #ffffff;
     border: none;
   }
+  
 </style>
+<script src="/admin/js/categoryValidation.js"></script>

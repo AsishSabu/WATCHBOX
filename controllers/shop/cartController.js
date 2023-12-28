@@ -144,6 +144,36 @@ const getCartCount = asynchandler(async (req, res) => {
   }
 });
 
+const checkProductAvailability = asynchandler(async (req, res) => { 
+  try {
+   
+    const userId = req.user._id;
+    console.log(userId);
+    const user = await Cart.findOne({user:userId}).populate('products').exec(); // Populate the product details
+   for (const product of user.products) {
+     const productId = product.product._id;
+     const products = await Product.findById(productId);
+     console.log(products.quantity,"////////////////////////////");
+     console.log(product.quantity, ".................................");
+     const quantity = products.quantity - product.quantity;
+     console.log(quantity, "===============================");
+     if (quantity < 0) {
+       return res.json({
+         
+         status: "danger",
+      
+       });
+     }
+    }
+    res.json({
+      
+      status: "success",
+    });
+  } catch (error) {
+    throw new Error(error)
+  }
+})
+
 
 module.exports = {
   loadCart,
@@ -151,5 +181,6 @@ module.exports = {
   removeProduct,
   incQuantity,
   decQuantity,
-  getCartCount
+  getCartCount,
+  checkProductAvailability
 };

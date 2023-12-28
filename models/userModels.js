@@ -30,16 +30,13 @@ const userSchema = new Schema(
     referralCode: {
       type: String,
       unique: true,
-      default: 'ReferralCode'
+      default: "ReferralCode",
     },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     cart: [
       {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-        },
-        quantity: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart",
       },
     ],
     wallet: { type: mongoose.Schema.Types.ObjectId, ref: "Wallet" },
@@ -59,14 +56,14 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
   if (this.isNew) {
     const salt = bcrypt.genSaltSync(10);
-    console.log(this.password);    
+    console.log(this.password);
     this.password = await bcrypt.hash(this.password, salt);
   }
   next();
 });
 
 userSchema.methods.isPasswordMatched = async function (enteredPassword) {
-    console.log(enteredPassword);
+  console.log(enteredPassword);
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

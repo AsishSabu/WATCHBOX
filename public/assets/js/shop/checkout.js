@@ -442,3 +442,60 @@ function handleRemoveCouponBtnClick() {
         }
     });
 }
+
+
+
+
+
+
+function checkProductAvailability(callback) {
+  $.ajax({
+    type: "GET",
+    url: "/checkProductAvailability",
+    success: function (response) {
+      console.log(response.status, "response in cart");
+      if (response.status == "success") {
+        console.log("Product is available");
+        callback(true); // Call the callback with true if product is available
+      } else {
+        console.log("Product is not available");
+        callback(false); // Call the callback with false if product is not available
+      }
+    },
+    error: function (textStatus, errorThrown) {
+      console.error(
+        "Error checking product availability:",
+        textStatus,
+        errorThrown
+      );
+      callback(false); // Call the callback with false in case of an error
+    },
+  });
+}
+
+document
+  .getElementById("checkoutBtn")
+  .addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Call checkProductAvailability and pass a callback function
+    checkProductAvailability(function (isAvailable) {
+      if (isAvailable) {
+        // Product is available, submit the form
+        document.querySelector("form").submit();
+      } else {
+        // Product is not available, show an alert or take appropriate action
+        showStockAlert();
+      }
+    });
+  });
+
+function showStockAlert() {
+  Swal.fire({
+    position: "center",
+    icon: "error",
+    title: "Out of stock",
+    showConfirmButton: false,
+    timer: 1500,
+  });
+}

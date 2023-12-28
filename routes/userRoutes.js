@@ -11,7 +11,7 @@ const {
 const checkoutController = require("../controllers/shop/checkoutController");
 const addressController = require("../controllers/shop/addressControl");
 const orderController = require("../controllers/shop/orderControllers");
-const { validateID }=require("../middleware/idValidation")
+const { validateID } = require("../middleware/idValidation")
 const walletController = require("../controllers/shop/walletController");
 
 userRoute.use((req, res, next) => {
@@ -29,30 +29,16 @@ userRoute.get("/logout", ensureAuthenticated, usercontroller.logout);
 userRoute.get("/register", ensureNotAuthenticated, usercontroller.loadRegister);
 userRoute.get("/resendOtp", ensureNotAuthenticated, usercontroller.resendOtp);
 userRoute.get("/verifyOtp", ensureNotAuthenticated, usercontroller.loadOtp);
-userRoute.get(
-  "/sendEmail",
-  ensureNotAuthenticated,
-  usercontroller.loadSendEmail
-);
-userRoute.get(
-  "/verifyEmail",
-  ensureNotAuthenticated,
-  usercontroller.LoadVerifyEmail
-);
-userRoute.get(
-  "/reverifyEmail",
-  ensureNotAuthenticated,
-  usercontroller.reverifyEmail
-);
+userRoute.get( "/sendEmail",ensureNotAuthenticated,usercontroller.loadSendEmail);
+userRoute.get( "/verifyEmail",ensureNotAuthenticated, usercontroller.LoadVerifyEmail);
+userRoute.get("/reverifyEmail",ensureNotAuthenticated,usercontroller.reverifyEmail);
 userRoute.get("/profile", ensureAuthenticated, usercontroller.loadProfile);
 userRoute.post("/profile", ensureAuthenticated, usercontroller.editProfile);
 
 /*
     post methods
     */
-userRoute.post(
-  "/login",
-  ensureNotAuthenticated,
+userRoute.post("/login",ensureNotAuthenticated,
   passport.authenticate("local", {
     successRedirect: "/", // Redirect on successful login
     failureRedirect: "/login", // Redirect on failed login
@@ -71,26 +57,12 @@ userRoute.post("/forgotPassword", usercontroller.forgotPassword);
 userRoute.post("/resetPassword/:id", usercontroller.resetPassword);
 userRoute.get("/newPassword", usercontroller.loadnewPassword);
 userRoute.post("/newPassword", usercontroller.newPassword);
-userRoute.get(
-  "/changePassword",
-  ensureAuthenticated,
-  usercontroller.changePassword
-);
+userRoute.get("/changePassword",ensureAuthenticated,usercontroller.changePassword);
 
-//-------------------------whislist
+//-------------------------whislist---------------------------------
 userRoute.get("/whishlist", ensureAuthenticated, shopController.loadWhishlist);
-userRoute.get(
-  "/addTo-wishlist/:id",
-  validateID,
-  ensureAuthenticated,
-  shopController.addTowishlist
-);
-userRoute.get(
-  "/removeWishlist/:id",
-  validateID,
-  ensureAuthenticated,
-  shopController.removeItemfromWishlist
-);
+userRoute.get("/addTo-wishlist/:id",validateID,ensureAuthenticated,shopController.addTowishlist);
+userRoute.get("/removeWishlist/:id",validateID,ensureAuthenticated,shopController.removeItemfromWishlist);
 
 //--------------------------shop page------------------------
 
@@ -98,33 +70,14 @@ userRoute.get("/shop", shopController.loadShop);
 
 //-------------------------------productDetails page------------------------
 
-userRoute.get(
-  "/viewProduct/:id",
-  validateID,
-  shopController.loadProductDetails
-);
+userRoute.get("/viewProduct/:id",validateID,shopController.loadProductDetails);
 
 //------------------------user Cart page---------------------------------------------------
 
 userRoute.get("/cart", ensureAuthenticated, cartController.loadCart);
-userRoute.get(
-  "/cart/add/:id",
-  validateID,
-  ensureAuthenticated,
-  cartController.addToCart
-);
-userRoute.get(
-  "/cart/remove/:id",
-  validateID,
-  ensureAuthenticated,
-  cartController.removeProduct
-);
-userRoute.get(
-  "/cart/inc/:id",
-  validateID,
-  ensureAuthenticated,
-  cartController.incQuantity
-);
+userRoute.get("/cart/add/:id",validateID,ensureAuthenticated,cartController.addToCart);
+userRoute.get("/cart/remove/:id",validateID,ensureAuthenticated,cartController.removeProduct);
+userRoute.get("/cart/inc/:id",validateID,ensureAuthenticated,cartController.incQuantity);
 userRoute.get(
   "/cart/dec/:id",
   validateID,
@@ -137,6 +90,8 @@ userRoute.get(
   ensureAuthenticated,
   cartController.getCartCount
 );
+
+userRoute.get("/checkProductAvailability", ensureAuthenticated, cartController.checkProductAvailability)
 //---------------------------address Route------------
 
 userRoute.get(
