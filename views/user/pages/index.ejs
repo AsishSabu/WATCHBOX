@@ -131,7 +131,7 @@
                             <div class="custom-col-style-2 custom-col-4">
                                 <div class="product-wrapper product-border mb-24">
                                     <div class="product-img-3">
-                                        <a href="product-details.html">
+                                        <a href="/viewProduct/<%= product?._id %>">
                                             <img src="<%= product.images[0].thumbnailUrl %>" alt="">
                                         </a>
                                       <% if(product.quantity<=0){%>
@@ -159,7 +159,7 @@
                                     </div>
                                     <div class="product-content-4 text-center">
                                       
-                                        <h4><a href="product-details.html"><%= product?.title %></a></h4>
+                                        <h4><a href="/viewProduct/<%= product?._id %>"><%= product?.title %></a></h4>
                                         <span><%= product?.categoryName?.categoryName%></span>
                                         <h5>₹ <%=product?.salePrice %></h5>
                                     </div>

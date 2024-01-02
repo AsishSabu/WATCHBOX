@@ -290,7 +290,7 @@
                   >
                     Pay with Razorypay
                   </button>
-
+             <% if(total<=wallet?.balance){%>
                   <button
                     class="btn btn-success h-auto rounded-0 fw-bold"
                     style="padding: 12px"
@@ -300,6 +300,7 @@
                   >
                     Pay With Wallet
                   </button>
+                  <% }%>
                 </div>
               </div>
             </div>

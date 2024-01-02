@@ -181,7 +181,7 @@
     </div>
   </div>
 </div>
-<div class="product-description-review-area ">
+<!-- <div class="product-description-review-area ">
   <div class="container">
     <div class="product-description-review text-center">
       <div class="description-review-title nav" role="tablist">
@@ -213,14 +213,14 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
 
 <div class="product-area ">
   <div class="container">
     <div class="section-title-3 text-center mb-5">
-      <h2>Related products</h2>
+      <h2 class="mt-5 ">Related products</h2>
     </div>
     <div id="grid-sidebar" class="tab-pane fade active show">
       <div class="row">
@@ -233,24 +233,8 @@
                       </a>
                       <div class="product-action">
                          
-                          <% if(!user){ %>
-                            <a class="animate-left" title="Wishlist" href="/login">
-                              <i class="pe-7s-like"></i>
-                          </a>
-                            <% }else{ %>
-                              <a class="animate-left" title="Wishlist" href="#">
-                                <i class="pe-7s-like"></i>
-                            </a>
-                            <% } %>
-                          <% if(!user){ %>
-                          <a class="animate-top" title="Add To Cart" href="/login">
-                              <i class="pe-7s-cart"></i>
-                          </a>
-                          <% }else{ %>
-                            <a class="animate-top" title="Add To Cart" onclick="addToCart('<%= product._id %>')">
-                              <i class="pe-7s-cart"></i>
-                          </a>
-                          <% } %>
+                          
+                          
                           <a class="animate-right" title="Quick View" href="/viewProduct/<%= product?._id %>">
                             <i class="pe-7s-look"></i>
                         </a>

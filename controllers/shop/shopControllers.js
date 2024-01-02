@@ -40,6 +40,7 @@ exports.loadShop = asynchandler(async (req, res) => {
       const limit = 12;
 
       const listedCategories = await Category.find({ isListed: true });
+      console.log(listedCategories,"listed categories");
       const categoryMapping = {};
 
       listedCategories.forEach((category) => {
@@ -93,7 +94,7 @@ exports.loadShop = asynchandler(async (req, res) => {
           sortCriteria.salePrice = -1;
         }
       }
-
+     console.log(filter,"filter.........................");
       const findProducts = await product.find(filter)
         .populate("images").populate("categoryName")
         .skip((page - 1) * limit)

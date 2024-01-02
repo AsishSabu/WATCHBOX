@@ -153,6 +153,7 @@ minusButtons.forEach((button) => {
 });
 
 function addToCart(id) {
+  currentCartData();
   console.log("in the add to cart ...............................................................................................");
   const productId = id;
   const url = `/cart/add/${productId}`;
