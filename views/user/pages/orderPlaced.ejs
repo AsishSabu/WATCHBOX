@@ -10,6 +10,8 @@
           <p><strong>Shipping Address:</strong> <%= order.address %>, <%= order.town %>, <%= order.state %></p>
           <p><strong>Phone:</strong> <%= order.phone %></p>
           <p><strong>Total Price:</strong> <%= order.totalPrice %></p>
+          <p><strong>Payment Method:</strong><%=order.
+payment_method%></p>
           <p><strong>Ordered Date:</strong> <%=  moment(order.orderedDate).local().format('MMMM Do YYYY, h:mm a') %></p>
           <hr>
           <p class="lead"><strong>PRODUCTS</strong></p>
@@ -21,7 +23,7 @@
                 </li>
             </ul>
             <% }) %>
-          <div>        <a href="#" class="btn btn-dark">Continue Shopping</a>
+          <div>        <a href="/shop" class="btn btn-dark">Continue Shopping</a>
               <a href="/order" class="btn btn-dark">View Order</a>
   
           </div>

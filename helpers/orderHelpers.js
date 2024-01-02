@@ -16,7 +16,7 @@ exports.getSingleOrder = expressAsyncHandler(async (orderId) => {
       model:'Product',
       populate: { path: "images" },
     })
-    .select("orderId orderItems orderedDate shippingAddress town createdAt") 
+    .select("orderId orderItems orderedDate shippingAddress town createdAt payment_method") 
     .sort({
       createdAt: 1,
     });

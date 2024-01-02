@@ -63,9 +63,11 @@
                       <% } %>
                        <!-- Ship To Name -->
                        <p class="card-text">
-                          <strong>Ship To Name:</strong>
+                          <strong>Ship To :</strong>
                           <%= order.shippingAddress.name%>
                       </p>
+                      <p class="card-text">
+                        <strong>Payment Method :</strong><%=order.payment_method%></p>
                        <p class="card-text">
                           <strong><h5>₹ <%=price%></h5> </strong>
                            
