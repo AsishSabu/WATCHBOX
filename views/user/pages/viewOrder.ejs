@@ -7,7 +7,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <p class="text-muted mb-2"> Order ID <span class="fw-bold text-body"><%=order.orderId  %></span></p>
-                <p class="text-muted mb-0"> Place On <span class="fw-bold text-body">12,March 2019</span> </p>
+                <p class="text-muted mb-0"> Place On <span class="fw-bold text-body"><%= moment(order.orderedDate).local().format('MMMM Do YYYY, h:mm a')%></span> </p>
               </div>
               <div>
                 <!-- <h6 class="mb-0"> <a href="#">View Details</a> </h6> -->

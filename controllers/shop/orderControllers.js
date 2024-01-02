@@ -9,6 +9,7 @@ const {status} = require("../../utils/status");
 const { Timestamp } = require("mongodb");
 const pdfMake = require("pdfmake/build/pdfmake");
 const vfsFonts = require("pdfmake/build/vfs_fonts");
+const moment = require("moment");
 
 
 const orderPage = asynchandler(async (req, res) => {
@@ -58,7 +59,8 @@ const viewOrder = asynchandler(async (req, res) => {
         quantity,
         price,
         status,
-        productItem
+        productItem,
+        moment
       });
     } else {
       res.send("error in view order");
