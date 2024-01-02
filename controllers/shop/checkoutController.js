@@ -30,12 +30,17 @@ const checkoutPage = asynchandler(async (req, res) => {
         }
       }
     ]);
-
-    console.log("........................................",availableCoupons);
-    const coupons = availableCoupons.map((coupon) => coupon.code).join(" | ");
-    const couponMessage= { status: "text-info", message: ""  };
-   
-    
+       console.log(
+         "........................................",
+         availableCoupons
+       );
+       const coupons = availableCoupons
+         .map((coupon) => coupon.code)
+         .join(" | ");
+       const couponMessage = {
+         status: "text-info",
+         message: "Try these coupons --" + coupons,
+       };
     
 
 
