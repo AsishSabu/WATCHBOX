@@ -62,11 +62,13 @@ const insertUser = asynchandler(async (req, res) => {
     });
     if (req.body.referalCode !== "") {
       userData.referralCode = req.body.referalCode
+      
     } else {
       userData.referralCode = "no referral code"
     }
     console.log(userData,".......................................");
     
+
     try {
       const existingEmail = await User.findOne({ email: req.body.email });
   
@@ -101,7 +103,7 @@ const insertUser = asynchandler(async (req, res) => {
     const otpSend = otpSetup.sendOtp(email, OTP, name);
       }
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }
     
   
@@ -112,7 +114,7 @@ const insertUser = asynchandler(async (req, res) => {
       throw new Error(error);
     }
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 });
 
