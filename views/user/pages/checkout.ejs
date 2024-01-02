@@ -259,10 +259,14 @@
                   <th>Order Total</th>
                   <td>
                     <strong
-                      ><span id="total" class="amount">
-                        ₹ <%= total.toFixed(2) %></span
+                      >  ₹<span id="total" class="amount">
+                       <%= total.toFixed(2) %></span
                       ></strong
                     >
+                    <span id="totalAmount" class="amount d-none">
+                       <%= total %></span
+                      >
+                  
                   </td>
                 </tr>
               </tfoot>
@@ -290,9 +294,9 @@
                   >
                     Pay with Razorypay
                   </button>
-             <% if(total<=wallet?.balance){%>
+                 
                   <button
-                    class="btn btn-success h-auto rounded-0 fw-bold"
+                    class="btn btn-success h-auto rounded-0 fw-bold "
                     style="padding: 12px"
                     type="button"
                     id="wlt-button"
@@ -300,7 +304,8 @@
                   >
                     Pay With Wallet
                   </button>
-                  <% }%>
+                  
+                 
                 </div>
               </div>
             </div>
