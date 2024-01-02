@@ -29,7 +29,6 @@ const userSchema = new Schema(
     },
     referralCode: {
       type: String,
-      unique: true,
       default: "ReferralCode",
     },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
