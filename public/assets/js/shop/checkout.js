@@ -253,19 +253,25 @@ async function handlePaymentFailure(orderId) {
 
 function handleWalletPayment() {
   console.log(" handle wallet payment");
+  const totalAmount = document.getElementById("totalAmount");
   const wallet = document.getElementById("wallet");
   const wltBtn = document.getElementById("wlt-button");
   const availableBalance = document.getElementById("available-balance");
-  if (wallet) {
-    if (availableBalance && availableBalance.innerText <= 0) {
-      wallet.disabled = true;
-      wltBtn.style.display = "none";
-    }
+  console.log(availableBalance.innerText);
+  console.log(totalAmount.innerText, "///////////////////////");
 
-    wallet.removeEventListener("change", handlePaymentChange);
-    wallet.addEventListener("change", handlePaymentChange);
-    handleCouponBtnClick("onUpdate");
-  }
+     if (wallet) {
+       if (availableBalance && availableBalance.innerText <= 0) {
+         wallet.disabled = true;
+         wltBtn.style.display = "none";
+        
+       }
+
+
+       wallet.removeEventListener("change", handlePaymentChange);
+       wallet.addEventListener("change", handlePaymentChange);
+       handleCouponBtnClick("onUpdate");
+     }
 }
 
 function handlePaymentChange() {
@@ -380,6 +386,7 @@ function showCouponAlert(data) {
 }
 
 function handleCouponBtnClick(data) {
+  
   const couponCode = document.getElementById("coupon_code");
   const sanitizedValue = couponCode.value
     .replace(/[^A-Z0-9]/g, "")
@@ -492,22 +499,22 @@ function checkProductAvailability(callback) {
   });
 }
 
-document
-  .getElementById("checkoutBtn")
-  .addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default form submission
+// document
+//   .getElementById("checkoutBtn")
+//   .addEventListener("click", function (event) {
+//     event.preventDefault(); // Prevent the default form submission
 
-    // Call checkProductAvailability and pass a callback function
-    checkProductAvailability(function (isAvailable) {
-      if (isAvailable) {
-        // Product is available, submit the form
-        document.querySelector("form").submit();
-      } else {
-        // Product is not available, show an alert or take appropriate action
-        showStockAlert();
-      }
-    });
-  });
+//     // Call checkProductAvailability and pass a callback function
+//     checkProductAvailability(function (isAvailable) {
+//       if (isAvailable) {
+//         // Product is available, submit the form
+//         document.querySelector("form").submit();
+//       } else {
+//         // Product is not available, show an alert or take appropriate action
+//         showStockAlert();
+//       }
+//     });
+//   });
 async function showStockAlert() {
   await new Promise((resolve) => {
     Swal.fire({
