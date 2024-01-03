@@ -326,9 +326,14 @@ const loadProfile = asynchandler(async (req, res) => {
   try {
     const user = req.user;
     const wallet=await Wallet.findOne({user:req.user._id})
-    const order=await Orders.findOne({user:req.user._id}).count()
+    const order = await Orders.findOne({ user: req.user._id }).count()
+
+     const whishlist = await User.findById(user).populate("wishlist");
+     const wishlistCount = whishlist.wishlist.length;
+     console.log(`User's wishlist count: ${wishlistCount}`);
+  
     
-    res.render("./user/pages/profile", { title: "WATCHBOX",wallet,order});
+    res.render("./user/pages/profile", { title: "WATCHBOX",wallet,order,wishlistCount});
   } catch (error) {
     throw new Error(error);
   }
