@@ -15,26 +15,19 @@ exports.salesReportpage = expressHandler(async (req, res) => {
 exports.generateSalesReport = async (req, res, next) => {
   try {
       const fromDate = new Date(req.query.fromDate);
-      console.log(fromDate);
       const toDate = new Date(req.query.toDate);
-      console.log(toDate);
     const salesData = await Order.find({
       orderedDate: {
         $gte: fromDate,
         $lte: toDate,
       },
     }).select("orderId totalPrice orderedDate payment_method -_id");
-      
-      // console.log(salesData);
-
     res.status(200).json(salesData);
   } catch (error) {
     console.error(error);
     next(error);
   }
 };
-
-
 
 exports.getSalesData = async (req, res) => {
   try {
@@ -82,7 +75,6 @@ exports.getSalesData = async (req, res) => {
 
     res.json(monthlySalesArray);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -125,7 +117,6 @@ exports. getSalesDataYearly = async (req, res) => {
 
     res.json(yearlySalesArray);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -168,11 +159,9 @@ exports.getSalesDataWeekly = async (req, res) => {
     ];
 
     const weeklySalesArray = await Order.aggregate(weeklySalesPipeline);
-    console.log(weeklySalesArray);
 
     res.json(weeklySalesArray);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

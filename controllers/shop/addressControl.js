@@ -45,7 +45,6 @@ const loadEditAddress = asyncHandler(async(req,res)=>{
     try {
         const addressId=req.params.id;
         const address=await Address.findOne({_id:addressId});
-        console.log(address);
         res.render("./user/pages/editAddress",{title:'WATCHBOX',address})
     } catch (error) {
         throw new Error(error)

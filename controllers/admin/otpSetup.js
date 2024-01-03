@@ -1,17 +1,6 @@
 const transporter = require("../../config/email");
 
 //----------------function to generate otp--------------------
-// function generateNumericOTP() {
-//     const digits = '0123456789';
-//     let otp = '';
-
-//     for (let i = 0; i < 4; i++) {
-//       const randomIndex = Math.floor(Math.random() * digits.length);
-//       otp += digits.charAt(randomIndex);
-//     }
-
-//     return otp;
-//   }
 
 function generateNumericOTP() {
   const min = 1000;
@@ -19,10 +8,6 @@ function generateNumericOTP() {
   const otp = Math.floor(Math.random() * (max - min + 1)) + min;
   return otp;
 }
-
-//----------chechking code-------------------
-//   const otp = generateNumericOTP();
-//   console.log('Generated Numeric OTP:', otp);
 
 //----------send otp function--------------------------------
 
@@ -101,9 +86,6 @@ function sendOtp(email, otp, name) {
 
 //-----------------testing------------------------
 
-//  const recipientEmail = 'ashiasish1858@gmail.com';
-// const otp = generateNumericOTP();
-// const name ="bilby"// Replace with the generated OTP
 function sendToken(email,token, name) {
   
   const message = `<!DOCTYPE html>

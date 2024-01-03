@@ -72,13 +72,11 @@ const unList = expressHandler(async (req, res) => {
 const list = expressHandler(async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
 
     const listing = await category.findByIdAndUpdate(
       { _id: id },
       { $set: { isListed: true } }
     );
-    console.log(listing);
     res.redirect("/admin/category");
   } catch (error) {
     throw new Error(error);
@@ -96,8 +94,6 @@ const editCategory = expressHandler(async (req, res) => {
         title: "editCategory",
         value: catName, messages
       });
-    } else {
-      console.log("error in rendering");
     }
   } catch (error) {
     throw new Error(error);
@@ -109,13 +105,11 @@ const updateCategory = expressHandler(async (req, res) => {
   try {
     const id = req.params.id;
     const { updatedName, offer, description, startDate, endDate, } = req.body
-    console.log(req.body);
+    
     const existedCategory = await category.find({
       categoryName: updatedName,
       _id: { $ne: id }
     });
-    console.log(id);
-console.log(existedCategory);
 
     if (existedCategory&& existedCategory.length!=0) {
       req.flash("danger", `${updatedName} already exists, try new one`);
@@ -136,23 +130,6 @@ console.log(existedCategory);
   }
 });
 
-// searchcCategory----
-// const searchCategory = expressHandler(async (req, res) => {
-//     console.log(req.body.search);
-//     try {
-//         const data = req.body.search
-//         const searching = await category.find({ categoryName: { $regex: data, $options: 'i' } });
-//         if (searching) {
-//             res.render('./admin/pages/categories', { title: 'Searching', catList: searching })
-
-//         } else {
-//             res.render('./admin/pages/categories', { title: 'Searching' })
-//         }
-
-//     } catch (error) {
-//         throw new Error(error)
-//     }
-// })
 
 module.exports = {
   categoryManagement,

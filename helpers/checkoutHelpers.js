@@ -41,7 +41,7 @@ exports.placeOrder=asyncHandler(async(userId,addressId,paymentMethod,isWallet,co
             product: cartItem.product._id,
         }
         orders.push(orderItems);
-//         console.log(orders);      
+    
     }
     
 
@@ -156,13 +156,9 @@ exports.calculateTotalPrice = asyncHandler(async (cartItems, userid, payWithWall
 /**
  * Verify payment using Razorpay
  */
-exports.verifyPayment = asyncHandler(async (razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId) => {
-
-    console.log('in verify payment');
+exports.verifyPayment = asyncHandler(async (razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId) => { 
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
-    console.log(process.env.RAZORPAY_SECRET_KEY);
     const expectedSign = Crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY).update(sign.toString()).digest("hex");
-    console.log(expectedSign);
     if (razorpay_signature === expectedSign) {
         return { message: "success", orderId: orderId };
     } else {

@@ -41,8 +41,6 @@ adminRoute.post("/product/editProduct/:id",isAdminLoggedin,productController.upd
 adminRoute.put("/product/editImage/:id",isAdminLoggedin,upload.single("images"),productController.editImage);
 adminRoute.put("/product/editImage/upload/:id",upload.fields([{ name: "images", maxCount: 4 }]),isAdminLoggedin,productController.addNewImages);
 adminRoute.delete("/product/deleteImage/:id",isAdminLoggedin,productController.deleteImage);
-// adminRoute.post('/product/editProduct/editImage/:id',uploadSingle,isAdminLoggedin,productController.editProductImages)
-// adminRoute.post("/editproduct/images/upload/new/:id", uploadMultiple, productController.addNewImages);
 
 //---------------------admin category management ----------------------------------------------------------------
 

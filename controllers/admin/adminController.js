@@ -3,7 +3,7 @@ const User = require("../../models/userModels");
 const asynchandler = require("express-async-handler");
 const Product = require("../../models/productModel");
 const Orders = require("../../models/orderModel");
-const graphHelpers=require("../../helpers/graphHelper")
+const graphHelpers = require("../../helpers/graphHelper");
 require("dotenv").config();
 
 // -------------------load Login------------------------
@@ -12,7 +12,7 @@ const loadLogin = asynchandler(async (req, res) => {
   try {
     res.render("./admin/pages/login", { title: "WATCHBOX/LOGIN" });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 });
 
@@ -39,7 +39,7 @@ const verifyAdmin = asynchandler(async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error.message);
   }
 });
 
@@ -83,19 +83,10 @@ const loadIndex = asynchandler(async (req, res) => {
     const totalUsers =
       totalUsersResult.length > 0 ? totalUsersResult[0].totalUsers : 0;
 
-    console.log("Total number of orders:", totalOrders);
-    console.log("Total number of sold products:", soldCount);
-    console.log("Total quantity of all products:", totalQuantity);
-    console.log("Total number of users:", totalUsers);
-
-
     //-------------graph deatails----------------------------
 
-  
-     const usersData = await graphHelpers.countUsers();
-     const productSold = await graphHelpers.calculateProductSold();
-    console.log("------------------------------------------------------------");
-    console.log(productSold);
+    const usersData = await graphHelpers.countUsers();
+    const productSold = await graphHelpers.calculateProductSold();
 
     res.render("./admin/pages/index", {
       title: "WATCHBOX/INDEX",
@@ -103,26 +94,13 @@ const loadIndex = asynchandler(async (req, res) => {
       totalOrders,
       totalQuantity,
       totalUsers,
-       usersData
-      ,productSold
+      usersData,
+      productSold,
     });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    throw new Error("Error:", error);
   }
 });
-
-
-//---------------------load user list-------------------
-
-// const userList=asynchandler(async(req,res)=>{
-//     try {
-//         res.render('./admin/pages/userlist',{title:"WATCHBOX/USERLIST"})
-
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-// })
 
 //---------------usermanagement------------------------
 
@@ -134,7 +112,7 @@ const userManagement = asynchandler(async (req, res) => {
       title: "WATCHBOX/USERLIST",
     });
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error.message);
   }
 });
 
@@ -145,7 +123,6 @@ const searchUser = asynchandler(async (req, res) => {
     const searching = await User.find({
       userName: { $regex: data, $options: "i" },
     });
-    console.log(searching);
 
     if (searching) {
       res.render("./admin/pages/userlist", {
@@ -156,7 +133,7 @@ const searchUser = asynchandler(async (req, res) => {
       res.render("./admin/pages/userlist", { title: "Search" });
     }
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error.message);
   }
 });
 
@@ -165,10 +142,11 @@ const searchUser = asynchandler(async (req, res) => {
 const blockUser = asynchandler(async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
     await User.findByIdAndUpdate(id, { isBlock: true }, { new: true });
     res.redirect("/admin/userlist");
-  } catch (error) {}
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 //-----------------------unblock user----------------------
@@ -179,7 +157,7 @@ const unblockUser = asynchandler(async (req, res) => {
     await User.findByIdAndUpdate(id, { isBlock: false }, { new: true });
     res.redirect("/admin/userlist");
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -187,11 +165,10 @@ const unblockUser = asynchandler(async (req, res) => {
 
 const logout = asynchandler(async (req, res) => {
   try {
-    console.log("hello i logout");
     req.session.admin = null;
     res.redirect("/admin");
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error);
   }
 });
 

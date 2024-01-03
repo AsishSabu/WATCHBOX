@@ -22,7 +22,7 @@ const orderPage = expressHandler(async (req, res) => {
         "orderId orderedDate shippingAddress city zip totalPrice payment_method"
       )
       .sort({ _id: -1 });
-   
+
     res.render("admin/pages/orders", { title: "WATCHBOX", orders });
   } catch (error) {
     throw new Error(error);
@@ -51,7 +51,6 @@ const orderDetails = expressHandler(async (req, res) => {
         path: "user",
         modal: "User",
       });
-    console.log(order,"order");
     res.render("admin/pages/orderDetails", { title: "WATCHBOX", order });
   } catch (error) {
     throw new Error(error);
@@ -63,9 +62,8 @@ const orderDetails = expressHandler(async (req, res) => {
 const orderStatus = expressHandler(async (req, res) => {
   const productId = req.params.id;
   const orderId = req.body.orderId;
- 
+
   const newStatus = req.body.status;
-  console.log(newStatus);
 
   const order = await Order.findOne({ orderId })
     .populate({
@@ -73,21 +71,22 @@ const orderStatus = expressHandler(async (req, res) => {
       model: "Product",
       populate: { path: "images" },
     })
-    .select("orderId orderItems orderedDate shippingAddress town createdAt coupon discount totalPrice paidAmount") .populate({
+    .select(
+      "orderId orderItems orderedDate shippingAddress town createdAt coupon discount totalPrice paidAmount"
+    )
+    .populate({
       path: "user",
       modal: "User",
     });
   if (!order) {
-    console.log("No order found");
     return res.status(404).send("Order not found");
   } else {
-    
-
     const productItem = order.orderItems.id(productId);
-    
-    if(req.body.status===status.shipped||req.body.status===status.delivered)
-    { 
-      console.log(productItem, "productItem");
+
+    if (
+      req.body.status === status.shipped ||
+      req.body.status === status.delivered
+    ) {
       if (req.body.status === status.shipped) {
         productItem.status = newStatus;
         productItem.shippedDate = Date.now();
@@ -96,18 +95,12 @@ const orderStatus = expressHandler(async (req, res) => {
         productItem.deliveryDate = Date.now();
       }
       await order.save();
-
-    }
-    
-  else if (req.body.status === status.cancelled) {
-    
-
-      await AdminOrderHelpers.handleCancelledOrder(productItem,order);
+    } else if (req.body.status === status.cancelled) {
+      await AdminOrderHelpers.handleCancelledOrder(productItem, order);
     }
 
     if (req.body.status === status.returnPending) {
-      console.log("going to handle return order");
-      await AdminOrderHelpers.handleReturnedOrder(productItem,order);
+      await AdminOrderHelpers.handleReturnedOrder(productItem, order);
     }
     await order.save();
     res.redirect("back");

@@ -5,34 +5,6 @@ const User = require("../../models/userModels");
 
 //----------------------load shop page ---------------------------------------
 exports.loadShop = asynchandler(async (req, res) => {
-  // try {
-  //   const user = req.user;
-  //   const categories = await category.find({ isListed: true });
-  //   const listedCategoryIds = categories.map((category) => category._id);
-  //   const products = await product
-  //     .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
-  //     .populate("images")
-  //     .limit(12);
-
-  //   let userWishlist;
-  //   if (user) {
-  //     if (user.wishlist) {
-  //       userWishlist = user.wishlist;
-  //     }
-  //   } else {
-  //     userWishlist = false;
-  //   }
-
-  //   res.render("./user/pages/shop", {
-  //     title: "WATCHBOX",
-  //     products,
-  //     categories,
-  //     userWishlist,
-  //   });
-  // } catch (error) {
-  //   throw new Error(error);
-  // }
-
 
     try {
       const user = req.user;
@@ -40,7 +12,6 @@ exports.loadShop = asynchandler(async (req, res) => {
       const limit = 12;
 
       const listedCategories = await Category.find({ isListed: true });
-      console.log(listedCategories,"listed categories");
       const categoryMapping = {};
 
       listedCategories.forEach((category) => {
@@ -62,7 +33,6 @@ exports.loadShop = asynchandler(async (req, res) => {
         filter.$or = [{ title: { $regex: req.query.search, $options: "i" } }];
         // if search and category both included in the query parameters
         if (req.query.search && req.query.category) {
-          console.log(req.query.category);
           if (categoryMapping.hasOwnProperty(req.query.category)) {
             filter.categoryName = categoryMapping[req.query.category];
           } else {
@@ -94,7 +64,6 @@ exports.loadShop = asynchandler(async (req, res) => {
           sortCriteria.salePrice = -1;
         }
       }
-     console.log(filter,"filter.........................");
       const findProducts = await product.find(filter)
         .populate("images").populate("categoryName")
         .skip((page - 1) * limit)
@@ -122,7 +91,6 @@ exports.loadShop = asynchandler(async (req, res) => {
       if (filter.categoryName) {
         selectedCategory.push(filter.categoryName);
       }
-      console.log("selected cat", selectedCategory);
 
       res.render("./user/pages/shop", {
           title: "WATCHBOX",
@@ -188,7 +156,6 @@ exports.addTowishlist = asynchandler(async (req, res) => {
     // checking if the product already existing in the wishlist
     const user = await User.findById(userId);
     if (user.wishlist.includes(productId)) {
-      console.log("product found");
       await User.findByIdAndUpdate(userId, { $pull: { wishlist: productId } });
       return res.json({
         success: false,

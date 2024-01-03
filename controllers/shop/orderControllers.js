@@ -47,7 +47,6 @@ const viewOrder = asynchandler(async (req, res) => {
     );
    
     if (productItem) {
-      console.log(productItem,"productItem:............. ");
       const product = productItem.product;
       const quantity = productItem.quantity;
       const price = productItem.price;
@@ -129,8 +128,6 @@ const  donwloadInvoice = asynchandler(async (req, res) => {
   try {
     const orderId = req.params.id;
     const productId = req.params.productId;
-    console.log(orderId, "orderId...................");
-    console.log(productId,"productid........................");
 
     const data = await orderHelpers.generateInvoice(orderId, productId);
   

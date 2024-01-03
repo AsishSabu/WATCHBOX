@@ -7,7 +7,6 @@ const {incrementQuantity,decrementQuantity,calculateCartTotals} = require("../..
 const loadCart = asynchandler(async (req, res) => {
   const userId = req.user.id;
   const messages = req.flash();
-
   try {
     const cart = await Cart.findOne({ user: userId })
       .populate({
@@ -22,22 +21,18 @@ const loadCart = asynchandler(async (req, res) => {
       }else{
       
         res.render("./user/pages/cart", {title:'WATCHBOX', cartItems:null,messages })
-      }
-
-   
+      }   
   } catch (error) {
     throw new Error(error);
   }
 });
 
 const addToCart = asynchandler(async (req, res) => {
-  const productId = req.params.id;
+ const productId = req.params.id;
   const userId = req.user.id;
 
   try {
       const product = await Product.findById(productId);
-      console.log(product);
-      // let existingProduct2=false;
 
       if (!product) {
           return res.status(404).json({ message: "Product not found",count:1});
@@ -73,8 +68,6 @@ const addToCart = asynchandler(async (req, res) => {
       }
 
   } catch (error) {
-      // Handle errors appropriately
-      console.log(error);
       res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -138,9 +131,7 @@ const getCartCount = asynchandler(async (req, res) => {
     // Return the count as JSON response
     res.json({ count });
   } catch (error) {
-    // Handle errors
-    console.error('Error getting cart count:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+throw new Error(error);
   }
 });
 
@@ -148,15 +139,11 @@ const checkProductAvailability = asynchandler(async (req, res) => {
   try {
    
     const userId = req.user._id;
-    console.log(userId);
     const user = await Cart.findOne({user:userId}).populate('products').exec(); // Populate the product details
    for (const product of user.products) {
      const productId = product.product._id;
      const products = await Product.findById(productId);
-     console.log(products.quantity,"////////////////////////////");
-     console.log(product.quantity, ".................................");
      const quantity = products.quantity - product.quantity;
-     console.log(quantity, "===============================");
      if (quantity < 0) {
        return res.json({
          

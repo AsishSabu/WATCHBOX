@@ -15,7 +15,6 @@ exports.loadAddCoupon = asyncHandler(async (req, res) => {
 
 exports.addCoupon = asyncHandler(async (req, res) => { 
     try {
-        console.log(req.body)
         const existingCoupon = await Coupon.findOne({ code: req.body.code });
 
         if (!existingCoupon) {
@@ -41,7 +40,6 @@ exports.addCoupon = asyncHandler(async (req, res) => {
 exports.loadCoupon = asyncHandler(async (req, res) => {
     try {
         const coupons = await Coupon.find().sort({ _id: -1 });
-        console.log(coupons);
         res.render("./admin/pages/coupon",{title:"coupons",coupons})
     } catch (error) {
         throw new Error(error)
@@ -52,7 +50,6 @@ exports.listUnlist = asyncHandler(async (req, res) => {
     try {
         const couponId = req.params.id
         const coupon = await Coupon.findById(couponId)
-        console.log(coupon.isListed);
         if (coupon.isListed) {
             coupon.isListed = false;
             coupon.save();
@@ -77,7 +74,6 @@ exports.listUnlist = asyncHandler(async (req, res) => {
 exports.editCoupon = asyncHandler(async (req, res) => {
     try {
         const coupons = await Coupon.findById(req.params.id);
-        console.log(coupons);
         const messages=req.flash()
         res.render("./admin/pages/editCoupon",{title:"watchbox/editCoupon",data:coupons,messages})
     } catch (error) {

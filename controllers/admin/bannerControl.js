@@ -9,9 +9,7 @@ const { log } = require('console')
 exports. bannerList=expressHandler(async(req,res)=>{
     try {
         const  listBanners = await Banner.find()
-        console.log(listBanners);
-        res.render('./admin/pages/banner', { title: 'WATCHBOX/BANNER', banners: listBanners }) 
-      
+        res.render('./admin/pages/banner', { title: 'WATCHBOX/BANNER', banners: listBanners })      
     } catch (error) {
         throw new Error(error)
     }
@@ -31,7 +29,6 @@ exports.loadAddBanner = expressHandler(async(req,res)=>{
 })
 exports.createBanner= expressHandler(async(req,res)=>{
     try {
-        console.log('body', req.body);
         let bannerImage = [];
         if (req.file) {
             bannerImage.push({
@@ -49,7 +46,6 @@ exports.createBanner= expressHandler(async(req,res)=>{
 
 
         const create = await Banner.create(newBanner)
-        console.log('create', create);
         res.redirect('/admin/banner')
 
     } catch (error) {

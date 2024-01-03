@@ -18,16 +18,15 @@ const generateReferralCode = (length) => {
 
 // credit for refered user
 const creditforRefferedUser = async (code, email) => {
-    console.log(email);
+   
 
     const findUser = await User.findOne({ referralCode: code, email: { $ne: email } });
 
-    console.log(findUser);
+  
 
     if (!findUser) return false
 
     const walletId = findUser.wallet
-    console.log(walletId,"wallet id")
   
 
     const updatedWallet = await Wallet.findByIdAndUpdate(
@@ -60,7 +59,7 @@ const creditforNewUser = async (user) => {
     const transactionDone = await transaction.save();
     await Wallet.findByIdAndUpdate(user.wallet,
         { $push: { transactions: transactionDone._id } })
-    console.log('updated wallet', updatedWallet);
+   
 }
 
 module.exports = {

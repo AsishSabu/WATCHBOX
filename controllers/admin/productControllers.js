@@ -12,17 +12,18 @@ const loadProduct = asynchandler(async (req, res) => {
     const products = await product
       .find()
       .populate("categoryName")
-      .populate("images").sort({ createdAt:-1})
+      .populate("images")
+      .sort({ createdAt: -1 });
 
-      const messages=req.flash();
+    const messages = req.flash();
 
     res.render("./admin/pages/product", {
       title: "WATCHBOX/PRODUCTS",
       messages,
       products: products, // Pass the products to the view
-    })
+    });
   } catch (error) {
-    // Handle the error appropriately, e.g., render an error page or log the error
+    // Handle the error
     throw new Error(error);
   }
 });
@@ -32,12 +33,11 @@ const loadProduct = asynchandler(async (req, res) => {
 const addProduct = asynchandler(async (req, res) => {
   try {
     const Category = await category.find({ isListed: true });
-    console.log(category);
-    const messages=req.flash();
+    const messages = req.flash();
     res.render("./admin/pages/addProduct", {
       title: "Add Product",
       catList: Category,
-      messages
+      messages,
     });
   } catch (error) {
     throw new Error(error);
@@ -52,7 +52,6 @@ const insertProduct = asynchandler(async (req, res) => {
 
     // Check if req.files exists and has images
     if (req.files && req.files.images.length > 0) {
-      console.log("......................");
       const images = req.files.images;
 
       for (const file of images) {
@@ -67,7 +66,7 @@ const insertProduct = asynchandler(async (req, res) => {
           const thumbnailUrl = path.join("/admin/uploads", file.filename);
           imageUrls.push({ imageUrl, thumbnailUrl });
         } catch (error) {
-          console.error("Error processing image:", error);
+          throw new Error(error);
         }
       }
 
@@ -76,7 +75,7 @@ const insertProduct = asynchandler(async (req, res) => {
 
       const newProduct = await product.create({
         title: req.body.productName,
-        description:req.body.description,
+        description: req.body.description,
         categoryName: req.body.categoryName,
         quantity: req.body.quantity,
         productPrice: req.body.productPrice,
@@ -85,7 +84,6 @@ const insertProduct = asynchandler(async (req, res) => {
         images: imageId,
       });
 
-      console.log("inserted", newProduct);
       if (newProduct) {
         req.flash("success", "Product Created");
         res.redirect("/admin/products");
@@ -97,7 +95,6 @@ const insertProduct = asynchandler(async (req, res) => {
     throw new Error(error);
   }
 });
-
 
 //------------------------------------list products--------------------------------
 const listProduct = asynchandler(async (req, res) => {
@@ -136,13 +133,13 @@ const editProduct = asynchandler(async (req, res) => {
       .populate("categoryName")
       .populate("images");
     const categories = await category.find({ isListed: true });
-    const messages=req.flash();
+    const messages = req.flash();
 
     res.render("./admin/pages/editProduct", {
       title: "editProduct",
       categories,
       Product,
-      messages
+      messages,
     });
   } catch (error) {
     throw new Error(error);
@@ -157,8 +154,6 @@ const updateProduct = asynchandler(async (req, res) => {
     const exists = await product.findOne({ title: req.body.title });
 
     const updatedProduct = await product.findByIdAndUpdate(id, req.body);
-
-    console.log(exists);
     res.redirect("/admin/products");
   } catch (error) {
     throw new Error(error);
@@ -171,8 +166,6 @@ const editImage = asynchandler(async (req, res) => {
   try {
     const imageId = req.params.id;
     const file = req.file;
-    console.log("file", req.file);
-    console.log(imageId);
     const imageBuffer = await sharp(file.path).resize(600, 800).toBuffer();
     const thumbnailBuffer = await sharp(file.path).resize(300, 300).toBuffer();
     const imageUrl = path.join("/admin/uploads", file.filename);
@@ -195,7 +188,6 @@ const editImage = asynchandler(async (req, res) => {
 const deleteImage = asynchandler(async (req, res) => {
   try {
     const imageId = req.params.id;
-    // Optionally, you can also remove the image from your database
     await Images.findByIdAndRemove(imageId);
     const Product = await product.findOneAndUpdate(
       { images: imageId },
@@ -205,15 +197,13 @@ const deleteImage = asynchandler(async (req, res) => {
     res.json({ message: "Images Removed" });
   } catch (error) {
     throw new Error(error);
-    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 //--------------------------------------------
 const addNewImages = asynchandler(async (req, res) => {
   try {
-    console.log("hi.....................");
-    const files = req.files.images;;
+    const files = req.files.images;
     const imageUrls = [];
     const productId = req.params.id;
 
@@ -221,32 +211,31 @@ const addNewImages = asynchandler(async (req, res) => {
       try {
         const imageBuffer = sharp(file.path).resize(600, 600).toBuffer();
         const thumbnailBuffer = sharp(file.path).resize(300, 300).toBuffer();
-
         const imageUrl = path.join("/admin/uploads", file.filename);
         const thumbnailUrl = path.join("/admin/uploads", file.filename);
-        imageUrls.push({imageUrl, thumbnailUrl})
+        imageUrls.push({ imageUrl, thumbnailUrl });
       } catch (error) {
-          console.log("Error Processing image: ", error);
+        throw new Error(error);
       }
     }
-console.log("hloooooooooooooooooooooooooooooo");
-     // Find the existing product
-     const existingProduct = await product.findById(productId);
+    // Find the existing product
+    const existingProduct = await product.findById(productId);
 
-     // Remove the old images from the database
-     await Images.deleteMany({ _id: { $in: existingProduct.images } });
- 
-     // Create and store the new images
-     const newImages = await Images.create(imageUrls);
-     
-     // Update the product with the new image ids
-     await product.findByIdAndUpdate(productId, { images: newImages.map(image => image._id) });
- 
-     req.flash("success", "Images replaced");
-     res.redirect("back");
-    
+    // Remove the old images from the database
+    await Images.deleteMany({ _id: { $in: existingProduct.images } });
+
+    // Create and store the new images
+    const newImages = await Images.create(imageUrls);
+
+    // Update the product with the new image ids
+    await product.findByIdAndUpdate(productId, {
+      images: newImages.map((image) => image._id),
+    });
+
+    req.flash("success", "Images replaced");
+    res.redirect("back");
   } catch (error) {
-   console.log(error.message);
+  throw new Error(error);
   }
 });
 module.exports = {

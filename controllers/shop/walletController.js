@@ -4,7 +4,6 @@ const Wallet=require("../../models/walletModel")
 
 exports.viewWallet=expressAsyncHandler(async(req,res)=>{
     try {
-        console.log("am in walllet history");
         const user=req.user;
         const findWallet = await User.findById(user).populate('wallet')
         let walletHistory = false;
@@ -14,9 +13,7 @@ exports.viewWallet=expressAsyncHandler(async(req,res)=>{
             options: {
                 sort: { timestamp: -1 } 
             }});
-            console.log(walletTransaction);
             walletHistory=walletTransaction.transactions
-            // console.log(walletHistory);
 
         }
         const walletBalance=findWallet.wallet.balance
