@@ -66,9 +66,6 @@ const insertUser = asynchandler(async (req, res) => {
     } else {
       userData.referralCode = "no referral code"
     }
-    console.log(userData,".......................................");
-    
-
     try {
       const existingEmail = await User.findOne({ email: req.body.email });
   
@@ -86,13 +83,9 @@ const insertUser = asynchandler(async (req, res) => {
 
 
     const userWallet= await Wallet.create({user:userData._id})
-    console.log(userWallet);
     const userwallet=await User.findByIdAndUpdate(userData._id,{wallet:userWallet._id})
-    console.log(userwallet);
-
     //--------------------generating otp --------------------
     const OTP = otpSetup.generateNumericOTP();
-    console.log(OTP);
     //--------------saving otp to databasse------------------------------
     const email = req.body.email;
     const otp = new otpdb({ email: email, otp: OTP });
@@ -105,9 +98,6 @@ const insertUser = asynchandler(async (req, res) => {
     } catch (error) {
       throw new Error(error.message);
     }
-    
-  
-
     try {
       return res.redirect("/verifyOtp");
     } catch (error) {
@@ -150,13 +140,11 @@ const verifyOtp = async (req, res) => {
       if (user.referralCode && user.referralCode !== 'no referral code') {
         const referralCode = user.referralCode.trim()
         userFound = await creditforRefferedUser(referralCode,otpRecord.email)
-        console.log(userFound, ".......userFound");
         const creditNewUser = await creditforNewUser(user)
         user.referralCode = null;
         const newUser = await user.save()
       }
       const referalCode = await generateReferralCode(8);
-      console.log(referalCode);
       user.referralCode = referalCode
       const newUser = await user.save()
 
@@ -176,9 +164,7 @@ const verifyOtp = async (req, res) => {
 const resendOtp = asynchandler(async (req, res) => {
   try {
     const OTP = otpSetup.generateNumericOTP();
-    console.log(OTP);
     const email = req.session.userData.email;
-    console.log(email);
     const otp = new otpdb({ email: email, otp: OTP });
     const otpSave = await otp.save();
     const name = req.session.userData.name;
@@ -198,7 +184,6 @@ const userLogin = asynchandler(async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
-    console.log(user.isVerified);
   } catch (error) {
     throw new Error(error);
   }
@@ -245,10 +230,9 @@ const sendEmail = asynchandler(async (req, res) => {
     } else {
       req.session.verifyEmail = email;
       const OTP = otpSetup.generateNumericOTP();
-      console.log(OTP+"token is here");
       const otp = new otpdb({ email: email, otp: OTP });
       const otpSave = await otp.save();
-      name = user.userName;
+      const name = user.userName;
       const otpSend = otpSetup.sendOtp(email, OTP, name);
       try {
         res.redirect("/verifyEmail");
@@ -304,7 +288,6 @@ const verifyEmail = asynchandler(async (req, res) => {
 const reverifyEmail = asynchandler(async (req, res) => {
   try {
     const OTP = otpSetup.generateNumericOTP();
-    console.log(OTP);
     email = req.session.verifyEmail;
     const otp = new otpdb({ email: email, otp: OTP });
     const otpSave = await otp.save();
@@ -329,10 +312,7 @@ const loadProfile = asynchandler(async (req, res) => {
     const order = await Orders.findOne({ user: req.user._id }).count()
 
      const whishlist = await User.findById(user).populate("wishlist");
-     const wishlistCount = whishlist.wishlist.length;
-     console.log(`User's wishlist count: ${wishlistCount}`);
-  
-    
+     const wishlistCount = whishlist.wishlist.length; 
     res.render("./user/pages/profile", { title: "WATCHBOX",wallet,order,wishlistCount});
   } catch (error) {
     throw new Error(error);
@@ -343,7 +323,6 @@ const loadProfile = asynchandler(async (req, res) => {
 
 const editProfile = asynchandler(async (req, res) => {
   try {
-    console.log(req.body);
     const userId = req.user.id;
     const editedProfile = await User.findByIdAndUpdate(
       { _id: userId },
@@ -385,7 +364,6 @@ const loadforgotPassword = asynchandler(async (req, res) => {
 const forgotPassword = asynchandler(async (req, res) => {
   try {
     const email = req.body.email;
-    console.log(email);
     const user = await User.findOne({ email });
     if (!user) {
       req.flash("danger", "enter a registered email addresss");
@@ -393,7 +371,6 @@ const forgotPassword = asynchandler(async (req, res) => {
     } else {
       //generate a random reset token-------------------
       const resetToken = await user.createResetPasswordToken();
-      console.log("reset token", resetToken,"......");
       await user.save();
       const name = user.userName;
       const sendToken = await otpSetup.sendToken(email, resetToken, name);
@@ -425,15 +402,12 @@ const emailcheck = asynchandler(async (req, res) => {
 const resetPassword = asynchandler(async (req, res) => {
   try {
     const resetToken = req.params.id; //accessing the token
-    console.log(resetToken);
 
     const passwordResetToken = crypto
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
-    console.log(passwordResetToken);
     const tokenCheck = await User.findOne({ passwordResetToken });
-    console.log(tokenCheck.passwordResetTokenExpires);
     const time = tokenCheck.passwordResetTokenExpires;
     if (time < Date.now()) {
       // The reset token has expired
@@ -493,7 +467,6 @@ const changePassword = asynchandler(async (req, res) => {
     const user = await User.findOne({ email: email });
     const resetToken = await user.createResetPasswordToken();
     await user.save();
-    console.log(user);
     const name = user.userName;
     const sendToken = await otpSetup.sendToken(email, resetToken, name);
 
@@ -501,8 +474,7 @@ const changePassword = asynchandler(async (req, res) => {
     res.status(200).json({ message: "Password change initiated successfully" });
   } catch (error) {
     // Handle errors and send an error response
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+  throw new Error(error)
   }
 });
 

@@ -1,12 +1,4 @@
 let data;
-
-
-
-
-
-
-
-
 async function currentCartData() {
   try {
     const response = await fetch('/getCartCount', { method: 'GET' });
@@ -137,7 +129,6 @@ const minusButtons = document.querySelectorAll(".minusBtn");
 
 plusButtons.forEach((button) => {
   button.addEventListener("click", function () {
-    console.log("+button");
     const productId = this.getAttribute("data-product-id");
     updateQuantity(productId, true);
   });
@@ -145,7 +136,6 @@ plusButtons.forEach((button) => {
 
 minusButtons.forEach((button) => {
   button.addEventListener("click", function () {
-    console.log("-button");
     
     const productId = this.getAttribute("data-product-id");
     updateQuantity(productId, false);
@@ -165,9 +155,7 @@ function addToCart(id) {
     method: "GET",
   })
     .then((response) => {
-      console.log("res", response);
-      if (response.ok) {
-        console.log("json response is sending ");
+      if (response.ok) {;
         return response.json();
       } else {
         console.log("json response is sending failed");
@@ -175,10 +163,8 @@ function addToCart(id) {
       }
     })
     .then((data) => {
-      console.log("Server Response:", data);
       if (data) {
         if (data.count && data.message) {
-          console.log("json response is sending in the kunji box  ");
           
 currentCartData();
           // cartCount.innerText = data.count;

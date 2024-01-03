@@ -92,17 +92,7 @@
           <h3><%= Product.title %></h3>
            <p class="text-danger mb-0 fw-bold"><%= Product.categoryName.categoryName%></p>
            <p class=" fw-bold"><%= Product.description %></p>
-          <!-- <div class="rating-number">
-            <div class="quick-view-rating">
-              <i class="pe-7s-star red-star"></i>
-              <i class="pe-7s-star red-star"></i>
-              <i class="pe-7s-star"></i>
-              <i class="pe-7s-star"></i>
-              <i class="pe-7s-star"></i>
-            </div>
-            <div class="quick-view-number">
-              <span>2 Ratting (S)</span>
-            </div>-->
+          
           </div> 
            <% if(Product.productPrice!==Product.salePrice){  %>
             <h5 class="text-success fw-bold"><%=Product.categoryName.description %></h5>
@@ -130,9 +120,7 @@
           <% } %>
 
           <div class="quickview-plus-minus">
-                      <!-- <div class="cart-plus-minus">
-                          <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
-                      </div> -->
+
                       <div class="quickview-btn-cart">
                         <% if(!user){ %>
                           <a class="btn-hover-black rounded-pill" title="" href="/login">add to cart</a>
@@ -267,8 +255,6 @@
 
 <script>
   function addcart(id) {
-  console.log("in the add to cart ...............................................................................................");
-  const productId = id;
   const url = `/cart/add/${productId}`;
 
   const cartMessage = document.getElementById("cart-message");
@@ -278,20 +264,15 @@
     method: "GET",
   })
     .then((response) => {
-      console.log("res", response);
       if (response.ok) {
-        console.log("json response is sending ");
         return response.json();
       } else {
         console.log("json response is sending failed");
-        console.error("Failed");
       }
     })
     .then((data) => {
-      console.log("Server Response:", data);
       if (data) {
         if (data.count && data.message) {
-          console.log("json response is sending in the kunji box  ");
           // cartCount.innerText = data.count;
           cartMessage.innerText = data.message;
 

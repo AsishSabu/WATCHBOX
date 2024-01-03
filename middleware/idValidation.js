@@ -7,7 +7,6 @@ const validateID = [
     .isMongoId() // Check if it's a valid MongoDB ObjectID
     .withMessage('Invalid ID format'),
   (req, res, next) => {
-    console.log("in validate id....................")
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render('./user/pages/404', { title: "Error.." });
