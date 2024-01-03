@@ -87,6 +87,7 @@ const loadIndex = asynchandler(async (req, res) => {
 
     const usersData = await graphHelpers.countUsers();
     const productSold = await graphHelpers.calculateProductSold();
+    console.log(productSold,"........................");
 
     res.render("./admin/pages/index", {
       title: "WATCHBOX/INDEX",
