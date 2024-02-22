@@ -7,10 +7,14 @@ const bcrypt = require("bcrypt");
 const product = require("../../models/productModel");
 const category = require("../../models/categoryModel");
 const crypto = require("crypto");
-const Banner=require("../../models/bannerModel")
-const Wallet=require("../../models/walletModel")
-const Orders = require('../../models/orderModel')
-const { generateReferralCode, creditforRefferedUser, creditforNewUser }=require("../../helpers/referHelpers");
+const Banner = require("../../models/bannerModel");
+const Wallet = require("../../models/walletModel");
+const Orders = require("../../models/orderModel");
+const {
+  generateReferralCode,
+  creditforRefferedUser,
+  creditforNewUser,
+} = require("../../helpers/referHelpers");
 const { log } = require("util");
 
 //-------------------------loadlanding page---------------------
@@ -22,9 +26,9 @@ const loadIndex = asynchandler(async (req, res) => {
       .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
       .populate("images")
       .limit(8);
-      const banner=await Banner.find({isActive:true}).limit(1);
+    const banner = await Banner.find({ isActive: true }).limit(1);
 
-    res.render("./user/pages/index", { title: "WATCHBOX", topProduct ,banner});
+    res.render("./user/pages/index", { title: "WATCHBOX", topProduct, banner });
   } catch (error) {
     throw new Error(error);
   }
@@ -61,39 +65,37 @@ const insertUser = asynchandler(async (req, res) => {
       passwordChangedAt: Date.now(),
     });
     if (req.body.referalCode !== "") {
-      userData.referralCode = req.body.referalCode
-      
+      userData.referralCode = req.body.referalCode;
     } else {
-      userData.referralCode = "no referral code"
+      userData.referralCode = "no referral code";
     }
     try {
       const existingEmail = await User.findOne({ email: req.body.email });
-  
+
       if (existingEmail) {
-        req.flash("danger","email already registered please try with another")
-        res.redirect("back")
-      
+        req.flash("danger", "email already registered please try with another");
+        res.redirect("back");
       } else {
-          /*--------
+        /*--------
             accessing the details of the user
                */
-    const userSave = await userData.save(); //-------------------user save to database-------------------
+        const userSave = await userData.save(); //-------------------user save to database-------------------
         req.session.userData = userData; //-------------------userdata take to the  session----------------
-      
 
+        const userWallet = await Wallet.create({ user: userData._id });
+        const userwallet = await User.findByIdAndUpdate(userData._id, {
+          wallet: userWallet._id,
+        });
+        //--------------------generating otp --------------------
+        const OTP = otpSetup.generateNumericOTP();
+        //--------------saving otp to databasse------------------------------
+        const email = req.body.email;
+        const otp = new otpdb({ email: email, otp: OTP });
+        const otpSave = await otp.save();
 
-    const userWallet= await Wallet.create({user:userData._id})
-    const userwallet=await User.findByIdAndUpdate(userData._id,{wallet:userWallet._id})
-    //--------------------generating otp --------------------
-    const OTP = otpSetup.generateNumericOTP();
-    //--------------saving otp to databasse------------------------------
-    const email = req.body.email;
-    const otp = new otpdb({ email: email, otp: OTP });
-    const otpSave = await otp.save();
-
-    //------------------------otp sending to mail ------------------------------
-    const name = req.body.name;
-    const otpSend = otpSetup.sendOtp(email, OTP, name);
+        //------------------------otp sending to mail ------------------------------
+        const name = req.body.name;
+        const otpSend = otpSetup.sendOtp(email, OTP, name);
       }
     } catch (error) {
       throw new Error(error.message);
@@ -111,7 +113,7 @@ const insertUser = asynchandler(async (req, res) => {
 //-----------------load Otp page------------------------
 const loadOtp = asynchandler(async (req, res) => {
   try {
-    email = req.session.userData.email;
+    const email = req.session.userData.email;
     const messages = req.flash();
     res.render("./user/pages/verifyOtp", {
       title: "WATCHBOX",
@@ -135,18 +137,18 @@ const verifyOtp = async (req, res) => {
         { email: otpRecord.email },
         { $set: { isVerified: true } }
       );
-      const user = await User.findOne({ email: otpRecord.email })
+      const user = await User.findOne({ email: otpRecord.email });
       let userFound = null;
-      if (user.referralCode && user.referralCode !== 'no referral code') {
-        const referralCode = user.referralCode.trim()
-        userFound = await creditforRefferedUser(referralCode,otpRecord.email)
-        const creditNewUser = await creditforNewUser(user)
+      if (user.referralCode && user.referralCode !== "no referral code") {
+        const referralCode = user.referralCode.trim();
+        userFound = await creditforRefferedUser(referralCode, otpRecord.email);
+        const creditNewUser = await creditforNewUser(user);
         user.referralCode = null;
-        const newUser = await user.save()
+        const newUser = await user.save();
       }
       const referalCode = await generateReferralCode(8);
-      user.referralCode = referalCode
-      const newUser = await user.save()
+      user.referralCode = referalCode;
+      const newUser = await user.save();
 
       req.flash("success", "succesfully registered");
       res.redirect("/login");
@@ -219,12 +221,10 @@ const sendEmail = asynchandler(async (req, res) => {
     const email = req.body.email;
     const user = await User.findOne({ email: email }); //---------------checking email already registered-----------------------
 
-    if(!user){
+    if (!user) {
       req.flash("danger", "please register first");
       res.redirect("/sendEmail");
-    }
-
-   else if (user.isVerified) {
+    } else if (user.isVerified) {
       req.flash("danger", "you are already verified");
       res.redirect("/sendEmail");
     } else {
@@ -308,12 +308,17 @@ const reverifyEmail = asynchandler(async (req, res) => {
 const loadProfile = asynchandler(async (req, res) => {
   try {
     const user = req.user;
-    const wallet=await Wallet.findOne({user:req.user._id})
-    const order = await Orders.findOne({ user: req.user._id }).count()
+    const wallet = await Wallet.findOne({ user: req.user._id });
+    const order = await Orders.findOne({ user: req.user._id }).count();
 
-     const whishlist = await User.findById(user).populate("wishlist");
-     const wishlistCount = whishlist.wishlist.length; 
-    res.render("./user/pages/profile", { title: "WATCHBOX",wallet,order,wishlistCount});
+    const whishlist = await User.findById(user).populate("wishlist");
+    const wishlistCount = whishlist.wishlist.length;
+    res.render("./user/pages/profile", {
+      title: "WATCHBOX",
+      wallet,
+      order,
+      wishlistCount,
+    });
   } catch (error) {
     throw new Error(error);
   }
@@ -353,7 +358,7 @@ const checkEmail = asynchandler(async (req, res) => {
 const loadforgotPassword = asynchandler(async (req, res) => {
   try {
     const messages = req.flash();
-    res.render("./user/pages/forgotPassword", { title:"WAT", messages });
+    res.render("./user/pages/forgotPassword", { title: "WAT", messages });
   } catch (error) {
     throw new Error(error);
   }
@@ -374,8 +379,8 @@ const forgotPassword = asynchandler(async (req, res) => {
       await user.save();
       const name = user.userName;
       const sendToken = await otpSetup.sendToken(email, resetToken, name);
-      req.flash('success',"verify link send to the email address")
-      res.redirect('/forgotPassword')
+      req.flash("success", "verify link send to the email address");
+      res.redirect("/forgotPassword");
     }
   } catch (error) {
     throw new Error(error);
@@ -427,7 +432,7 @@ const resetPassword = asynchandler(async (req, res) => {
 
 const loadnewPassword = asynchandler(async (req, res) => {
   try {
-    res.render("./user/pages/newPassword", {title:"WATCHBOX"});
+    res.render("./user/pages/newPassword", { title: "WATCHBOX" });
   } catch (error) {
     throw new Error(error);
   }
@@ -442,7 +447,7 @@ const newPassword = asynchandler(async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       const salt = bcrypt.genSaltSync(10);
-      
+
       const password = await bcrypt.hash(newPassword, salt);
       user.password = password;
       user.passwordChangedAt = Date.now();
@@ -474,7 +479,7 @@ const changePassword = asynchandler(async (req, res) => {
     res.status(200).json({ message: "Password change initiated successfully" });
   } catch (error) {
     // Handle errors and send an error response
-  throw new Error(error)
+    throw new Error(error);
   }
 });
 
@@ -503,5 +508,5 @@ module.exports = {
   resetPassword,
   loadnewPassword,
   newPassword,
-  changePassword
+  changePassword,
 };
