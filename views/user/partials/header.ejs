@@ -1,0 +1,97 @@
+<header class="header-area d-flex wrapper-padding-1">
+  <div id="main-menu" class="sticker header-sticky ">
+    <div class="container-fluid ">
+      <div class="logo-menu-wrapper ">
+        <div class="logo-watch navbar-header ">
+          <a class="navbar-brand" href="/"><img src="assets/img/logo/WATCH.png" alt="" /></a>
+        </div>
+        <div class="icons d-flex  ml-4 ">
+          <div class="hamburger-wrapper ">
+            <div class="hamburger-menu menu-style-toggle text-end" id="main-menu-2">
+              <nav class="">
+                <ul>
+                  <li><a href="/">HOME</a></li>
+                  <li><a href="/shop">shop</a></li>
+                  <li><a href="/whishlist">Whishlist</a></li>
+                  <% if(!user){ %>
+                  <li><a href="/login">Sign in</a></li>
+                  <li><a href="/register">Sign up</a></li>
+                  <% }else{ %>
+                  <li> <a href="/logout">Sign Out</a></li>
+                  <li><a href="/profile"> Profile</a></li>
+                  <% } %>
+                </ul>
+              </nav>
+              <div class="menu-toggle hamburger hamburger--squeeze">
+                <div class="hamburger-box">
+                  <div class="hamburger-inner"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div >
+            <% if(user){ %>
+            <div class="cartdiv d-flex" style="align-items: center; margin-top: -3%">
+              <% if(title==="WATCHBOX/PRODUCTdETAILS"||
+            title==="WATCHBOX/CHECKOUT") {%>
+              <div class="header-cart-2 m-2">
+                <a class="icon-cart text-white" href="/cart">
+                  <i class="ti-shopping-cart"></i>
+                  <span id="cartCount" class="handicraft-count">cart</span>
+                </a>
+              </div>
+
+              <% }else{ %>
+              <div class="header-cart-2 m-2">
+                <a class="icon-cart text-white" href="/cart">
+                  <span id="countSpan" class="text-danger js-cart-quantity">0</span>
+                  <i class="ti-shopping-cart"></i>
+                 
+                </a>
+              </div>
+              <% } %>
+
+            </div>
+
+            <%} %>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<style>
+  .header-cart-2 {
+    position: relative;
+  }
+
+  .icon-cart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .js-cart-quantity {
+    position: absolute;
+    top: 25px;
+    /* Adjust this value to position the quantity properly */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f9f9f9;
+    color: #000000;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .handicraft-count {
+    margin-top: 4px;
+    /* Adjust this value to provide spacing between the number and "cart" text */
+  }
+</style>

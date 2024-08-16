@@ -1,0 +1,113 @@
+<!-- Page Content -->
+<div class="container ">
+  <h1>Coupoun Management</h1>
+  <br />
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="table-responsive">
+          <table id="adminsTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Coupon Type</th>
+                <th>Coupon Amount</th>
+                <th>Description</th>
+                <th>Min Amount</th>
+                <th>Max Amount</th>
+                <th>Expiry Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% coupons?.forEach(coupon=> { %>
+                <tr>
+                  <td class="text-center">
+                    <%= coupon?.code %>
+                  </td>
+                  <td class="text-center">
+                    <%= coupon?.type.toUpperCase() %>
+                  </td>
+                  <td class="text-center">
+                    <%= coupon?.value %>
+                  </td>
+                  <td class="text-center">
+                    <%= coupon?.description %>
+                  </td>
+                  <td class="text-center">
+                    <%= coupon?.minAmount %>
+                  </td>
+                  <td class="text-center">
+                    <%= coupon?.maxAmount %>
+                  </td>
+                  <td class="text-center">
+                    <%= new Date(coupon?.expiryDate).toLocaleDateString('en-US', { year: 'numeric' , month: 'long' ,
+                      day: 'numeric' }) %>
+                  </td>
+                  <td class="text-center d-flex">
+
+
+                    <a href="/admin/coupon/editCoupon/<%=coupon._id %>" class="btn btn-primary btn-sm"
+                      style="margin-right: 10px">
+                      <i class="ti ti-pencil"></i>
+                    </a>
+
+
+                    <div  id="btn-<%= coupon._id %>" onclick="toggle(`<%=coupon._id %>`)" <% if(!coupon.isListed){ %>
+                      class="btn btn-sm btn-success">
+                      <i class="bx bxs-message-square-check"></i>
+                      <% }else{ %>
+                        class="btn btn-sm btn-danger">
+                        <i class="bx bxs-message-square-x"></i>
+                        <% } %>
+                      </div>
+         <!-- <a class="btn btn-sm btn-danger"><i class="ti ti-trash text-white"></i></a>  -->
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  .container {
+
+    margin-top: 5%;
+
+    text-align: center;
+  }
+</style>
+
+<script>
+  function toggle(couponId) {
+    const button = document.getElementById(`btn-${couponId}`);
+    $.ajax({
+      type: "POST",
+      url: `/admin/coupon/listUnlist/${couponId}`,
+      success: function (response) {
+      if (response.success) {
+          button.classList.remove("btn-success"); // Remove the btn-success class
+        button.classList.add("btn-danger"); // Add the btn-danger class
+        button.innerHTML = '<i class="bx bxs-message-square-x"></i>'; // Update the button content
+      } else {
+       button.classList.remove("btn-danger"); // Remove the btn-danger class
+        button.classList.add("btn-success"); // Add the btn-success class
+        button.innerHTML = '<i class="bx bxs-message-square-check"></i>'; // Update the button content
+      }
+    },
+      error: function (textStatus, errorThrown) {
+        console.log(
+          "Error in sending addtowishlist request",
+          textStatus,
+          errorThrown
+        );
+      },
+    });
+
+  }
+</script>

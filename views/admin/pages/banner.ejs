@@ -1,0 +1,99 @@
+<div class="container">
+    <h1>Banner Management</h1>
+    <br />
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="table-responsive">
+          <% if (banners.length> 0 ) { %>
+          <table id="adminsTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Banner Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% banners.forEach(banner=> { %>
+              <% banner.bannerImage.forEach(image=> { %>
+              <tr>
+                <td><img src="/admin/uploads/<%= image.name %>" alt="<%= banner.title %>" class="img-thumbnail" style="max-width: 100px;"></td>
+                <td>
+                  <%= banner.title %>
+                </td>
+                <td>
+                  <%= banner.description %>
+                </td>
+                <td>
+
+                  <% if (banner.isActive) { %>
+                  <form method="post" action="/admin/banner/unlist/<%= banner._id %>">
+
+
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      <i class="bx bxs-message-square-x"></i>
+                    </button>
+                  </form>
+                  <% } else { %>
+                  <form method="post" action="/admin/banner/list/<%= banner._id %>">
+                    <button type="submit" class="btn btn-sm btn-success">
+                      <i class="bx bxs-message-square-check"></i>
+                    </button>
+                  </form>
+                  <% } %>
+
+                </td>
+
+              </tr>
+              <% }); %>
+              <% }); %>
+
+            </tbody>
+          </table>
+          <% } else { %>
+  <h1 class="fw-bolder">No banners found</h1>
+  <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<script>
+  $(document).ready(function() {
+    $('.banner-toggle').change(function() {
+
+      const bannerId = $(this).data('banner-id');
+      console.log(bannerId);
+      const isActive = this.checked;
+
+      // Send a request to the server to update the banner status
+      $.ajax({
+        url: `/admin/banner/updateBannerStatus/${bannerId}`,
+        method: 'POST', // Change to your preferred HTTP method
+        data: {
+          isActive: isActive
+        },
+        success: function(response) {
+          if (response) {
+            console.log('Status updated');
+          }
+        },
+        error: function(error) {
+          // Handle errors here
+        }
+      });
+    });
+  });
+</script>
+<style>
+  .container {
+
+    margin-top: 5%;
+
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,104 @@
+<div class="container-fluid d-flex justify-content-center">
+    <% if (orders && orders.length) { %>
+      <div class="card card-1 ">
+        <div class="card-header text-center mb-5">
+          <h4 class=" ">
+            Thanks for your Order, <span class="change-color"><%= user.userName %></span>!
+          </h4>
+        </div>
+  
+        <% orders.forEach(order => { %> 
+          <% order.orderItems.forEach(orderItem => { %>
+            <div class="card-1 ">
+              <div class="row justify-content-between mb-3">
+                <div class="col-auto">
+                  <h6 class="color-1 mb-0 change-color"></h6>
+                </div>
+                <div class="col-auto">
+                  <small class="m-3">Order Number: <%=order.orderId %></small>
+                </div>
+              </div>
+          
+            
+                  <div class="card-1 ">
+                    <div class="card-body">
+                      <div class="media">
+                        <div class="sq align-self-center">
+                          <img
+                            class="img-fluid my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0"
+                            src="<%= orderItem.product.images[0].thumbnailUrl %>"
+                            width="135"
+                            height="135"
+                          />
+                        </div>
+                        <div class="media-body my-auto">
+                          <div class="row my-auto flex-column flex-md-row justify-content-between ">
+                            <div class="col-auto">
+                              <h6 class="mb-0">
+                                Product Name: 
+                                <strong class="text-dark"><%= orderItem.product.title %></strong>
+                              </h6>
+                            </div>
+                            <div class="col-auto ">
+                              <small>
+                                Order Status:
+                                <% if(orderItem.status === 'Pending'){ %>
+                                  <strong class="text-warning"><%= orderItem.status %></strong>
+                                <% } else if (orderItem.status === 'Shipped') { %>
+                                  <strong class="text-primary"><%= orderItem.status %></strong>
+                                  <% } else if (orderItem.status === 'Cancel Requested') { %>
+                                    <strong class="text-danger"><%= orderItem.status %></strong>
+                                <% } else if (orderItem.status === 'Cancelled' ) { %>
+                                  <strong class="text-danger"><%= orderItem.status %></strong>
+                                <% } else if (orderItem.status === 'Delivered') { %>
+                                  <strong class="text-success"><%= orderItem.status %></strong>
+                                <% } else if (orderItem.status === 'Returned') { %>
+                                  <strong class="text-info"><%= orderItem.status %></strong>
+                                  <% } else if (orderItem.status === 'Return Requested') { %>
+                                    <strong class="text-info"><%= orderItem.status %></strong>
+                                    <% } else if (orderItem.status === 'cancel Requested') { %>
+                                      <strong class="text-info"><%= orderItem.status %></strong>
+                                    <% } %>
+                              </small>
+                            </div>
+                            <div class="col-auto"><small>qty:<%=orderItem.quantity %></small></div>
+                            <div class="col-auto">
+                              <form action="/orders/<%= order._id %>" method="post">
+                              <input type="hidden" name="productId" value="<%=orderItem.product._id %>">
+                              <button type="submit" class="btn btn-dark h-auto">View Order</button></form>
+                            
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr class="my-3" />
+                    </div>
+                  </div>
+            </div>
+          <% }) %> 
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="card-header bg-white">
+        <div class="media flex-sm-row flex-column-reverse justify-content-between">
+          <div class="col my-auto text-center">
+            <h4 class="mb-0">
+              Please order something, <span class="change-color"><%= user.userName %></span>!
+            </h4>
+            <a href="/shop" class="btn btn-dark h-auto">Shop</a>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+  
+  <style>
+    .card{
+        width: 80%;
+        margin-top: 0%;
+    }
+    .card-header{
+      margin-top: 200px;
+      margin-bottom: 200px;
+    }
+  </style>

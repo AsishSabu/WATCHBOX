@@ -1,0 +1,352 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="border border-dark-light">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title fw-semibold mb-4">Edit Product</h5>
+          <!-- <a class="btn btn-primary" href="/admin/Product/edit/image/<%= Product._id %>">Change Images</a> -->
+        </div>
+
+        <form
+          action="/admin/product/editProduct/<%= Product._id %>"
+          method="post"
+          id="editProduct"
+          onsubmit="return validateProductForm()"
+        >
+          <div class="form-group mt-2">
+            <label for="productName">Product Name:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="productName"
+              name="title"
+              value="<%= Product.title %>"
+              placeholder="Enter Product name"
+              required
+            />
+            <div id="nameerr" class="text-center text-danger fw-bolder""></div>
+          </div>
+        
+          <div class="form-group mt-2">
+            <label for="category">Category:</label>
+            <select
+              class="form-select"
+              name="categoryName"
+              id="category"
+              required
+            >
+              <option selected value="<%= Product?.categoryName?._id %>">
+                <%= Product?.categoryName?.categoryName%>
+              </option>
+              <% categories.forEach(category=> { %><% if (category.categoryName
+              !== Product?.categoryName?.categoryName) { %>
+              <option class="text-danger" value="<%=category?._id %>">
+                <%= category.categoryName %>
+              </option>
+              <% } %> <% }) %>
+            </select>
+          </div>
+          <div class="form-group mt-2">
+            <label for="description">Description:</label>
+            <textarea
+              class="form-control"
+              id="description"
+              rows="3"
+              name="description"
+              placeholder="Enter Product description"
+              required
+            ><%= Product.description %></textarea>
+            
+            <div class="text-center text-danger fw-bolder" id="decerr" ></div>
+          </div>
+         
+          <div class="form-group mt-2">
+            <label for="productPrice">Product Price:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="productPrice"
+              name="productPrice"
+              value="<%= Product.productPrice %>"
+              placeholder="Enter Product price"
+              required
+            />
+            <div class="text-center text-danger fw-bolder" id="productPriceErr" ></div>
+          </div>
+          <div class="form-group mt-2">
+            <label for="salesPrice">Sales Price:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="salesPrice"
+              name="salePrice"
+              value="<%= Product.salePrice %>"
+              placeholder="Enter sales price"
+              required
+            />
+            <div class="text-center text-danger fw-bolder" id="saleerr" ></div>
+          </div>
+         
+          <div class="form-group mt-2">
+            <label for="quantity">Quantity:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="quantity"
+              name="quantity"
+              value="<%= Product.quantity %>"
+              placeholder="Enter quantity"
+              required
+            />
+            <div class="text-center text-danger fw-bolder" id="qerr"></div>
+          </div>
+
+          <div class="form-group mt-2">
+            <label for="brand">Brand:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="brand"
+              name="brand"
+              value="<%= Product.brand %>"
+             
+              required
+            />
+            <div class="text-center text-danger fw-bolder" id="branderr"></div>
+          </div>
+       
+          
+
+
+          
+          <button type="submit" class="btn btn-primary mt-2">
+            Save Changes
+          </button>
+        </form>
+
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body p-4">
+              <% Product.images.forEach((element, index) => { %>
+              <form
+                action="/admin/product/editImage/<%= Product.images[index]._id %>/?_method=PUT"
+                method="post"
+                enctype="multipart/form-data"
+              >
+                <div
+                  class="mb-3 d-flex align-items-center justify-content-between"
+                >
+                  <img
+                    src="<%= Product.images[index].thumbnailUrl %>"
+                    alt="Image"
+                    id="previewImage<%= index %>"
+                    class="img-thumbnail mr-3"
+                    style="max-width: 150px"
+                  />
+                  <div class="d-flex flex-column">
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="image<%= index %>"
+                      accept="image/*"
+                      style="display: none"
+                      name="image"
+                    />      
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-primary mb-2 update-image-button"
+                      data-index="<%= index %>"
+                    >
+                      <i class="fas fa-upload"></i> Select Image
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-success"
+                      id="submitImage<%= index %>"
+                      disabled
+                    >
+                      <i class="fas fa-edit"></i> Update Image
+                    </button>
+                    <button
+                      type="button"
+                      onclick="removeImage(`<%= Product.images[index]._id %>`)"
+                      class="btn btn-sm btn-danger mt-2"
+                    >
+                      <i class="fas fa-trash"></i> Remove Image
+                    </button>
+                  </div>
+                </div>
+                <div class="text-center text-danger fw-bolder" id="imgErr"></div>
+              </form>
+              <% }) %>
+              <form
+                action="/admin/product/editImage/upload/<%= Product._id %>/?_method=PUT"
+                method="post"
+                enctype="multipart/form-data"
+                onsubmit="return imageValidation()"
+              >
+                <div
+                  class="mb-3 d-flex align-items-center justify-content-between"
+                >
+                  <div id="previewNewImages"></div>
+                  <div>
+                    <input
+                      type="file"
+                      class="form-control"
+                      
+        id='newImages'
+                      accept="image/*"
+                      name="images"
+                      multiple
+                      style="display: none"
+                    />
+                    <div class="d-flex flex-column gap-2">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-primary update-image-button"
+                        onclick="document.getElementById('newImages').click()"
+                      
+                      >
+                        <i class="fas fa-upload"></i> Select Images
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-success"
+                        id="submitNewImages"
+                        disabled
+                      >
+                        <i class="fas fa-edit"></i> Upload Images
+                      </button>
+                      <div id="imageerr" class="text-center text-danger fw-bolder"></div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const updateImageButtons = document.querySelectorAll(".update-image-button");
+  function handleFileInputChange(index) {
+    const fileInput = document.getElementById("image" + index);
+    const previewImage = document.getElementById("previewImage" + index);
+    const submitButton = document.getElementById("submitImage" + index);
+    fileInput.addEventListener("change", (event) => {
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImage.src = e.target.result;
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+        // Enable the "Update Image" button when a file is selected
+        submitButton.removeAttribute("disabled");
+      } else {
+        // Disable the "Update Image" button if no file is selected
+        submitButton.setAttribute("disabled", "disabled");
+      }
+    });
+    // Trigger the hidden file input
+    fileInput.click();
+  }
+  // Add event listeners to all update image buttons
+  updateImageButtons.forEach((button, index) => {
+    button.addEventListener("click", (event) => {
+      handleFileInputChange(index);
+    });
+  });
+</script>
+
+<script>
+ function removeImage(id) {
+  const imageId = id;
+  const url = `/admin/product/deleteImage/${imageId}`;
+  const imageElement = document.getElementById(`previewImage${imageId}`);
+  const remainingImages = document.querySelectorAll('.img-thumbnail').length;
+  const imageerr = document.getElementById("imgErr");
+  if (remainingImages <= 1) {
+    imageerr.innerHTML = "atleast one image is required";
+    return; // Prevent further execution
+  }
+
+  fetch(url, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Image removed successfully");
+        location.reload();
+        return response.json();
+      } else {
+        console.error("Failed to remove image");
+      }
+    })
+    .catch((error) => {
+      console.error("An error occurred:", error);
+    });
+}
+
+</script>
+
+<script>
+  document.getElementById("newImages").addEventListener("change", function () {
+    const previewContainer = document.getElementById("previewNewImages");
+    previewContainer.innerHTML = ""; // Clear previous previews
+    const files = this.files;
+    const selectedFiles = []; // Array to store selected files
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.classList.add("img-thumbnail");
+        img.style.maxWidth = "150px";
+
+        const previewDiv = document.createElement("div");
+        previewDiv.style.position = "relative";
+
+        const removeButton = document.createElement("button");
+        removeButton.innerText = "X";
+        removeButton.classList.add("btn", "btn-sm", "btn-danger", "remove-button");
+        removeButton.style.position = "absolute";
+        removeButton.style.top = "0";
+        removeButton.style.left = "0";
+
+        removeButton.addEventListener("click", function () {
+          // Remove the preview from the UI
+          previewDiv.remove();
+
+          // Remove the file from the selectedFiles array
+          const index = selectedFiles.indexOf(file);
+          if (index !== -1) {
+            selectedFiles.splice(index, 1);
+          }
+        });
+
+        previewDiv.appendChild(img);
+        previewDiv.appendChild(removeButton);
+        previewContainer.appendChild(previewDiv);
+
+        // Add the file to the selectedFiles array
+        selectedFiles.push(file);
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    // Enable the "Upload Images" button
+    document.getElementById("submitNewImages").removeAttribute("disabled");
+
+    // Update the input files with the selectedFiles array
+    document.getElementById("newImages").files = new FileList(selectedFiles);
+  });
+</script>
+<script src="/admin/js/productValidation.js"></script>
+

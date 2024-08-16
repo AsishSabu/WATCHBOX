@@ -1,0 +1,84 @@
+<div class="container  table-responsive  ">
+  <h1>USER LIST</h1>
+  <br />
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="table-responsive">
+          <table id="adminsTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" class="text-info fw-bolder fs-5">Username</th>
+                <th scope="col" class="text-info fw-bolder fs-5">Email</th>
+                <th scope="col" class="text-info fw-bolder fs-5">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+
+            <% if(users.length >0){
+                for(let i=0;i<users.length;i++){%>
+
+            <%if(users.userName==="Admin"){continue;}%>
+
+
+            <tr>
+              <td><%= users[i].userName%></td>
+              <td><%= users[i].email%></td>
+              <td><% if(users[i].isBlock) { %>
+                <form action="/admin/unblockUser/<%- users[i]?._id %>" method="post">
+                  <button type="submit" class="btn btn-success btn-sm unblock-button">Unblock</button>
+                </form>
+                <% } else { %>
+                <form action="/admin/blockUser/<%- users[i]?._id %>" method="post">
+                  <button type="submit" class="btn btn-danger btn-sm block-button"> Block</button>
+                </form>
+                <% } %>
+              </td>
+
+            </tr>
+
+            <%
+                }
+
+            }else{
+                %>
+            <tr>
+              <td>
+                Users Not Found
+              </td>
+            </tr>
+            <%	
+            }
+            %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<style>
+  .container {
+    position: absolute;
+    margin-top: 100px;
+    text-align: center;
+  }
+
+  /* Custom CSS for the search box */
+  .search-box {
+    position: fixed;
+    /* Adjust the left position as needed */
+    top: 10%;
+    /* Adjust the top position as needed */
+
+    background-color: #fff;
+
+    padding: 10px;
+
+  }
+</style>

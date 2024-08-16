@@ -1,0 +1,122 @@
+<div class="container">
+    <h1>Products</h1>
+    <br />
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="table-responsive">
+  <table id="adminsTable"  class="table table-bordered mdl-data-table" >
+   
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Sales Price</th>
+        <th>Product Price</th>
+        <th>Stock</th>
+        <th>Sold</th>
+        <th>Images</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% products.forEach((product,index)=>{%>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td>
+          <% if (product.title.length > 10) { %> <%= product.title.substring(0,
+          10) + "..." %> <% } else { %> <%= product.title %> <% } %>
+        </td>
+        <td><%= product?.categoryName?.categoryName %></td>
+        <td>
+          <% if(product.description.length>10){%> <%=
+          product.description.substring(0,10)+'...'%> <% }else{ %> <%=
+          product.description %> <% } %>
+        </td>
+        <td>$<%= product.salePrice %></td>
+
+        <td>$<%= product.productPrice %></td>
+        <td><%= product.quantity %></td>
+          <td><%= product.sold %></td>
+        <td class="align-middle">
+          <% if(product&&product.images&&product.images[0]&&product.images[0].thumbnailUrl){ %>
+          <img
+            class="img-fluid img-thumbnail"
+            src="<%= product.images[0].thumbnailUrl %>"
+            alt="no image"
+            style="width: 100px; height: 100px"
+          />
+          <%} else{ %>
+            <p class="text-danger">no image found</p>
+         <% } %>
+        </td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Product Actions">
+            <a
+              href="/admin/product/editProduct/<%= product._id %>"
+              class="btn btn-primary btn-sm"
+              style="margin-right: 10px"
+            >
+              <i class="ti ti-pencil"></i>
+            </a>
+            <% if (product.isListed) { %>
+            <form
+              method="post"
+              action="/admin/product/unlist/<%= product._id %>"
+            >
+              <button type="submit" class="btn btn-sm btn-success">
+                <i class="bx bxs-message-square-check"></i>
+              </button>
+            </form>
+            <% } else { %>
+            <form
+              method="post"
+              action="/admin/product/list/<%= product._id %>"
+            >
+              <button type="submit" class="btn btn-sm btn-danger">
+                <i class="bx bxs-message-square-x"></i>
+              </button>
+            </form>
+            <% } %>
+          </div>
+        </td>
+      </tr>
+
+      <% }) %>
+      <!-- Sample Product Row (You can add more rows dynamically)
+            <tr>
+                <td>1</td>
+                <td>Product 1</td>
+                <td>Category 1</td>
+                <td>Description 1</td>
+                <td>$10.00</td>
+                <td>$8.00</td>
+                <td>50</td>
+                <td>
+                   
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm">Edit</button>
+                    <button class="btn btn-success btn-sm">List</button>
+                    <button class="btn btn-danger btn-sm">Unlist</button>
+                </td>
+            </tr> -->
+    </tbody>
+  </table>
+  </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+
+<style>
+  .container {
+
+    margin-top: 5%;
+   
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,207 @@
+
+<div><section class="h-100  h-custom" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-8 col-xl-8">
+          <div class="card border-top border-bottom border-3" style="border-color: #f37a27 !important;">
+            <div class="card-body  p-5">
+  
+              <p class="display-6  con text-center fw-bold mb-5" style="color: #f37a27;"> <%=order.orderId%> </p>
+              <p class="lead fw-bold " style="color: #000000;"> Customer Information</p>
+              <div class="mx-n5 px-5 py-4" style="background-color: #f2f2f2;">
+                <div class="row">
+                  <div class="col-md-8 col-lg-9">
+                    <p><strong>Name:</strong> <%= order.user.userName %>, </p>
+                  </div>
+                  <div class="col-md-8 col-lg-9">
+                    <p><strong>Email: </strong><a href="#"><%= order.user.email %></a>
+                    </p>
+                  </div>
+                  <div class="col-md-8 col-lg-9">
+                    <p><strong>Address:</strong> <%= order.shippingAddress.address %>, <%= order.town%>, <%= order.state %> </p>
+                  </div>
+                  <div class="col-md-8 col-lg-9">
+                    <p><strong>Phone: </strong><%= order.phone %></p>
+                  </div>
+                  
+                </div>
+                <!-- <div class="row">
+                  <div class="col-md-8 col-lg-9">
+                    <p class="mb-0">Shipping</p>
+                  </div>
+                  <div class="col-md-4 col-lg-3">
+                    <p class="mb-0">£33.00</p>
+                  </div>
+                </div> -->
+              </div>
+  
+              <div class="row">
+                <p class="lead fw-bold mt-2 " style="color: #000000;"> Order Information</p>
+
+                <div class="col-md-8 col-lg-9">
+                  <p class="small text-muted mb-1"><strong>Payment Method:</strong> <%= order.payment_method %>
+                 
+                </div>
+                <div class="col-md-8 col-lg-9">
+                  <p class="small text-muted mb-1"><strong>Total Amount:</strong> <%= order.totalPrice %></p>
+
+                </div>
+              </div>
+
+              <% order.orderItems.forEach((item, index) => { %>
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <small><%= %></small>
+                        <img
+                            src="<%= item.product.images[0].thumbnailUrl %>"
+                            alt="Product 1"
+                            class="img-fluid img-thumbnail"
+                        />
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong><%= item.product.title %></strong></p>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <% if (item.status === 'Pending') { %>
+                        <p><strong class="bg-warning text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Shipped") { %>
+                        <p><strong class="bg-primary text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Delivered") { %>
+                        <p><strong class="bg-success text-whitepx-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Cancel Requested") { %>
+                        <p><strong class="bg-danger text-white  d-flex  px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Returned") { %>
+                        <p><strong class="bg-info text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                         <% } else if (item.status === "Return Requested") { %>
+                        <p><strong class="bg-info text-white d-flex px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% }%>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong>Quantity:</strong> <%= item.quantity %></p>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong>Price:</strong> <%= item.price %></p>
+                    </div>
+                    <% if (item.status !== "Cancelled" && item.status !== "Delivered" && item.status !== "Return Requested"
+                    && item.status !== "Returned"  && item.status !== "Cancel Requested") { %>
+                    <div class="col-md-2 d-flex flex-column d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
+                            <select name="status" class="form-control mb-3">
+                                <% if (item.status === "Pending") { %>
+                                    <option value="Pending" <%= item.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="Shipped" <%= item.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="Delivered" <%= item.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="Cancelled" <%= item.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } else if (item.status === "Shipped") { %>
+                                    <option value="Shipped" <%= item.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="Delivered" <%= item.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="Cancelled" <%= item.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } %>
+                            </select>
+                            <input type="hidden" name="orderId" value="<%=order.orderId%>" >
+                            <button class="btn btn-sm btn-primary btn-block" type="submit">Update</button>
+                        </form>
+                    </div>
+
+                    <% } else if (item.status === "Delivered") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/images/signs/tick.svg"
+                            alt="Delivered"
+                            class="icon"
+                        />
+                    </div>
+                    <% } else if (item.status === "Cancelled") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/images/signs/cancel.svg"
+                        
+                            alt="Cancelled"
+                            class="icon"
+                        />
+                    </div>
+                    <% } else if (item.status === "Return Requested") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
+                          <input type="hidden" name="orderId" value="<%=order.orderId%>">
+                          <input type="hidden" name="status" value="Return Requested">
+                            <button class="btn btn-danger text-white">Confirm Return</button>
+                        </form>
+                    </div>
+                    <% }  else if (item.status ==="Cancel Requested") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
+                          <input type="hidden" name="orderId" value="<%=order.orderId%>">
+                          <input type="hidden" name="status" value="Cancelled">
+                            <button class="btn btn-danger text-white">Confirm Cancel</button>
+                        </form>
+                    </div>
+                    <% } else if (item.status === "Returned") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                             src="/admin/images/signs/return_icon.png"
+                            alt="Cancelled"
+                            class="icon"
+                        />
+                    </div>
+                    <% } %>
+                </div>
+               
+                <% if (index !== order.orderItems.length - 1) { %>
+                <hr class="border-1 bg-dark" />
+                <% } %> <% }) %>
+
+                <!-- Product End -->
+  
+             
+  
+         
+  
+             
+  
+            
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section></div>
+  <style>
+  
+    @media (min-width: 1025px) {
+.h-custom {
+height: 100vh !important;
+}
+}
+
+.horizontal-timeline .items {
+border-top: 2px solid #ddd;
+}
+
+.horizontal-timeline .items .items-list {
+position: relative;
+margin-right: 0;
+}
+
+.horizontal-timeline .items .items-list:before {
+content: "";
+position: absolute;
+height: 8px;
+width: 8px;
+border-radius: 50%;
+background-color: #ddd;
+top: 0;
+margin-top: -5px;
+}
+
+.horizontal-timeline .items .items-list {
+padding-top: 15px;
+}
+.con{
+    margin-top: 15%;
+}
+  </style>

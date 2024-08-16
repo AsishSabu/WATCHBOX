@@ -1,0 +1,62 @@
+<div class="container">
+    
+   <h1>Manage Category</h1>
+    <br />
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="table-responsive">
+  <% if(category.length){ %>  
+  <table id="adminsTable" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>List/Unlist</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% category.forEach((category,index)=>{ %>
+      <tr>
+        <td><%= index+1 %></td>
+        <td><%= category.categoryName %></td>
+        <td>
+          <% if(category.isListed){ %>
+          <a href="/admin/category/unlist/<%- category?._id  %>">   
+            <button class="btn btn-danger btn-unlist">Unlist</button> </a
+          >
+          <% }else{ %>
+          <a href=" /admin/category/list/<%- category?._id  %>">
+          
+            <button class="btn btn-success btn-list">List</button>
+          </a>
+          <% } %>
+        </td>
+        <td>
+          <a href="/admin/editCategory/<%- category?._id  %>">
+            <button class="btn btn-primary">Edit</button>
+          </a>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% }else{ %>
+  <h1 class="fw-bolder">No categories found</h1>
+  <% } %>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<style>
+  .container {
+ 
+    margin-top: 5%;
+  
+    text-align: center;
+  }
+</style>

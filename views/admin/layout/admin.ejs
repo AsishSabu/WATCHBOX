@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%=title %></title>
+    <link rel="stylesheet" href="/admin/js/cropper/cropper.css">
+    <script src="/admin/js/cropper/cropper.js"></script>
+    <link rel="shortcut icon"type="image/png"href="/admin/images/logos/favicon.png"/>
+    <link rel="stylesheet" href="/admin/css/styles.min.css" />
+    <link href="admin/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet"/>
+
+    <!-- Include DataTables CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"
+    />
+  </head>
+
+  <% if(title==="WATCHBOX/LOGIN"||title=="Error.."){%> <%-body %> <%}else{%>
+  <%-include('../partials/navbar.ejs')%>
+
+  <page><%-body %></page>
+
+  <%-include('../partials/footer.ejs')%> <%} %>
+
+  <!-- Include DataTables JavaScript -->
+  <script>
+    $(document).ready(function () {
+        $('#adminsTable').dataTable( {
+     
+        "dom": 'ftip',
+        "info":     false
+  } );
+    });
+  </script>
+  <script
+    type="text/javascript"
+    charset="utf8"
+    src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"
+  ></script>
+  
+</html>

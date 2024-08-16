@@ -1,0 +1,335 @@
+<div class="breadcrumb-area" style="background-color: black; color: white">
+  <div class="container">
+    <div class="breadcrumb-content text-center pt-1">
+      <ul>
+        <li>
+          <h3><a href="/">Home</a></h3>
+        </li>
+        <li>
+          <h3 style="color: white">/</h3>
+        </li>
+        <li>
+          <h3 style="color: white">Cart</h3>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- checkout-area start -->
+<div class="checkout-area ptb-100">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="coupon-accordion">
+
+          <h3 class="bg-dark">
+            Have a coupon?
+            <span id="showcoupon">Click here to enter your code</span>
+          </h3>
+          <div id="checkout_coupon" class="coupon-checkout-content col-lg-6">
+            <div class="coupon-info d-flex">
+              <button id="rmCoupon" type="button" class="btn btn-sm">
+                <i class="ti ti-close text-danger fw-bolder"></i>
+              </button>
+              <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();" />
+              <input class="button" name="apply_coupon" id="couponBtn" type="button" value="Apply coupon" />
+            </div>
+            <% if (availableCoupons && availableCoupons.length > 0) { %>
+            <h6 class="mt-2 text-success" id="couponError">
+              <%= couponMessage?.message %>
+            </h6>
+            <% } else { %>
+            <h6 class="mt-2 text-danger" id="couponError">
+              No coupons available
+            </h6>
+            <% } %>
+          </div>
+          <!-- ACCORDION END -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <h1 class="text-grey text-center pb-5 fw-bolder">CHECKOUT</h1>
+      <div class="col-lg-6 col-md-12 col-12">
+        <form action="#">
+          <div class="checkbox-form">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="checkbox-form">
+                  <div class="d-flex">
+                    <h3>Select Address</h3>
+                    <a
+                      href="/addAddress"
+                      class="btn bg-white text-danger rounded btn-outline-white"
+                      >Add</a
+                    >
+                  </div>
+                  <div class="different-address">
+                    <div id="" class="row">
+                      <% if (address && address.length) { %> <%
+                      address.forEach((item, index) => { %>
+                      <div class="col-md-8 mb-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio"
+                              name="addressId" id="address<%= index %>"
+                              value="<%= item._id %>" required <%= index === 0 ?
+                              "checked" : "" %> />
+                              <label
+                                class="form-check-label"
+                                for="address<%= index %>"
+                              >
+                                <h5 class="card-title"><%= item.name %></h5>
+                                <p class="card-text">
+                                  <%= item.address %>, <%= item.town %>, <%=
+                                  item.state %>, <%= item.postcode %>
+                                </p>
+                                <p class="card-text">
+                                  Mobile: +91 <%= item.mobile %>
+                                </p>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <% }) %> <% } else { %>
+                      <p class="text-danger text-center fs-1 p-5">
+                        No Address Found
+                      </p>
+
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-lg-6 col-md-12 col-12">
+        <div class="your-order">
+          <h3>Your order</h3>
+          <input
+            type="hidden"
+            id="originalCartData"
+            name="currentCartData"
+            value="<%= JSON.stringify(cartData) %>"
+          />
+          <div class="your-order-table table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th class="product-name">Product</th>
+                  <th class="product-total">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% product.forEach(item=>{%>
+
+                <tr class="cart_item">
+                  <td class="product-name">
+                    <% if (item.product.title.length> 36) { %>
+                    <small>
+                      <%= item.product.title.substring(0, 36) + '...' %>
+                    </small>
+                    <% } else { %> <small> <%= item.product.title %> </small> <%
+                    } %>
+                    <strong class="product-quantity">
+                      <%=item.quantity %></strong
+                    >
+                  </td>
+                  <td class="product-total">
+                    <span class="amount"
+                      ><%=item.product.salePrice*item.quantity %></span
+                    >
+                  </td>
+                </tr>
+
+                <% }) %>
+              </tbody>
+              <tfoot>
+                <tr class="cart-subtotal">
+                  <th>Cart Subtotal</th>
+                  <td><span class="amount">₹ <%= subtotal %></span></td>
+                </tr>
+                <tr class="cart-discount">
+                  <th>Discount</th>
+                  <td>₹<span class="amount" id="discount"></span></td>
+                </tr>
+
+                <tr class="wallet-payment">
+                  <td colspan="2">
+                    <div
+                      class="wallet-info d-flex justify-content-between align-items-center"
+                    >
+                      <div class="d-flex flex-column ml-10">
+                        <div class="d-flex align-items-center">
+                          <input type="checkbox" id="wallet" name="wallet"
+                          value="wallet" style="width: 20px; height: 20px;
+                          margin-right: 10px" <%= wallet.balance === 0 ?
+                          "disabled" : "" %> />
+                          <label for="wallet">Pay with Wallet:</label>
+                        </div>
+                        <small
+                          >Available Balance: ₹
+                          <span id="available-balance"
+                            ><%= wallet?.balance ?? "0" %></span
+                          ></small
+                        >
+                      </div>
+                      <span
+                        >- ₹<span id="wallet-amount" class="mr-90"
+                          >0</span
+                        ></span
+                      >
+                    </div>
+                  </td>
+                </tr>
+
+                <tr class="order-total">
+                  <th>Order Total</th>
+                  <td>
+                    <strong
+                      >  ₹<span id="total" class="amount">
+                       <%= total.toFixed(2) %></span
+                      ></strong
+                    >
+                    <span id="totalAmount" class="amount d-none">
+                       <%= total %></span
+                      >
+                  
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <% if(address&& address.length){ %>
+          <div class="payment-method">
+            <div class="payment-accordion">
+              <div class="order-button-payment">
+                <div class="order-button-payment d-flex flex-column gap-2">
+                  <button
+                    type="button"
+                    class="btn btn-dark h-auto rounded-0 fw-bold"
+                    style="padding: 12px"
+                    id="cod-button"
+                  >
+                    CASH ON DELIVERY
+                  </button>
+                  <button
+                    class="btn btn-primary h-auto rounded-0 fw-bold "
+                    style="padding: 12px;"
+                    type="button"
+                    id="rzp-button"
+                    value="submit"
+                  >
+                    Pay with Razorypay
+                  </button>
+                 
+                  <button
+                    class="btn btn-success h-auto rounded-0 fw-bold "
+                    style="padding: 12px;display: none;"
+                    type="button"
+                    id="wlt-button"
+                    value="submit"
+                  >
+                    Pay With Wallet
+                  </button>
+                  
+                 
+                </div>
+              </div>
+            </div>
+            <% }else{ %>
+            <div class="text-center">
+              <p class="text-white bg-dark p-2 h5">Please Add An Address</p>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- checkout-area end -->
+  <style>
+    body {
+      background-color: rgb(255, 255, 255);
+    }
+
+    /* ... (other CSS code) ... */
+
+    .coupon {
+      border-radius: 12px;
+      background-color: rgb(255, 244, 230);
+      box-shadow: 5px 8px 10px #00000033;
+      margin-bottom: 10px; /* Add margin bottom to create space between coupons */
+    }
+
+    .coupon:hover {
+      box-shadow: 5px 8px 10px #00000055; /* Change box shadow on hover for a slight effect */
+    }
+
+    .coupon img {
+      max-width: 100%; /* Make sure the image doesn't overflow its container */
+    }
+
+    .code {
+      background-color: #f8f9fa; /* Add a background color to make the code stand out */
+      cursor: pointer;
+    }
+
+    .code:hover {
+      background-color: #e9ecef; /* Change background color on hover */
+    }
+
+    .copy-message {
+      display: none;
+      color: #28a745; /* Green color for success */
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    /* ... (other CSS code) ... */
+  </style>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+   // Find all promo code elements
+const promoCodeElements = document.querySelectorAll(".promoCode");
+
+// Add a click event listener to each promo code element
+promoCodeElements.forEach(promoCodeElement => {
+  promoCodeElement.addEventListener("click", () => {
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = promoCodeElement.innerText;
+    document.body.appendChild(tempInput);
+
+    // Select the value of the input
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the selected text
+    document.execCommand("copy");
+
+    // Remove the temporary input
+    document.body.removeChild(tempInput);
+
+    // Show the copy message
+    const copyMessageElement = promoCodeElement.nextElementSibling;
+    copyMessageElement.textContent = "Copied!";
+    copyMessageElement.style.display = "block";
+
+    // Hide the copy message after a short delay
+    setTimeout(() => {
+      copyMessageElement.textContent = "";
+      copyMessageElement.style.display = "none";
+    }, 1000);
+  });
+});
+
+  </script>
+</div>
+
+
+

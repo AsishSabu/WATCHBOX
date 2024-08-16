@@ -1,0 +1,183 @@
+
+<div class="breadcrumb-area" style="background-color: black; color: white">
+  <div class="container">
+    <div class="breadcrumb-content text-center pt-1">
+      <ul>
+        <li>
+          <h3><a href="/">Home</a></h3>
+        </li>
+        <li>
+          <h3 style="color: white">/</h3>
+        </li>
+        <li>
+          <h3 style="color: white">Cart</h3>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- checkout-area start -->
+
+<div class="container">
+  <div class="checkout-area">
+    <form action="/addAddress" method="POST">
+      <div class="checkbox-form">
+        <h1 class="text-center fw-bolder">ADDRESS</h1>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="checkout-form-list">
+              <label>Name <span class="required">*</span></label>
+              <input type="text" name="name" id="name" placeholder="Your Name" />
+            </div>
+          </div>
+
+         
+          <div class="order-notes">
+            <div class="checkout-form-list mrg-nn">
+              <label>Address<span class="required">*</span></label>
+              <input type="text" name="address" id="address" placeholder="Street Address"/>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="checkout-form-list">
+                <label>State<span class="required">*</span></label>
+                
+                <select name="state" id="state" class="form-control" required>
+                    <option value="">Select State</option>
+                  <option value="andhra_pradesh">Andhra Pradesh</option>
+                  <option value="arunachal_pradesh">Arunachal Pradesh</option>
+                  <option value="assam">Assam</option>
+                  <option value="bihar">Bihar</option>
+                  <option value="chhattisgarh">Chhattisgarh</option>
+                  <option value="goa">Goa</option>
+                  <option value="gujarat">Gujarat</option>
+                  <option value="haryana">Haryana</option>
+                  <option value="himachal_pradesh">Himachal Pradesh</option>
+                  <option value="jammu_kashmir">Jammu and Kashmir</option>
+                  <option value="jharkhand">Jharkhand</option>
+                  <option value="karnataka">Karnataka</option>
+                  <option value="kerala">Kerala</option>
+                  <option value="madhya_pradesh">Madhya Pradesh</option>
+                  <option value="maharashtra">Maharashtra</option>
+                  <option value="manipur">Manipur</option>
+                  <option value="meghalaya">Meghalaya</option>
+                  <option value="mizoram">Mizoram</option>
+                  <option value="nagaland">Nagaland</option>
+                  <option value="odisha">Odisha</option>
+                  <option value="punjab">Punjab</option>
+                  <option value="rajasthan">Rajasthan</option>
+                  <option value="sikkim">Sikkim</option>
+                  <option value="tamil_nadu">Tamil Nadu</option>
+                  <option value="telangana">Telangana</option>
+                  <option value="tripura">Tripura</option>
+                  <option value="uttar_pradesh">Uttar Pradesh</option>
+                  <option value="uttarakhand">Uttarakhand</option>
+                  <option value="west_bengal">West Bengal</option>
+                </select>
+              </div>
+              
+          </div>
+          <div class="col-md-6">
+            <div class="checkout-form-list">
+              <label>Town/City <span class="required">*</span></label>
+              <input type="text" name="town" id="town" placeholder="Your Town" />
+            </div>
+          </div>
+        
+          <div class="col-md-6">
+            <div class="checkout-form-list">
+              <label>Postcode / Zip <span class="required">*</span></label>
+              <input type="text" name="postcode" id="postcode" placeholder="Your postalcode" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="checkout-form-list">
+              <label>Phone <span class="required">*</span></label>
+              <input type="number" name="mobile" id="mobile" placeholder="Your mobileNo" />
+            </div>
+          </div>
+ 
+        </div>
+        <div class="btn">
+            <button type="submit">SAVE</button>
+        </div>
+     
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  body {
+    background-color: #000000;
+    padding-top: 50px;
+  }
+
+  .container {
+    width: 50%;
+  }
+
+  .checkout-area {
+    background-color: #fff;
+    padding: 10%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 30px;
+  }
+
+  .checkout-form-list label {
+    font-weight: bold;
+  }
+
+  .checkout-form-list input,
+  .checkout-form-list select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .order-notes textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .order-notes label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  button {
+
+  padding: 12px 24px;
+  background: rgb(220, 220, 220);
+  font-weight: bold;
+  color: rgb(120, 120, 120);
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: ease 0.3s;
+  margin: 0 auto; /* This will center the button horizontally */
+}
+
+button:hover {
+  background: #000000;
+  color: #ffffff;
+}
+  .btn {
+    display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      width: 90%;
+    }
+  }
+</style>

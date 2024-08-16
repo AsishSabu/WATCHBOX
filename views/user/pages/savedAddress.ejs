@@ -1,0 +1,235 @@
+<div class="breadcrumb-area" style="background-color: black; color: white">
+  <div class="container">
+    <div class="breadcrumb-content text-center pt-1">
+      <ul>
+        <li>
+          <h3><a href="/">Home</a></h3>
+        </li>
+        <li>
+          <h3 style="color: white">/</h3>
+        </li>
+        <li>
+          <h3 style="color: white">Cart</h3>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container pt-5">
+  <div class="row">
+
+    <div class="col-md-12">
+      <div class="osahan-account-page-right shadow-sm bg-white p-4 h-100">
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade active show"
+            id="addresses"
+            role="tabpanel"
+            aria-labelledby="addresses-tab"
+          >
+            <!-- <h4 class="font-weight-bold mt-0 mb-4">Manage Addresses</h4> -->
+            <div style="display: flex; justify-content: space-between">
+              <h2 style="margin-bottom: 20px">Address List</h2>
+              <a class="list-btn-style" href="/addAddress">Add Address</a>
+            </div>
+            <% if(address.length>0){ %> <% address.forEach((element,index)=>{ %>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div
+                  class="bg-white card addresses-item mb-4 border border-primary shadow"
+                >
+                  <div class="gold-members p-4">
+                    <div class="media">
+                      <div class="media-body">
+                        <h4 class="mb-1 text-secondary">
+                          Address <%= index + 1 %>
+                        </h4>
+
+                        <p class="card-text text-black"><%= element.name %></p>
+                        <p class="card-text text-black">
+                          <%= element.address %>
+                        </p>
+                        <p class="card-text text-black"><%= element.town %></p>
+                        <p class="card-text text-black"><%= element.state %></p>
+                        <p class="card-text text-black">
+                          <%= element.postcode %>
+                        </p>
+                        <p class="card-text text-black">
+                          <%= element.mobile %>
+                        </p>
+                        <p class="mb-0 text-black font-weight-bold">
+                            <a class="list-btn-style" data-toggle="modal"  href="/editAddress/<%= element._id %>">
+                                <i class=""></i> EDIT
+                              </a>
+                              <% if(index>0){ %>
+                              <a class=" list-btn-style" data-toggle="modal" data-target="#delete-address-modal" href="#">
+                                <i class=""></i> DELETE
+                              </a>
+                              <% } %>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }) %> <% }else{ %>
+            <div class="row">
+              <h3 class="text-center text-warning">
+                You have no saved address! , Please add an Address.
+              </h3>
+            </div>
+
+            <% }%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    margin-top: 20px;
+    background: #000000;
+  }
+
+  .list-btn-style {
+    max-width: 137px;
+    max-height: 43px;
+    background-color: #000000;
+  }
+
+  .list-btn-style :hover {
+    background-color: #000000;
+  }
+  /* My Account */
+  .payments-item img.mr-3 {
+    width: 47px;
+  }
+  .order-list .btn {
+    border-radius: 2px;
+    min-width: 121px;
+    font-size: 13px;
+    padding: 7px 0 7px 0;
+  }
+  .osahan-account-page-left .nav-link {
+    padding: 18px 20px;
+    border: none;
+    font-weight: 600;
+    color: #535665;
+  }
+  .osahan-account-page-left .nav-link i {
+    width: 28px;
+    height: 28px;
+    background: #535665;
+    display: inline-block;
+    text-align: center;
+    line-height: 29px;
+    font-size: 15px;
+    border-radius: 50px;
+    margin: 0 7px 0 0px;
+    color: #fff;
+  }
+  .osahan-account-page-left .nav-link.active {
+    background: #f3f7f8;
+    color: #282c3f !important;
+  }
+  .osahan-account-page-left .nav-link.active i {
+    background: #282c3f !important;
+  }
+  .osahan-user-media img {
+    width: 90px;
+  }
+  .card offer-card h5.card-title {
+    border: 2px dotted #000;
+  }
+  .card.offer-card h5 {
+    border: 1px dotted #daceb7;
+    display: inline-table;
+    color: #17a2b8;
+    margin: 0 0 19px 0;
+    font-size: 15px;
+    padding: 6px 10px 6px 6px;
+    border-radius: 2px;
+    background: #fffae6;
+    position: relative;
+  }
+  .card.offer-card h5 img {
+    height: 22px;
+    object-fit: cover;
+    width: 22px;
+    margin: 0 8px 0 0;
+    border-radius: 2px;
+  }
+  .card.offer-card h5:after {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #daceb7;
+    content: "";
+    left: 30px;
+    position: absolute;
+    bottom: 0;
+  }
+  .card.offer-card h5:before {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #daceb7;
+    content: "";
+    left: 30px;
+    position: absolute;
+    top: 0;
+  }
+  .payments-item .media {
+    align-items: center;
+  }
+  .payments-item .media img {
+    margin: 0 40px 0 11px !important;
+  }
+  .reviews-members .media .mr-3 {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+  }
+  .order-list img.mr-4 {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    border-radius: 2px;
+  }
+  .osahan-cart-item p.text-gray.float-right {
+    margin: 3px 0 0 0;
+    font-size: 12px;
+  }
+  .osahan-cart-item .food-item {
+    vertical-align: bottom;
+  }
+
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #000000;
+  }
+
+  .shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  }
+
+  .rounded-pill {
+    border-radius: 50rem !important;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+</style>

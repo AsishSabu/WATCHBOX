@@ -1,0 +1,169 @@
+<div class="mt-0">
+  <div class="container-fluid mt-5">
+    <div class="row">
+      <div class="col-sm-6 col-xl-3">
+    
+      </div>
+      <div class="col-sm-6 col-xl-3">
+       
+      </div>
+      <div class="col-sm-6 col-xl-3">
+       
+      </div>
+      <div class="col-sm-6 col-xl-3">
+       
+      </div>
+    </div>
+
+    <div class="row mt-5">
+
+
+
+             <div class="card col-lg-4 ">
+              <div class="card-body">
+                <div class="row alig n-items-start">
+                  <div class="col-8">
+                    <h5 class="card-title mb-9 fw-semibold">
+                      Orders
+                    </h5>
+                    <h4 class="fw-semibold mb-3"> <%=totalOrders%> </h4>
+                   
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end">
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="earning"></div>
+            </div>
+
+             <div class="card col-lg-4">
+              <div class="card-body">
+                <div class="row alig n-items-start">
+                  <div class="col-8">
+                    <h5 class="card-title mb-9 fw-semibold">
+                     Products
+                    </h5>
+                    <h4 class="fw-semibold mb-3"> <%= totalQuantity%> </h4>
+ 
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end">
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="earning"></div>
+            </div>
+
+             <div class="card col-lg-4">
+              <div class="card-body">
+                <div class="row alig n-items-start">
+                  <div class="col-8">
+                    <h5 class="card-title mb-9 fw-semibold">
+                     Total Users
+                    </h5>
+                    <h4 class="fw-semibold mb-3"> <%= totalUsers%> </h4>
+ 
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end">
+ 
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="earning"></div>
+            </div>
+
+
+    </div>
+    <!--  Row 1 -->
+
+    <div class="row">
+      <!-- Graph -->
+
+      <div class="col-lg-6 d-flex align-items-stretch">
+        <div class="col-xl-12 col-lg-12">
+          <div class="card mb-4">
+            <article class="card-body">
+              <h5 class="card-title">Sale statistics</h5>
+              <div>
+                <canvas id="saleChart"></canvas>
+              </div>
+              <div class="graph-options ml-3">
+                <button
+                  id="monthlyBtn"
+                  class="btn btn-white shadow border btn-sm mt-2"
+                >
+                  Monthly
+                </button>
+                <button
+                  id="weeklyBtn"
+                  class="btn btn-white shadow border btn-sm mt-2"
+                >
+                  Weekly
+                </button>
+                <button
+                  id="yearlyBtn"
+                  class="btn btn-white shadow border btn-sm mt-2"
+                >
+                  Yearly
+                </button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 d-flex align-items-stretch">
+        <div class="card w-100">
+          <div class="card-body">
+            <div
+              class="d-sm-flex d-block align-items-center justify-content-between mb-9"
+            >
+              <div class="mb-3 mb-sm-0">
+                <h5 class="card-title fw-semibold">Sales Overview</h5>
+              </div>
+            </div>
+            <div>
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="row">
+          <div class="col-lg-12">
+
+          </div>
+          <div class="col-lg-12">
+     
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<input type="hidden" id="usersData" value="<%= JSON.stringify(usersData) %>" />
+<input
+  type="hidden"
+  id="productSold"
+  value="<%= JSON.stringify(productSold) %>"
+/>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  canvas {
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+      border: 1px solid #ddd;
+    }
+</style>

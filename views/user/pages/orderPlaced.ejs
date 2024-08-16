@@ -1,0 +1,53 @@
+
+
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="order-confirmation">
+          <h2>Order Placed Successfully</h2>
+          <p><strong>Order ID:</strong> <%= order.orderId %></p>
+          <p><strong>Shipping Address:</strong> <%= order.address %>, <%= order.town %>, <%= order.state %></p>
+          <p><strong>Phone:</strong> <%= order.phone %></p>
+          <p><strong>Total Price:</strong> <%= order.totalPrice %></p>
+          <p><strong>Payment Method:</strong><%=order.
+payment_method%></p>
+          <p><strong>Ordered Date:</strong> <%=  moment(order.orderedDate).local().format('MMMM Do YYYY, h:mm a') %></p>
+          <hr>
+          <p class="lead"><strong>PRODUCTS</strong></p>
+          <% order.orderItems.forEach(product => { %>
+            <ul class="list-group m-3">
+                <li class="list-group-item">
+                    Product Name: <%= product.product.title %>
+                    <span class="badge badge-primary">Quantity: <%= product.quantity %></span>
+                </li>
+            </ul>
+            <% }) %>
+          <div>        <a href="/shop" class="btn btn-dark">Continue Shopping</a>
+              <a href="/order" class="btn btn-dark">View Order</a>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+      body {
+          margin-top: 1%;
+     
+       
+        background-color: black;
+      }
+      .container{
+        margin-top: 200px;
+      }
+      .order-confirmation {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+    </style>

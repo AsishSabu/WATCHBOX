@@ -1,0 +1,199 @@
+<div class="container">
+  <h1 class="card-title  fw-semibold mb-4">Add Product</h1>
+    
+  <form action="" method="post" id="addProduct" enctype="multipart/form-data" onsubmit="return validateProductForm()">
+    <div class="form-group">
+      <label for="productName">Product Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="productName"
+        name="productName"
+        required
+      />
+      <div id="nameerr" class="text-danger text-center error-message"></div>
+    </div>
+    <div class="form-group">
+      <label class="fw-bold" for="category">Category</label>
+      <select name="categoryName" id="category" class="form-control" required>
+        <option class="fw-bolder" value="">Select Category</option>
+        <!-- EJS code for category options here -->
+
+        <% catList.forEach(category=> { %>
+        <option class="text-danger" value="<%= category?._id %>">
+          <%= category.categoryName %>
+        </option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        rows="4"
+        required
+      ></textarea>
+      <div id="decerr" class="text-danger text-center"></div>
+    </div>
+    <div class="form-group">
+      <label for="productPrice">Product Price</label>
+      <input
+        type="number"
+        class="form-control"
+        id="productPrice"
+        name="productPrice"
+        
+      />
+      <div id="productPriceErr" class="text-danger text-center"></div>
+    </div>
+    <div class="form-group">
+      <label for="salePrice">Sale Price</label>
+      <input
+        type="number"
+        class="form-control"
+        id="salePrice"
+        name="salePrice"
+      
+      />
+      <div id="saleerr" class="text-danger text-center"></div>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input
+        type="number"
+        class="form-control"
+        id="quantity"
+        name="quantity"
+        required
+      />
+      <div id="qerr" class="text-danger text-center"></div>
+    </div>
+    <div class="form-group">
+      <label for="brand">Brand</label>
+      <input
+        type="text"
+        class="form-control"
+        id="brand"
+        name="brand"
+        required
+      />
+      <div id="branderr" class="text-danger text-center"></div>
+    </div>
+
+    <!-- <div class="form-group">
+      <label for="productImage">Product Images</label>
+      <input type="file" class="form-control-file" id="image" name="images" accept="image/*" multiple />
+      <div id="imageerrr" class="text-danger text-center"></div>
+    </div> -->
+    <div class="mb-3">
+      <label for="product-images" class="form-label">Product Images</label>
+      <input
+        type="file"
+        class="form-control"
+        id="product-images"
+        name="images"
+        accept="image/*"
+        multiple
+        style="display: none"
+       
+      />
+      <div id="image-preview" class="d-flex flex-wrap gap-3"></div>
+      <button
+        type="button"
+        class="btn btn-sm btn-primary mt-2"
+        onclick="document.getElementById('product-images').click()"
+      >
+        Select Images
+      </button>
+      <div id="imageerr" class="text-danger text-center"></div>
+      <%-include("../partials/flashMessage.ejs")  %>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Product</button>
+
+    <div id="formerr" class="text-danger text-center"></div>
+  </form>
+</div>
+<!-- Add Bootstrap JS and jQuery (you may need to adjust the paths) -->
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+
+<style>
+  body {
+    background-color: #ffffff;
+
+  padding: 10px;
+
+  border-radius: 5px;
+  font-weight: 800;
+  }
+
+
+  .container {
+    z-index: -11111;
+    position: absolute;
+    margin-top: 4%;
+    background-color: #fff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    padding: 20px;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  /* Additional styling for responsiveness */
+  @media (max-width: 768px) {
+    .container {
+      margin: 20px;
+    }
+  }
+
+  .image-container {
+    position: relative;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: black;
+    border: none;
+    color: #dc3545; /* Bootstrap danger color */
+    cursor: pointer;
+  }
+  #image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .img-thumbnail {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+</style>
+<script src="/admin/js/productValidation.js"></script>

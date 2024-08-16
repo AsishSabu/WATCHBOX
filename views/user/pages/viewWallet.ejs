@@ -1,0 +1,109 @@
+<style>
+    .bod{
+        font-family: Arial, sans-serif;
+        padding: 200px;
+        background-color: black;
+    }
+
+    .wallet-container {
+        text-align: center;
+        margin-bottom: 20px;
+        
+    }
+
+    
+
+    .wallet-amount {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+
+    table {
+        width: 100%;
+     
+        margin-top: 20px;
+    }
+
+    th, td,tbody {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #cfcfcf;
+    }
+</style>
+
+<div class="bod">
+
+    <div class="wallet-container">
+        <div class="wallet-icon text-danger">
+            <!-- Bootstrap Wallet Icon -->
+            <i class="icon-wallet danger font-large-5"></i> 
+         
+        </div>
+        <div class="wallet-amount success">
+            ₹ <%=walletBalance %><!-- Replace with dynamic wallet amount -->
+        </div>
+    </div>
+
+    <h2>Wallet History</h2>
+
+    <%if(walletHistory&&walletHistory.length){ %>
+    <table class="table bg-white">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Order Id</th>
+                <th>Event</th>
+                <th>Type</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%walletHistory.forEach(transaction=>{%>
+            <tr>
+                <td><%= (transaction.timestamp).toLocaleDateString('en-IN', { year: 'numeric' , month: 'long' ,
+                    day: 'numeric' ,hour:'numeric',minute:'numeric' }) %></td>
+
+                <td>
+                    <% if (transaction.orderId) { %>
+                    <small class="text-secondary"><%= transaction.orderId %> <% } %></small>
+                    </td>
+                    <td>
+                       <% if(transaction.event=="returned"){%>
+                        <span class="text-danger"><%=transaction.event%></span> <% }else if(transaction.event=="Order Placed"){%>   <span class="text-success"><%=transaction.event%></span> <% }else{%><span class="text-warning"><%=transaction.event%></span> <% } %></td>
+                    
+                    <% if (transaction.type === "credit") { %>
+                <td class="text-success"><%= transaction.type %></td>
+                <% } else { %>
+                <td class="text-danger"><%= transaction.type %></td>
+                <% } %>
+                <% if (transaction.type=='credit' ) { %>
+                    <td class="text-success">+ ₹<%= (transaction.amount).toLocaleString() %>
+                    </td>
+                    <% } else { %>
+                    <td class="text-danger">- ₹<%= (transaction.amount).toLocaleString() %>
+                        </td>
+                        <% } %>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+   <% } else { %>
+        <h2 class="text-center mb-4">No Transactions yet</h2>
+
+        <% } %>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</div>

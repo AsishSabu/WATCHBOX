@@ -1,0 +1,210 @@
+<body>
+ 
+  <div class="shop-page-wrapper shop-page-padding ptb-150">
+    <div class="container-fluid">
+      <div class="row gy-5">
+        <div class="col-lg-3 order-2 order-lg-1">
+          <div class="shop-sidebar mr-50">
+            <div class="sidebar-widget mb-50">
+              <h3 class="sidebar-title">Search Products</h3>
+              <div class="sidebar-search">
+                <form>
+                  <input placeholder="Search Products..." type="text" id="search" name="search" />
+                  <button><i class="ti-search"></i></button>
+                </form>
+              </div>
+            </div>
+            <div class="sidebar-widget mb-40">
+              <h3 class="sidebar-title">Filter by Price</h3>
+              <div class="sidebar-categories">
+                <ul>
+                  <li><a href="/shop"> Default </a></li>
+                  <li><a href="" id="lowToHigh"> Low to High </a></li>
+                  <li><a href="" id="highToLow"> High to low </a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="sidebar-widget mb-45">
+              <h3 class="sidebar-title">Categories</h3>
+              <div class="sidebar-categories">
+                <ul>
+                  <% if (category.length>0) { %> <% if(category.length> 1) { %>
+                  <li><a href="/shop">All Categories</a></li>
+                  <% } %>
+                  <% category.forEach(element=> { %>
+                  <li>
+                    <a href="/shop?p=<%= currentPage %>&category=<%= element.categoryName %>" <% if
+                              (selectedCategory && selectedCategory.length>0) { %> class="<%=
+                                selectedCategory.includes(element._id) ? 'text-dark' : '' %>" <% } %>> <%=
+                                    element.categoryName %>
+                      <%if(element.offer){%><span class="text-danger">
+                        <%=element.offer%>% off
+                      </span>
+                      <%}%>
+                            </a>
+                          </li>
+                          <% }); %>
+                      <% } else { %>
+                      <h3>NO CATEGORIES</h3>
+                      <% } %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-9 order-1 order-lg-2">
+          <div class="shop-product-wrapper res-xl res-xl-btn">
+            <div class="shop-bar-area">
+
+              <div class="shop-product-content tab-content">
+                <div id="grid-sidebar1" class="tab-pane fade active show">
+                  <div class="row">
+                    <% products.forEach(product=> { %>
+                    <div class="col-lg-6 col-md-6 col-xl-3">
+                      <div class="product-wrapper mb-30">
+                        <div class="product-img">
+                          <a href="/viewProduct/<%= product?._id %>">
+                            <img src="<%= product.images[0].thumbnailUrl%>" alt="<%= product.title %>" />
+                          </a>
+                          <% if(product.quantity<=0){%>
+                          <div class="unavailable-container">
+                            <p class="unavailable ">Currently Unavailable</p>
+                          </div>
+                          <% }%>
+                          
+                          
+
+                          <div class="product-action">
+
+
+
+
+                            <% if(!user) {%>
+                            <a class="animate-top" title="Add To Cart" href="/login">
+                              <i class="pe-7s-cart"></i>
+                            </a>
+
+                            <% }else{ %>
+                            <a class="animate-top" title="Add To Cart" onclick="addToCart('<%= product._id %>')">
+                              <i class="pe-7s-cart"></i>
+                            </a>
+
+                            <% } %>
+                            <a class="animate-right" title="Quick View" href="/viewProduct/<%= product?._id %>">
+                              <i class="pe-7s-look"></i>
+                            </a>
+                          </div>
+                        </div>
+
+                        <div class="product-content">
+                          <h4 class="d-flex justify-content-between"><a href="/viewProduct/<%= product?._id %>">
+                              <%= product.title%>
+                            </a>
+                              <span title="Wishlist" <% if (userWishlist) { %> <% if (userWishlist.includes(product._id)) { %> 
+                              onclick="toggleWishlist(`<%= product._id %>`)" class="bg-danger rounded-circle p-2 " id="wishlist-<%= product._id %>">
+                              <i class="pe-7s-like" id="wishlist"></i>
+                              <% } else { %>
+                              class="bg-white rounded-circle p-2"     onclick="toggleWishlist(`<%= product._id %>`)" id="wishlist-<%= product._id %>">
+                              <i class="pe-7s-like" id="wishlist"></i>
+                              <% } %>
+                              <% } else { %>
+                                class="rounded-circle p-2"
+                              href="/login">
+                              <i class="pe-7s-like"></i>
+                            </span>
+                            <% } %></h4>
+                        </div>
+                        <p class="text-success">
+                          <%=product.categoryName.categoryName%>
+                        </p>
+                        <%if(product.productPrice!==product.salePrice){%>
+                        <div class="d-flex justify-content-between">
+                          <div>
+                            <span class="text-decoration-line-through text-secondary">
+                              ₹ <%= product.productPrice %>
+                            </span>
+                            <span class="m-2 text-danger fw-bold">
+                              <%= product.categoryName.offer%>% off
+                            </span>
+                          </div>
+                          <span class="fw-bolder">₹ <%= product.salePrice %></span>
+                        </div>
+                        <%}else{%>
+                        <div class="d-flex justify-content-between">
+                          <span class="fw-bolder">₹ <%= product.salePrice %></span>
+                        </div>
+                        <%}%>
+                        </div>
+                      </div>
+
+                      <div id="fixed-div" class="mt-2 fixed-div" style="display: none">
+                        <p id="wishlist-message" class="mb-0 text-light text-center"></p>
+                      </div>
+                      <% }) %>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="pagination-style mt-30 text-center">
+                <ul>
+                  <% if (currentPage> 1) { %>
+                  <li>
+                    <a href="?p=<%= parseInt(currentPage) - 1 %>"><i class="ti-angle-left"></i></a>
+                  </li>
+                  <% } else { %>
+                  <li class="disabled">
+                    <span><i class="ti-angle-left"></i></span>
+                  </li>
+                  <% } %>
+                  <% for (let i=1; i <=totalPages; i++) { %>
+                  <li class="<%= i === currentPage ? 'active' : '' %>">
+                    <a href="?p=<%= i %>">
+                      <%= i %>
+                    </a>
+                  </li>
+                  <% } %>
+                  <% if (currentPage < totalPages) { %>
+                  <li>
+                    <a href="?p=<%= parseInt(currentPage) + 1 %>">
+                      <i class="ti-angle-right"></i></a>
+                  </li>
+                  <% } else { %>
+                  <li class="disabled">
+                    <span><i class="ti-angle-right"></i></span>
+                  </li>
+                  <% } %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</body>
+<script src="assets/js/shop/shop.js" ></script>
+
+<style>
+  .fixed-div {
+    position: fixed;
+    bottom: 10px;
+    right: 40px;
+    width: fit-content;
+    z-index: 9999;
+  }
+
+  .unavailable-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+  }
+
+  .unavailable {
+    position: absolute;
+    color: red;
+    font-size: large;
+  }
+</style>

@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 center-content border border-3 border-dark">
+      <h1 class="mb-4">Add Category</h1>
+      <form action="" method="post" onsubmit="return categoryValidation()">
+        <div class="input-group m-auto">
+          <input type="text" class="form-control" id="name" placeholder="Category Name" name="text" required>
+          <button class="btn btn-submit" type="submit" name="btn">Submit</button>
+        </div>
+        <div id="nameerr" class="text-danger fw-bolder"></div>
+      </form>
+    </div>
+  </div>
+</div>
+<% if(typeof message !=='undefined') { %>
+  <div class="alert alert-success fade show mt-3" id="message" role="alert">
+      <%- message %>
+  </div>
+<% } %>
+
+<% if(typeof catCheck !=='undefined') { %>
+  <div class="alert alert-danger fade show mt-3" id="message" role="alert">
+      <%- catCheck %>
+  </div>
+<% } %>
+
+<script>
+const message = document.getElementById('message');
+
+const hide = () => {
+  message.style.display = 'none';
+}
+
+setTimeout(hide, 3000);
+
+</script>
+
+<style>
+  /* Style to add spacing from the top navbar */
+ 
+  /* Center the content */
+  h1{
+      color: #000000;
+  }   
+
+  .center-content {
+    text-align: center;
+    margin-top: 250px; 
+  background: #ffffff; 
+    height: 300px;
+    padding-top: 80px;
+    color: #000000;
+  }
+
+  /* Style for the input and button */
+  .input-group {
+    margin: 0 auto;
+    max-width: 300px;
+  }
+  .input-group input::placeholder {
+  color: #000000; /* Replace with your desired color */
+}
+
+  /* Style for the button */
+  .btn-submit {
+    background: #000000; 
+    color: #ffffff;
+    border: none;
+  }
+  
+</style>
+<script src="/admin/js/categoryValidation.js"></script>

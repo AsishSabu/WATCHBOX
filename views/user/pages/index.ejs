@@ -1,0 +1,232 @@
+<div class=>
+    <% if(banner&& banner.length) {%>
+        <% banner.forEach(banner=>{ %>
+            <% banner.bannerImage.forEach(image=>{ %>
+        <div id="home-area" class="height-100vh bg-img watch-slider" style="background-image: url(/admin/uploads/<%=image.name%>)">
+        
+            <div class="table">
+                <div class="table-cell">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-6 align-items-center">
+                                <div class="slider-text">
+                                    <h2 class="tlt1 neon"><%=banner.title%></h2>
+                                    <p class="flux"><%=banner.description %></p>
+                                    <div class="button-set">
+
+                                        <a class="explore-btn" href=<%= banner.productUrl %>>
+                                            Shop Now <i class="ti-control-play"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+        <% }) %>
+            <% } else { %>
+            <div id="home-area" class="height-100vh bg-img watch-slider" style="background-image: url('/assets/img/slider/w3.jpg');">
+        
+        <div class="table">
+            <div class="table-cell">
+                <div class="container ">
+                    <div class="row">
+                        <div class="col-md-6 align-items-center">
+                            <div class="slider-text">
+                                <h2 class="tlt1 ">Most <br>intelligent <br> & Smart Watch.</h2>
+                                
+                                <div class="button-set">
+                                    <a class="explore-btn" href="/shop">
+                                        Shop Now <i class="ti-control-play"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            <%} %>
+    
+    
+    
+    
+    <div class="banner-area wrapper-padding gray-bg-7 pt-60 main" >
+        <div class="container-fluid ">
+            <div class="row " >
+                <div class="col-lg-4">
+                    <div class="banner-wrapper-4 mb-30">
+                        <a href="#"><img src="assets/img/banner/watch5.jpg" alt=""></a>
+                        <div class="banner-content4-style1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="banner-wrapper-4 mb-30">
+                        <a href="#"><img src="assets/img/banner/watch4.jpg" alt=""></a>
+                        <div class="banner-content4-style2">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="banner-wrapper-4 mb-30">
+                        <a href="#"><img src="assets/img/banner/watch3.jpg" alt=""></a>
+                        <div class="banner-content4-style3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="electro-product-wrapper wrapper-padding pt-85 pb-75 main">
+        <div class="container">
+            <div class="section-title-4 text-center mb-45">
+                <h2>Top Products</h2>
+            </div>
+    
+            <div class="top-product-style">
+
+                <div class="tab-content">
+                    <div class="tab-pane active show fade" id="electro1" role="tabpanel">
+                        <div class="custom-row-2">
+                            <% topProduct.forEach(product=>{ %>  
+                            <div class="custom-col-style-2 custom-col-4">
+                                <div class="product-wrapper product-border mb-24">
+                                    <div class="product-img-3">
+                                        <a href="/viewProduct/<%= product?._id %>">
+                                            <img src="<%= product.images[0].thumbnailUrl %>" alt="">
+                                        </a>
+                                      <% if(product.quantity<=0){%>
+                                           <div class="unavailable-container">
+                                               <p class="unavailable ">Currently Unavailable</p>
+                                            </div>
+                                       <% }%>
+                                          
+                                        <div class="product-action-right">
+                                            <a class="animate-right" href="/viewProduct/<%= product?._id %>" title="Quick View">
+                                                <i class="pe-7s-look"></i>
+                                            </a>
+                                            <% if(!user) { %>
+                                                <a class="animate-top" title="Add To Cart" href="/login">
+                                                    <i class="pe-7s-cart"></i>
+                                                </a>
+                                                <% }else{ %>
+    
+                                                <a class="animate-top" title="Add To Cart"onclick="addToCart(`<%= product._id %>`)">
+                                                    <i class="pe-7s-cart"></i>
+                                                </a>
+                                                <% } %>
+                                              
+                                        </div>
+                                    </div>
+                                    <div class="product-content-4 text-center">
+                                      
+                                        <h4><a href="/viewProduct/<%= product?._id %>"><%= product?.title %></a></h4>
+                                        <span><%= product?.categoryName?.categoryName%></span>
+                                        <h5>₹ <%=product?.salePrice %></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                        </div>
+                    </div>     
+                </div>
+            </div>  
+        </div>
+    </div>
+
+</div>
+<script src="assets/js/shop/shop.js" ></script>
+
+
+<style>
+    
+.k {
+    width: 200px; /* Set the desired width for the product images */
+    height: 200px; /* Set the desired height for the product images */
+    object-fit: cover; /* This property ensures that the image covers the specified dimensions */
+}
+@font-face {
+  font-family: neon;
+  src: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/707108/neon.ttf);
+}
+
+.container {
+    
+
+ 
+  vertical-align: middle;
+}
+
+.neon {
+  font-family: neon;
+  color: #FB4264;
+  font-size: 9vw;
+  line-height: 9vw;
+  text-shadow: 0 0 3vw #F40A35;
+}
+
+.flux {
+  font-family: neon;
+  color: #2152f4;
+  font-size: 2vw;
+  line-height: 1vw;
+  text-shadow: 0 0 3vw #2356FF;
+}
+
+.neon {
+  animation: neon 1s ease infinite;
+  -moz-animation: neon 1s ease infinite;
+  -webkit-animation: neon 1s ease infinite;
+}
+
+@keyframes neon {
+  0%,
+  100% {
+    text-shadow: 0 0 1vw #FA1C16, 0 0 3vw #FA1C16, 0 0 10vw #FA1C16, 0 0 10vw #FA1C16, 0 0 .4vw #FED128, .5vw .5vw .1vw #806914;
+    color: #FED128;
+  }
+  50% {
+    text-shadow: 0 0 .5vw #800E0B, 0 0 1.5vw #800E0B, 0 0 5vw #800E0B, 0 0 5vw #800E0B, 0 0 .2vw #800E0B, .5vw .5vw .1vw #40340A;
+    color: #806914;
+  }
+}
+
+.flux {
+  animation: flux 2s linear infinite;
+  -moz-animation: flux 2s linear infinite;
+  -webkit-animation: flux 2s linear infinite;
+  -o-animation: flux 2s linear infinite;
+}
+
+@keyframes flux {
+  0%,
+  100% {
+    text-shadow: 0 0 1vw #1041FF, 0 0 3vw #1041FF, 0 0 10vw #1041FF, 0 0 10vw #1041FF, 0 0 .4vw #8BFDFE, .5vw .5vw .1vw #147280;
+    color: #28D7FE;
+  }
+  50% {
+    text-shadow: 0 0 .5vw #082180, 0 0 1.5vw #082180, 0 0 5vw #082180, 0 0 5vw #082180, 0 0 .2vw #082180, .5vw .5vw .1vw #0A3940;
+    color: #146C80;
+  }
+}
+
+.unavailable-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+ 
+}
+
+.unavailable {
+  position: absolute;
+  color: red;
+  font-size: large;
+}
+</style>

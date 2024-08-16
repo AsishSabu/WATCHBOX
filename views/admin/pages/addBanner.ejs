@@ -1,0 +1,304 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+  integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg="
+  crossorigin="anonymous"
+/>
+
+<div class="container">
+  <h1 class="card-title fw-semibold mb-4">Add Banner</h1>
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="productName">Banner Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        rows="4"
+        required
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label class="fw-bold" for="category">Product Url</label>
+      <select
+        name="productUrl"
+        id="select-state"
+        placeholder="Pick a Product*"
+        class="form-control"
+        required
+      >
+        <option value="">Select a Product...</option>
+        <% Products.forEach(element=> { %>
+        <option value="viewProduct/<%= element._id %>">
+          <%= element.title %>
+        </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <!-- Add this inside the form, after the mainImage input -->
+<div class="card mb-1">
+  <div class="input-upload">
+    <label for="mainImage">Main Product Image:</label>
+    <input id="mainImage" name="mainImage" class="form-control" type="file" accept=".jpg, .jpeg, .png" required>
+    <span class="error-message" id="mainImage-error"></span>
+
+    <!-- Image cropping section -->
+    <div id="cropContainer" style="display: none;width: 300px;height: 250px;">
+      <label>Crop Image:</label>
+      <div>
+        <img id="cropImage" src="" alt="Crop Preview" style="max-width: 40%;">
+      </div>
+      <button type="button" style="background-color: #007BFF; margin-top:10px white;border: none;border-radius: 10px;width: 100px;height: 50px;font-size: medium;" id="applyCrop">Apply Crop</button>
+    </div>
+  </div>
+</div>
+
+    <button type="submit" class="btn btn-primary">Add Banner</button>
+  </form>
+</div>
+
+
+  
+  
+
+ 
+
+
+    <style>
+      body {
+        background-color: #fff;
+      }
+
+      .container {
+        position: absolute;
+        margin-top: 72px;
+        background-color: #fff;
+        border: 1px solid #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      .form-control {
+        width: 100%;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+
+      /* Additional styling for responsiveness */
+      @media (max-width: 768px) {
+        .container {
+          margin: 20px;
+        }
+      }
+    </style>
+  </div>
+</div>
+<!-- <script>
+  document.getElementById("product-images").addEventListener("change", function () {
+    const previewContainer = document.getElementById("image-preview");
+    const cropperContainer = document.getElementById("cropper-container");
+    const imageerr = document.getElementById("imageerr");
+    const croppedImageNameInput = document.getElementById("cropped-image-name");
+
+    previewContainer.innerHTML = ""; // Clear previous previews
+    cropperContainer.innerHTML = ""; // Clear previous cropper container
+    imageerr.textContent = ""; // Clear previous error message
+
+    const files = this.files;
+
+    if (files.length === 0) {
+      imageerr.textContent = "Please select at least one image";
+      return;
+    } else if (files.length > 1) {
+      imageerr.textContent = "Only one image allowed";
+      return;
+    }
+
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.classList.add("img-thumbnail");
+      img.style.maxWidth = "150px";
+      img.style.maxHeight = "150px";
+
+      const buttonContainer = document.createElement("div");
+      buttonContainer.style.display = "flex";
+      buttonContainer.style.justifyContent = "space-between";
+
+      const closeButton = document.createElement("button");
+      closeButton.innerHTML = "&times;";
+      closeButton.classList.add("btn", "btn-sm", "btn-danger", "close-button");
+      closeButton.addEventListener("click", function () {
+        previewContainer.removeChild(imageDiv);
+        cropperContainer.style.display = "none";
+      });
+
+      const cropButton = document.createElement("button");
+      cropButton.innerHTML = "Crop";
+      cropButton.classList.add("btn", "btn-sm", "btn-primary", "crop-button");
+      cropButton.addEventListener("click", function () {
+        // Initialize Cropper.js on the selected image
+        const cropper = new Cropper(img, {
+          aspectRatio: 1, // Set the aspect ratio as needed
+          viewMode: 1,    // Set the view mode as needed
+        });
+
+        // Display the Cropper.js container
+        cropperContainer.style.display = "block";
+
+        // Handle the Crop button click event
+        const cropConfirmButton = document.createElement("button");
+        cropConfirmButton.innerHTML = "Confirm Crop";
+        cropConfirmButton.classList.add("btn", "btn-sm", "btn-success", "crop-confirm-button");
+        cropConfirmButton.addEventListener("click", function () {
+          // Get the cropped image data and display it in the preview container
+          const croppedImage = cropper.getCroppedCanvas().toDataURL("image/png");
+
+          // Create a new image for the cropped result
+          const croppedPreview = document.createElement("img");
+          croppedPreview.src = croppedImage;
+          croppedPreview.classList.add("img-thumbnail");
+          croppedPreview.style.maxWidth = "150px";
+          croppedPreview.style.maxHeight = "150px";
+
+          // Create a container for the cropped image
+          const croppedImageDiv = document.createElement("div");
+          croppedImageDiv.classList.add("image-container");
+          croppedImageDiv.appendChild(croppedPreview);
+
+          // Append the cropped image to the preview container
+          previewContainer.appendChild(croppedImageDiv);
+
+          // Set the name attribute to the cropped image name
+          croppedImageNameInput.value = "bannerImage";
+
+          // Hide the Cropper.js container
+          cropperContainer.style.display = "none";
+
+          // Destroy the Cropper instance
+          cropper.destroy();
+        });
+
+        buttonContainer.appendChild(closeButton);
+        buttonContainer.appendChild(cropConfirmButton);
+      });
+
+      buttonContainer.appendChild(closeButton);
+      buttonContainer.appendChild(cropButton);
+
+      const imageDiv = document.createElement("div");
+      imageDiv.classList.add("image-container");
+      imageDiv.appendChild(img);
+      imageDiv.appendChild(buttonContainer);
+
+      // Append the image and buttons to the preview container
+      previewContainer.appendChild(imageDiv);
+    };
+
+    reader.readAsDataURL(file);
+  });
+
+  // Form submission prevention
+  document.getElementById("your-form-id").addEventListener("submit", function (event) {
+    const files = document.getElementById("product-images").files;
+    if (files.length === 0) {
+      event.preventDefault(); // Prevent form submission
+      imageerr.textContent = "Please select at least one image";
+    }
+  });
+
+  // Append the Cropper.js container to the form
+  document.getElementById("cropper-container").appendChild(cropperContainer);
+</script> -->
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const image = document.getElementById("image-preview");
+          const cropButton = document.getElementById("crop-button");
+          const cropButtonModal = document.getElementById("crop-button-modal");
+          const croppedImageInput = document.getElementById("cropped-image");
+          const imageCroppingModal = new bootstrap.Modal(document.getElementById("imageCroppingModal"));
+  
+          const croppieContainer = document.getElementById("croppie-container");
+  
+          const scaleFactor = 0.4;
+
+          // Calculate the reduced dimensions based on the scale factor
+          const reducedWidth = 1920 * scaleFactor;
+          const reducedHeight = 800 * scaleFactor;
+
+          const croppie = new Croppie(croppieContainer, {
+              enableZoom: true,
+              viewport: { width: reducedWidth, height: reducedHeight }, // Reduced width and height
+              boundary: { width: reducedWidth, height: reducedHeight }, // Reduced width and height
+          });
+  
+          // Handle the file input change event
+          document.getElementById("image").addEventListener("change", function (e) {
+              const file = e.target.files[0];
+              if (file) {
+                  const reader = new FileReader();
+                  reader.onload = function (e) {
+                      croppie.bind({
+                          url: e.target.result,
+                      });
+                  };
+                  reader.readAsDataURL(file);
+                  imageCroppingModal.show(); // Show the modal when an image is selected
+              }
+          });
+  
+          // Handle the crop button click event
+          cropButton.addEventListener("click", function () {
+              imageCroppingModal.show(); // Show the modal when the "Crop Image" button is clicked
+          });
+  
+          // Handle the crop button in the modal
+          cropButtonModal.addEventListener("click", function () {
+              croppie.result("base64").then(function (base64) {
+                  image.src = base64; // Update the image preview
+                  croppedImageInput.value = base64; // Set the base64 data in the hidden input
+                  imageCroppingModal.hide(); // Hide the modal after cropping
+              });
+          });
+      });
+  </script>
+
+
+
+
+</body>
+</html>
+
+
