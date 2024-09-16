@@ -11,7 +11,7 @@ const passport = require("passport");
 const override = require("method-override");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 const Cart = require("./models/cartModel");
-const Port=process.env.PORT
+
 
 require("dotenv").config();
 
@@ -56,6 +56,7 @@ app.use("/admin", adminRoute);
 app.use("/", userRoute);
 
 app.use(errorHandler);
+const Port = process.env.PORT
 
 app.listen(Port, () => {
   console.log(`Server is running on http://localhost:${Port}`);
