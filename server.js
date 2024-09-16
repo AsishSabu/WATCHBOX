@@ -11,7 +11,7 @@ const passport = require("passport");
 const override = require("method-override");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 const Cart = require("./models/cartModel");
-const Port=process.env.SECRET
+const Port=process.env.PORT
 
 require("dotenv").config();
 
