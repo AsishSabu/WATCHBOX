@@ -69,6 +69,8 @@ exports.loadShop = asynchandler(async (req, res) => {
         .skip((page - 1) * limit)
         .limit(limit)
         .sort(sortCriteria);
+      
+      
 
       let userWishlist;
       let cartProductIds;
@@ -92,6 +94,11 @@ exports.loadShop = asynchandler(async (req, res) => {
         selectedCategory.push(filter.categoryName);
       }
 
+      console.log(findProducts, "findproducts");
+      console.log(user,"user,,,,,");
+      
+      
+
       res.render("./user/pages/shop", {
           title: "WATCHBOX",
         products: findProducts,
@@ -114,10 +121,14 @@ exports.loadShop = asynchandler(async (req, res) => {
 exports.loadProductDetails = asynchandler(async (req, res) => {
   try {
     const id = req.params.id;
+    console.log(id,"id   mmm");
+    
     const Product = await product
       .findOne({ _id: id })
       .populate("images")
       .populate("categoryName");
+    console.log(Product,'........');
+    
     const relatedProducts = await product.find().populate("images");
     res.render("./user/pages/productDetails", {
       title: "WATCHBOX/PRODUCTdETAILS",

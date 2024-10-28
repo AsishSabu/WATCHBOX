@@ -14,6 +14,7 @@ const loadProduct = asynchandler(async (req, res) => {
       .populate("categoryName")
       .populate("images")
       .sort({ createdAt: -1 });
+    console.log(products,"products")
 
     const messages = req.flash();
 

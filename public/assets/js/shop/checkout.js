@@ -155,7 +155,7 @@ function handleWltPayment(responseData) {
 
 function handleRzpPayment(responseData) {
   const options = {
-    key: "rzp_test_oyly1h0q9HqilB",
+    key: "rzp_test_VpPTWSenv9Hzha",
     amount: responseData.order.totalPrice * 100,
     currency: "INR",
     name: "WATCHBOX",

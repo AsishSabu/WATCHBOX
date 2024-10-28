@@ -193,6 +193,9 @@ const orderPlaced = asynchandler(async (req, res) => {
         path: "product",
       },
     });
+
+    console.log(order,"................");
+    
     const cartItems = await checkoutHelper.getCartItems(req.user._id);
     if (order.payment_method === "cash_on_delivery") {
       for (const item of order.orderItems) {

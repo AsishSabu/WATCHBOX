@@ -99,8 +99,9 @@
                                 <div class="product-wrapper product-border mb-24">
                                     <div class="product-img-3">
                                         <a href="/viewProduct/<%= product?._id %>">
-                                            <img src="<%= product.images[0].thumbnailUrl %>" alt="">
+                                            <img src="<%= product.images[0].imageUrl%>" alt="fsdfsdfsdf">
                                         </a>
+                                        <% console.log(product.images[0]. thumbnailUrl)%>
                                       <% if(product.quantity<=0){%>
                                            <div class="unavailable-container">
                                                <p class="unavailable ">Currently Unavailable</p>

@@ -5,7 +5,7 @@ const User = require("../../models/userModels");
 const asynchandler = require("express-async-handler");
 const Orders = require("../../models/orderModel");
 const orderHelpers = require("../../helpers/orderHelpers");
-const {status} = require("../../utils/status");
+const { status } = require("../../utils/status");
 const { Timestamp } = require("mongodb");
 const pdfMake = require("pdfmake/build/pdfmake");
 const vfsFonts = require("pdfmake/build/vfs_fonts");
@@ -24,7 +24,7 @@ const orderPage = asynchandler(async (req, res) => {
         populate: { path: "images" },
       })
       .select("orderId orderItems orderedDate shippingAddress town createdAt").sort({ _id: -1 });
-     console.log(orders);
+    console.log(orders);
 
     res.render("./user/pages/orders", { title: "WATCHBOX", orders, user });
   } catch (error) {
@@ -45,12 +45,13 @@ const viewOrder = asynchandler(async (req, res) => {
     const productItem = order.orderItems.find(
       (item) => String(item.product._id) === productIdString
     );
-   
+
     if (productItem) {
       const product = productItem.product;
       const quantity = productItem.quantity;
       const price = productItem.price;
       const status = productItem.status;
+      const payment = productItem.isPaid
       res.render("./user/pages/viewOrder", {
         title: "WATCHBOX",
         order,
@@ -59,7 +60,7 @@ const viewOrder = asynchandler(async (req, res) => {
         price,
         status,
         productItem,
-        moment
+        moment, payment
       });
     } else {
       res.send("error in view order");
@@ -71,7 +72,7 @@ const viewOrder = asynchandler(async (req, res) => {
 
 const cancelOrder = asynchandler(async (req, res) => {
   try {
-     const orderId = req.params.id;
+    const orderId = req.params.id;
     const productId = req.body.productId;
     const order = await orderHelpers.getSingleOrder(orderId);
     const productIdString = String(productId); //finding matching productId from orderDb
@@ -82,9 +83,9 @@ const cancelOrder = asynchandler(async (req, res) => {
       console.log("no product find to cancel");
     } else {
       productItem.status = status.cancelPending;
-   
+
       await order.save();
-  
+
       return res.redirect(`/order`);
     }
   } catch (error) {
@@ -106,13 +107,13 @@ const ReturnOrder = asynchandler(async (req, res) => {
     if (!productItem) {
       console.log("no product find to cancel");
     } else {
-      productItem.status =status.returnPending;
-  
+      productItem.status = status.returnPending;
+
       await order.save();
-  
+
       return res.redirect(`/order`);
     }
-   
+
   } catch (error) {
     throw new Error(error);
   }
@@ -124,13 +125,13 @@ const ReturnOrder = asynchandler(async (req, res) => {
  * Download Invoice
  * Method GET
  */
-const  donwloadInvoice = asynchandler(async (req, res) => {
+const donwloadInvoice = asynchandler(async (req, res) => {
   try {
     const orderId = req.params.id;
     const productId = req.params.productId;
 
     const data = await orderHelpers.generateInvoice(orderId, productId);
-  
+
     pdfMake.vfs = vfsFonts.pdfMake.vfs;
 
     // Create a PDF document

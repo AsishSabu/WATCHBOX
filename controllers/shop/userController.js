@@ -26,6 +26,7 @@ const loadIndex = asynchandler(async (req, res) => {
       .find({ categoryName: { $in: listedCategoryIds }, isListed: true })
       .populate("images")
       .limit(8);
+    console.log(topProduct);
     const banner = await Banner.find({ isActive: true }).limit(1);
 
     res.render("./user/pages/index", { title: "WATCHBOX", topProduct, banner });
@@ -57,6 +58,8 @@ const loadRegister = asynchandler(async (req, res) => {
 //---------------------insert user to database-----------------------
 
 const insertUser = asynchandler(async (req, res) => {
+       console.log("insertUser function called...................");
+
   try {
     const userData = new User({
       userName: req.body.name,
@@ -87,15 +90,17 @@ const insertUser = asynchandler(async (req, res) => {
           wallet: userWallet._id,
         });
         //--------------------generating otp --------------------
-        const OTP = otpSetup.generateNumericOTP();
+        const OTP = await otpSetup.generateNumericOTP();
+        console.log(OTP, "----otp");
+
         //--------------saving otp to databasse------------------------------
         const email = req.body.email;
-        const otp = new otpdb({ email: email, otp: OTP });
+        const otp = await new otpdb({ email: email, otp: OTP });
         const otpSave = await otp.save();
 
         //------------------------otp sending to mail ------------------------------
         const name = req.body.name;
-        const otpSend = otpSetup.sendOtp(email, OTP, name);
+        const otpSend = await otpSetup.sendOtp(email, OTP, name);
       }
     } catch (error) {
       throw new Error(error.message);
@@ -166,6 +171,7 @@ const verifyOtp = async (req, res) => {
 const resendOtp = asynchandler(async (req, res) => {
   try {
     const OTP = otpSetup.generateNumericOTP();
+    console.log(OTP, "----otp");
     const email = req.session.userData.email;
     const otp = new otpdb({ email: email, otp: OTP });
     const otpSave = await otp.save();
